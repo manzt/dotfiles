@@ -1,12 +1,59 @@
-# Path to oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# Start configuration added by Zim install {{{
 
-plugins=(
-  # zsh-autosuggestions
-  fast-syntax-highlighting
-)
+# -----------------
+# Zsh configuration
+# -----------------
 
-source $ZSH/oh-my-zsh.sh
+# Remove older command from the history if a duplicate is to be added.
+setopt HIST_IGNORE_ALL_DUPS
+
+# Set editor default keymap to emacs (`-e`) or vi (`-v`)
+bindkey -v
+
+# Remove path separator from WORDCHARS.
+WORDCHARS=${WORDCHARS//[\/]}
+
+# -----------------
+# Zim configuration
+# -----------------
+# zsh-syntax-highlighting
+#
+
+# Set what highlighters will be used.
+# See https://github.com/zsh-users/zsh-syntax-highlighting/blob/master/docs/highlighters.md
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets)
+
+# ------------------
+# Initialize modules
+# ------------------
+
+if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
+  # Update static initialization script if it does not exist or it's outdated, before sourcing it
+  source ${ZIM_HOME}/zimfw.zsh init -q
+fi
+source ${ZIM_HOME}/init.zsh
+
+#
+# zsh-history-substring-search
+#
+
+# Bind ^[[A/^[[B manually so up/down works both before and after zle-line-init
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
+
+# Bind up and down keys
+zmodload -F zsh/terminfo +p:terminfo
+if [[ -n ${terminfo[kcuu1]} && -n ${terminfo[kcud1]} ]]; then
+  bindkey ${terminfo[kcuu1]} history-substring-search-up
+  bindkey ${terminfo[kcud1]} history-substring-search-down
+fi
+
+bindkey '^P' history-substring-search-up
+bindkey '^N' history-substring-search-down
+bindkey -M vicmd 'k' history-substring-search-up
+bindkey -M vicmd 'j' history-substring-search-down
+# }}} End configuration added by Zim install
+
 
 export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
