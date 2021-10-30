@@ -11,8 +11,8 @@ let mapleader="\<Space>"
 call plug#begin()
 
 "enable hard mode
-Plug 'takac/vim-hardtime'
-let g:hardtime_default_on = 1
+" Plug 'takac/vim-hardtime'
+" let g:hardtime_default_on = 1
 
 " Vim enhancements
 Plug 'editorconfig/editorconfig-vim'
@@ -46,6 +46,8 @@ Plug 'tpope/vim-surround'
 " Nice find highlighting
 Plug 'romainl/vim-cool'
 Plug 'cespare/vim-toml'
+
+Plug 'github/copilot.vim'
 
 nnoremap <leader>j :NERDTreeToggle<CR>
 
@@ -81,7 +83,7 @@ colorscheme base16-gruvbox-dark-hard
 highlight Normal guibg=NONE ctermbg=NONE
 
 " Brighter comments
-call Base16hi("Comment", g:base16_gui09, "", g:base16_cterm09, "", "", "")
+" call Base16hi("Comment", g:base16_gui09, "", g:base16_cterm09, "", "", "")
 
 " call matchadd('ColorColumn', '\%81v', 90)
 highlight ColorColumn ctermbg=8
