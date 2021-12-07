@@ -10,17 +10,10 @@ let mapleader="\<Space>"
 
 call plug#begin()
 
-"enable hard mode
-" Plug 'takac/vim-hardtime'
-" let g:hardtime_default_on = 1
-
-" Vim enhancements
 Plug 'editorconfig/editorconfig-vim'
 
 " Color scheme
 Plug 'chriskempson/base16-vim'
-" Plug 'RRethy/nvim-base16'
-" Plug 'morhetz/gruvbox'
 
 " Fuzzy finder
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -37,8 +30,8 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
-" To enable more of the features of rust-analyzer, such as inlay hints and more!
 Plug 'simrat39/rust-tools.nvim'
+Plug 'evanleck/vim-svelte'
 
 " Delete, change, add surrounding pairs
 Plug 'tpope/vim-surround'
@@ -46,8 +39,10 @@ Plug 'tpope/vim-surround'
 " Nice find highlighting
 Plug 'romainl/vim-cool'
 Plug 'cespare/vim-toml'
+Plug 'snakemake/snakemake', {'rtp': 'misc/vim'}
 
-Plug 'github/copilot.vim'
+" Disable copilot
+" Plug 'github/copilot.vim'
 
 nnoremap <leader>j :NERDTreeToggle<CR>
 
@@ -101,9 +96,6 @@ inoremap <C-j> <Esc>
 map <C-p> :Files<CR>
 nmap <leader>; :Buffers<CR>
 
-" Quick-save
-nmap <leader>w :w<CR>
-
 " Copy clipboard
 map <leader>y "*y
 
@@ -113,19 +105,15 @@ noremap <leader>s :Rg
 " Toggle through buffers
 nnoremap <leader><leader> <c-^>
 
-" Align selected lines
-vnoremap <leader>ib :!align<cr>
+nmap <leader>x :!open %<cr><cr>
 
-" Close all other splits
-nnoremap <leader>o :only<cr>
-
-" Open new file adjacent to current file
-nnoremap <leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
+map gf :edit <cfile><cr>
 
 " =============================================================================
 " # Editor settings
 " =============================================================================
+
+set nofoldenable
 
 " Turn on syntax highlighting.
 syntax on
@@ -154,6 +142,9 @@ set number
 set relativenumber 
 set numberwidth=2
 
+set list
+set listchars=tab:▶\ ,trail:·
+
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
@@ -167,12 +158,6 @@ set updatetime=300
 
 " Always show the status line at the bottom, even if you only have one window open.
 set laststatus=2
-
-" The backspace key has slightly unintuitive behavior by default. For example,
-" by default, you can't backspace before the insertion point set with 'i'.
-" This configuration makes backspace behave more reasonably, in that you can
-" backspace over anything.
-set backspace=indent,eol,start
 
 set mouse=a " Enable mouse usage (all modes) in terminals
 
@@ -383,6 +368,5 @@ cmp.setup {
   }
 }
 EOF
-
 
 au BufReadPost *.njk set syntax=html
