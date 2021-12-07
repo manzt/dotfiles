@@ -370,3 +370,19 @@ cmp.setup {
 EOF
 
 au BufReadPost *.njk set syntax=html
+
+
+" https://github.com/neovim/nvim-lspconfig/issues/195#issuecomment-753644842
+lua <<EOF
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    -- disable virtual text
+    virtual_text = false,
+    -- show signs
+    signs = true,
+    -- delay update diagnostics
+    update_in_insert = false,
+    -- display_diagnostic_autocmds = { "InsertLeave" },
+  }
+)
+EOF
