@@ -26,7 +26,6 @@ Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
-
 Plug 'hrsh7th/cmp-vsnip'
 Plug 'hrsh7th/vim-vsnip'
 
@@ -43,8 +42,6 @@ Plug 'snakemake/snakemake', {'rtp': 'misc/vim'}
 
 " Disable copilot
 " Plug 'github/copilot.vim'
-
-nnoremap <leader>j :NERDTreeToggle<CR>
 
 call plug#end()
 
@@ -77,9 +74,6 @@ colorscheme base16-gruvbox-dark-hard
 
 highlight Normal guibg=NONE ctermbg=NONE
 
-" Brighter comments
-" call Base16hi("Comment", g:base16_gui09, "", g:base16_cterm09, "", "", "")
-
 " call matchadd('ColorColumn', '\%81v', 90)
 highlight ColorColumn ctermbg=8
 set colorcolumn=90
@@ -100,14 +94,12 @@ nmap <leader>; :Buffers<CR>
 map <leader>y "*y
 
 " <leader>s for Rg search
-noremap <leader>s :Rg
+noremap <leader>s :Rg<CR>
 
 " Toggle through buffers
 nnoremap <leader><leader> <c-^>
 
 nmap <leader>x :!open %<cr><cr>
-
-map gf :edit <cfile><cr>
 
 " =============================================================================
 " # Editor settings
@@ -143,7 +135,9 @@ set relativenumber
 set numberwidth=2
 
 set list
-set listchars=tab:▶\ ,trail:·
+set listchars=tab:→\ ,trail:·
+" set listchars=tab:▶\ ,trail:·
+
 
 " Permanent undo
 set undodir=~/.vimdid
