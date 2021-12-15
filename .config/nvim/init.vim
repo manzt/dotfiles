@@ -26,6 +26,9 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'L3MON4D3/LuaSnip'
+
 " pretty icons for LSP
 Plug 'onsails/lspkind-nvim'
 
@@ -333,15 +336,21 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'path' },
+    { name = 'luasnip' },
     { name = 'buffer', keyword_length = 3 },
   },
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
   formatting = {
-    -- Youtube: How to set up nice formatting for your sources.
     format = lspkind.cmp_format {
       with_text = true,
       menu = {
         buffer = "[buf]",
         nvim_lsp = "[LSP]",
+        luasnip = "[snip]",
         path = "[path]",
       },
     },
