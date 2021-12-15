@@ -21,13 +21,13 @@ Plug 'junegunn/fzf.vim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/nvim-cmp'
 
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
+" pretty icons for LSP
+Plug 'onsails/lspkind-nvim'
 
 Plug 'simrat39/rust-tools.nvim'
 Plug 'evanleck/vim-svelte'
@@ -315,44 +315,40 @@ EOF
 set completeopt=menuone,noinsert,noselect
 
 lua <<EOF
+local lspkind = require 'lspkind'
+lspkind.init()
+
 local cmp = require 'cmp'
 cmp.setup {
-  ["<C-d>"] = cmp.mapping.scroll_docs(-4),
-  ["<C-f>"] = cmp.mapping.scroll_docs(4),
-  ["<C-e>"] = cmp.mapping.close(),
-  ["<c-y>"] = cmp.mapping(
-    cmp.mapping.confirm {
+  mapping = {
+    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<c-y>"] = cmp.mapping.confirm {
       behavior = cmp.ConfirmBehavior.Insert,
       select = true,
     },
-    { "i", "c" }
-  ),
-  ["<c-space>"] = cmp.mapping {
-    i = cmp.mapping.complete(),
-    c = function(_ --[[fallback]])
-      if cmp.visible() then
-        if not cmp.confirm { select = true } then
-          return
-        end
-      else
-        cmp.complete()
-      end
-    end,
-  },
-  -- Testing
-  ["<c-q>"] = cmp.mapping.confirm {
-    behavior = cmp.ConfirmBehavior.Replace,
-    select = true,
+    ["<c-space>"] = cmp.mapping.complete(),
   },
   sources = {
     { name = 'nvim_lsp' },
     { name = 'path' },
-    { name = 'vsnip' },
-    { name = 'buffer', keyword_length = 5 },
+    { name = 'buffer', keyword_length = 3 },
+  },
+  formatting = {
+    -- Youtube: How to set up nice formatting for your sources.
+    format = lspkind.cmp_format {
+      with_text = true,
+      menu = {
+        buffer = "[buf]",
+        nvim_lsp = "[LSP]",
+        path = "[path]",
+      },
+    },
   },
   experimental = {
     native_menu = false,
-    ghost_text = false,
+    ghost_text = true,
   },
 }
 EOF
