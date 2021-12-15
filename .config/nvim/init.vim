@@ -21,13 +21,13 @@ Plug 'junegunn/fzf.vim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
-Plug 'hrsh7th/nvim-cmp'
 
-Plug 'hrsh7th/cmp-vsnip'
-Plug 'hrsh7th/vim-vsnip'
+" pretty icons for LSP
+Plug 'onsails/lspkind-nvim'
 
 Plug 'simrat39/rust-tools.nvim'
 Plug 'evanleck/vim-svelte'
@@ -315,66 +315,41 @@ EOF
 set completeopt=menuone,noinsert,noselect
 
 lua <<EOF
+local lspkind = require 'lspkind'
+lspkind.init()
+
 local cmp = require 'cmp'
-
--- https://github.com/hrsh7th/nvim-cmp/wiki/Example-mappings
-local has_words_before = function()
-  if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-    return false
-  end
-  local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-  return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-local feedkey = function(key, mode)
-  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes(key, true, true, true), mode, true)
-end
-
 cmp.setup {
-  snippet = {
-    expand = function(args)
-      vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` user.
-    end,
-  },
-  completion = {
-    autocomplete = { },
-  },
   mapping = {
-    ['<C-p>'] = cmp.mapping.select_prev_item(),
-    ['<C-n>'] = cmp.mapping.select_next_item(),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-e>'] = cmp.mapping.close(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
+    ["<C-d>"] = cmp.mapping.scroll_docs(-4),
+    ["<C-f>"] = cmp.mapping.scroll_docs(4),
+    ["<C-e>"] = cmp.mapping.close(),
+    ["<c-y>"] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Insert,
       select = true,
     },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if vim.fn.pumvisible() == 1 then
-        feedkey('<C-n>', 'n')
-      elseif vim.fn['vsnip#available']() == 1 then
-        feedkey('<Plug>(vsnip-expand-or-jump)', '')
-      elseif has_words_before() then
-        cmp.complete()
-      else
-        fallback() -- The fallback function sends a already mapped key. In this case, it's probably `<Tab>`.
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function()
-      if vim.fn.pumvisible() == 1 then
-        feedkey('<C-p>', 'n')
-      elseif vim.fn['vsnip#jumpable'](-1) == 1 then
-        feedkey('<Plug>(vsnip-jump-prev)', '')
-      end
-    end, { 'i', 's' }),
+    ["<c-space>"] = cmp.mapping.complete(),
   },
   sources = {
     { name = 'nvim_lsp' },
-    { name = 'vsnip' },
-    { name = 'buffer' },
     { name = 'path' },
-  }
+    { name = 'buffer', keyword_length = 3 },
+  },
+  formatting = {
+    -- Youtube: How to set up nice formatting for your sources.
+    format = lspkind.cmp_format {
+      with_text = true,
+      menu = {
+        buffer = "[buf]",
+        nvim_lsp = "[LSP]",
+        path = "[path]",
+      },
+    },
+  },
+  experimental = {
+    native_menu = false,
+    ghost_text = true,
+  },
 }
 EOF
 
