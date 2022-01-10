@@ -78,6 +78,11 @@ eval "$(fnm env)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# deno
+fpath=(~/.zsh $fpath)
+autoload -Uz compinit
+compinit -u
+
 # tabtab source for packages
 # uninstall by removing these lines
 [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true

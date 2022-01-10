@@ -245,13 +245,11 @@ nvim_lsp.pyright.setup {
   flags = flags
 }
 
-nvim_lsp.denols.setup {
-  root_dir = nvim_lsp.util.root_pattern("deno.json"),
-  init_options = { lint = true },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  flags,
-}
+-- nvim_lsp.denols.setup {
+--   root_dir = nvim_lsp.util.root_pattern("deno.json"),
+--   on_attach = on_attach,
+--   flags,
+-- }
 
 nvim_lsp.tsserver.setup {
   root_dir = nvim_lsp.util.root_pattern("package.json"),
