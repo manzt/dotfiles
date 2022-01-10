@@ -96,6 +96,13 @@ noremap <leader>ft :Telescope git_files<CR>
 noremap <leader>fd :Telescope find_files<CR>
 noremap <leader>; :Telescope buffers<CR>
 noremap <leader>s :Telescope grep_string<CR>
+noremap <leader>ca :Telescope lsp_code_actions<CR>
+noremap <leader>d :Telescope diagnostics bufnr=0<CR>
+noremap <leader>D :Telescope lsp_type_definitions<CR>
+noremap gr :Telescope lsp_references<CR>
+
+" edit dotfiles
+noremap <leader>ed :Telescope git_files cwd=~/github/manzt/dotfiles<CR>
 
 " Copy clipboard
 map <leader>y "*y
@@ -222,13 +229,10 @@ local on_attach = function(client, bufnr)
    -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
   buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
-  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
   buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
