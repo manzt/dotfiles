@@ -16,8 +16,10 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'chriskempson/base16-vim'
 
 " Fuzzy finder
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-telescope/telescope.nvim'
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
@@ -26,23 +28,22 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 
+" Snippets
 Plug 'saadparwaiz1/cmp_luasnip'
 Plug 'L3MON4D3/LuaSnip'
 
-" pretty icons for LSP
+" Pretty icons for LSP
 Plug 'onsails/lspkind-nvim'
 
+" Language/format-specific tools
 Plug 'simrat39/rust-tools.nvim'
 Plug 'evanleck/vim-svelte'
-
-" Delete, change, add surrounding pairs
-Plug 'tpope/vim-surround'
-
-" Nice find highlighting
 Plug 'romainl/vim-cool'
 Plug 'cespare/vim-toml'
 Plug 'snakemake/snakemake', {'rtp': 'misc/vim'}
 
+" Delete, change, add surrounding pairs
+Plug 'tpope/vim-surround'
 
 " Disable copilot
 " Plug 'github/copilot.vim'
@@ -91,14 +92,14 @@ nnoremap <C-j> <Esc>
 inoremap <C-j> <Esc>
 
 " Open hotkeys
-map <C-p> :Files<CR>
-nmap <leader>; :Buffers<CR>
+noremap <leader>ft :Telescope git_files<CR>
+noremap <leader>fd :Telescope find_files<CR>
+noremap <leader>; :Telescope buffers<CR>
+noremap <leader>s :Telescope grep_string<CR>
 
 " Copy clipboard
 map <leader>y "*y
 
-" <leader>s for Rg search
-noremap <leader>s :Rg<CR>
 
 " Toggle through buffers
 nnoremap <leader><leader> <c-^>
@@ -195,8 +196,13 @@ set ambiwidth=single
 
 
 " =============================================================================
-" # LSP client setup
+" # Telescope
 " =============================================================================
+
+lua << EOF
+require('telescope').setup {}
+require('telescope').load_extension('fzf')
+EOF
 
 lua << EOF
 local nvim_lsp = require('lspconfig')
@@ -216,21 +222,16 @@ local on_attach = function(client, bufnr)
    -- See `:help vim.lsp.*` for documentation on any of the below functions
   buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
   buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
-  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
-  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
   buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
-  buf_set_keymap('n', '<space>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', opts)
-  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -245,6 +246,7 @@ nvim_lsp.pyright.setup {
   flags = flags
 }
 
+-- TODO(2021-10-01): Turn off for now. Issues with both denols/tsserver running for JS/TS.
 -- nvim_lsp.denols.setup {
 --   root_dir = nvim_lsp.util.root_pattern("deno.json"),
 --   on_attach = on_attach,
@@ -252,7 +254,7 @@ nvim_lsp.pyright.setup {
 -- }
 
 nvim_lsp.tsserver.setup {
-  root_dir = nvim_lsp.util.root_pattern("package.json"),
+  -- root_dir = nvim_lsp.util.root_pattern("package.json"),
   on_attach = on_attach,
   capabilities = capabilities,
   flags = flags,
