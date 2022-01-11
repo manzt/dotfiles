@@ -80,26 +80,13 @@ set colorcolumn=90
 nnoremap <C-j> <Esc>
 inoremap <C-j> <Esc>
 
-" Open hotkeys
-noremap <leader>ft :Telescope git_files<CR>
-noremap <leader>fd :Telescope find_files<CR>
-noremap <leader>; :Telescope buffers<CR>
-noremap <leader>s :Telescope grep_string<CR>
-noremap <leader>ca :Telescope lsp_code_actions<CR>
-noremap <leader>d :Telescope diagnostics bufnr=0<CR>
-noremap <leader>D :Telescope lsp_type_definitions<CR>
-noremap gr :Telescope lsp_references<CR>
-
-" edit dotfiles
-noremap <leader>ed :Telescope git_files cwd=~/github/manzt/dotfiles<CR>
-
 " Copy clipboard
 map <leader>y "*y
-
 
 " Toggle through buffers
 nnoremap <leader><leader> <c-^>
 
+" open current file with default app
 nmap <leader>x :!open %<cr><cr>
 
 " =============================================================================
@@ -188,6 +175,19 @@ set ambiwidth=single
 " =============================================================================
 " # Telescope
 " =============================================================================
+"
+noremap <leader>ft :Telescope git_files<CR>
+noremap <leader>fd :Telescope find_files<CR>
+noremap <leader>; :Telescope buffers<CR>
+noremap <leader>s :Telescope grep_string<CR>
+noremap <space>ca :Telescope lsp_code_actions<CR>
+noremap <space>d :Telescope diagnostics bufnr=0<CR>
+noremap <space>D :Telescope lsp_type_definitions<CR>
+noremap gr :Telescope lsp_references<CR>
+
+" edit dotfiles
+noremap <leader>ed :Telescope git_files cwd=~/github/manzt/dotfiles<CR>
+
 
 lua << EOF
 require('telescope').load_extension('fzf')
@@ -218,23 +218,25 @@ local on_attach = function(client, bufnr)
   buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
   buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
   buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
   buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
   buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
 end
 
 -- nvim-cmp supports additional completion capabilities
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').update_capabilities(capabilities)
-
+local capabilities = require('cmp_nvim_lsp').update_capabilities(
+  vim.lsp.protocol.make_client_capabilities()
+)
 local flags = { debounce_text_changes = 150 }
 
-nvim_lsp.pyright.setup {
-  on_attach = on_attach,
-  capabilities = capabilities,
-  flags = flags
-}
+local servers = { 'pyright', 'tsserver' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = flags,
+  }
+end
 
 -- TODO(2022-10-01): Turn off for now. Issues with both denols/tsserver running for JS/TS.
 -- nvim_lsp.denols.setup {
@@ -243,20 +245,6 @@ nvim_lsp.pyright.setup {
 --   flags,
 -- }
 
-nvim_lsp.tsserver.setup {
-  -- root_dir = nvim_lsp.util.root_pattern("package.json"),
-  on_attach = on_attach,
-  capabilities = capabilities,
-  flags = flags,
-}
-
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    virtual_text = true,
-    signs = true,
-    update_in_insert = true,
-  }
-)
 
 require('rust-tools').setup {
   tools = {
@@ -335,19 +323,4 @@ cmp.setup {
     ghost_text = true,
   },
 }
-EOF
-
-" https://github.com/neovim/nvim-lspconfig/issues/195#issuecomment-753644842
-lua <<EOF
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    -- disable virtual text
-    virtual_text = false,
-    -- show signs
-    signs = true,
-    -- delay update diagnostics
-    update_in_insert = false,
-    -- display_diagnostic_autocmds = { "InsertLeave" },
-  }
-)
 EOF
