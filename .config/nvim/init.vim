@@ -61,25 +61,14 @@ if has("autocmd")
 endif
 
 " =============================================================================
-" # Deal with colors ... 
+" # Deal with colors ...
 " =============================================================================
-
-if !has('gui_running')
-  set t_Co=256
-endif
-
-if (match($TERM, "-256color") != -1) && (match($TERM, "screen-256color") == -1)
-  " screen does not (yet) support truecolor
-  set termguicolors
-endif
 
 set background=dark
 let base16colorspace=256
 colorscheme base16-gruvbox-dark-hard
 
 highlight Normal guibg=NONE ctermbg=NONE
-
-" call matchadd('ColorColumn', '\%81v', 90)
 highlight ColorColumn ctermbg=8
 set colorcolumn=90
 
@@ -150,7 +139,6 @@ set list
 set listchars=tab:→\ ,trail:·
 " set listchars=tab:▶\ ,trail:·
 
-
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
@@ -170,10 +158,6 @@ set mouse=a " Enable mouse usage (all modes) in terminals
 " Enable searching as you type, rather than waiting till you press enter.
 set incsearch
 
-" Ignore patterns for ctrlp
-set wildignore+=*/tmp/*
-set wildignore+=*/node_modules/*
-
 " Sane splits
 set splitright
 set splitbelow
@@ -186,7 +170,6 @@ set lazyredraw
 set synmaxcol=500
 set laststatus=2
 
-set hidden
 set nowrap
 set nojoinspaces
 
@@ -207,9 +190,12 @@ set ambiwidth=single
 " =============================================================================
 
 lua << EOF
-require('telescope').setup {}
 require('telescope').load_extension('fzf')
 EOF
+
+" =============================================================================
+" # LSP
+" =============================================================================
 
 lua << EOF
 local nvim_lsp = require('lspconfig')
@@ -250,7 +236,7 @@ nvim_lsp.pyright.setup {
   flags = flags
 }
 
--- TODO(2021-10-01): Turn off for now. Issues with both denols/tsserver running for JS/TS.
+-- TODO(2022-10-01): Turn off for now. Issues with both denols/tsserver running for JS/TS.
 -- nvim_lsp.denols.setup {
 --   root_dir = nvim_lsp.util.root_pattern("deno.json"),
 --   on_attach = on_attach,
@@ -350,8 +336,6 @@ cmp.setup {
   },
 }
 EOF
-
-au BufReadPost *.njk set syntax=html
 
 " https://github.com/neovim/nvim-lspconfig/issues/195#issuecomment-753644842
 lua <<EOF
