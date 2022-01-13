@@ -250,14 +250,10 @@ require('rust-tools').setup {
   tools = {
     autoSetHints = true,
     hover_with_actions = true,
-    inlay_hints = {
-      show_parameter_hints = false,
-      parameter_hints_prefix = "",
-      other_hints_prefix = "",
-    },
   },
   server = {
     on_attach = on_attach,
+    flags = flags,
     settings = {
       ["rust-analyzer"] = {
         checkOnSave = {
@@ -300,7 +296,7 @@ cmp.setup {
     { name = 'nvim_lsp' },
     { name = 'path' },
     { name = 'luasnip' },
-    { name = 'buffer', keyword_length = 3 },
+    { name = 'buffer' },
   },
   snippet = {
     expand = function(args)

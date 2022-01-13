@@ -61,15 +61,12 @@ export FZF_DEFAULT_COMMAND='rg --files'
 
 # aliases
 alias ls=exa
-alias tree='exa --tree'
+alias tree="exa --tree"
 alias vim=nvim
-alias path='echo -e ${PATH//:/\\n}'
-alias tmux='tmux -2'
+alias path="echo -e ${PATH//:/\\n}"
+alias tmux="tmux -2"
 alias R=radian
-
-
-# enable vi mode
-# bindkey -v
+alias icat="kitty +kitten icat"
 
 # tools
 eval "$(starship init zsh)"
