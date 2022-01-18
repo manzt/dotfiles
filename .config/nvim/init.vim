@@ -3,7 +3,6 @@ set rtp +=~/.vim
 nnoremap <SPACE> <Nop>
 let mapleader="\<Space>"
 
-
 " =============================================================================
 " # PLUGINS
 " =============================================================================
@@ -37,40 +36,39 @@ Plug 'onsails/lspkind-nvim'
 
 " Language/format-specific tools
 Plug 'simrat39/rust-tools.nvim'
-Plug 'evanleck/vim-svelte'
-Plug 'romainl/vim-cool'
-Plug 'cespare/vim-toml'
 Plug 'snakemake/snakemake', {'rtp': 'misc/vim'}
 
 " Delete, change, add surrounding pairs
 Plug 'tpope/vim-surround'
 
-" Disable copilot
+" make hlsearch nicer
+Plug 'romainl/vim-cool'
+
+" Github Copilot
 " Plug 'github/copilot.vim'
+" imap <silent><script><expr> <C-m> copilot#Accept("\<CR>")
+" let g:copilot_no_tab_map = v:true
 
 call plug#end()
+
 
 " =============================================================================
 " # Autocommands
 " =============================================================================
 
-" Jump to last edit position on opening file
-if has("autocmd")
-  " https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
-  au BufReadPost * if expand('%:p') !~# '\m/\.git/' && line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
-endif
+" Jump to last cursor position unless it's invalid or in an event handler
+autocmd BufReadPost *
+\ if line("'\"") > 0 && line("'\"") <= line("$") |
+\   exe "normal g`\"" |
+\ endif
 
 " =============================================================================
-" # Deal with colors ...
+" # Colors
 " =============================================================================
 
 set background=dark
 let base16colorspace=256
 colorscheme base16-gruvbox-dark-hard
-
-highlight Normal guibg=NONE ctermbg=NONE
-highlight ColorColumn ctermbg=8
-set colorcolumn=90
 
 " =============================================================================
 " # Key mappings
@@ -86,6 +84,9 @@ map <leader>y "*y
 " Toggle through buffers
 nnoremap <leader><leader> <c-^>
 
+" Insert a hash rocket with <c-l>
+imap <c-l> <space>=><space>
+
 " open current file with default app
 nmap <leader>x :!open %<cr><cr>
 
@@ -93,6 +94,7 @@ nmap <leader>x :!open %<cr><cr>
 " # Editor settings
 " =============================================================================
 
+" Turn folding off
 set nofoldenable
 
 " Turn on syntax highlighting.
@@ -105,7 +107,7 @@ set shiftwidth=4
 
 " Completion
 " Better display for messages
-set cmdheight=2
+set cmdheight=1
 
 " Keep more context when scrolling off the end of a buffer
 set scrolloff=3
@@ -119,19 +121,15 @@ set autoread
 
 " Line numbers
 set number
-set relativenumber 
+set relativenumber
 set numberwidth=2
 
 set list
 set listchars=tab:→\ ,trail:·
-" set listchars=tab:▶\ ,trail:·
 
 " Permanent undo
 set undodir=~/.vimdid
 set undofile
-
-" TextEdit might fail if hidden is not set.
-set hidden
 
 " Having longer update time leads to noticeable delays 
 " and poor user experience.
@@ -142,44 +140,37 @@ set laststatus=2
 
 set mouse=a " Enable mouse usage (all modes) in terminals
 
-" Enable searching as you type, rather than waiting till you press enter.
-set incsearch
-
 " Sane splits
 set splitright
 set splitbelow
 
-set showcmd " Show (partial) command in status line.
-
-set ttyfast
 " https://github.com/vim/vim/issues/1735#issuecomment-383353563
 set lazyredraw
 set synmaxcol=500
 set laststatus=2
 
 set nowrap
+" Insert only one space when joining lines that contain sentence-terminating punctuation like `.`.
 set nojoinspaces
 
 set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%)
 
 " Proper search
 set incsearch
-set ignorecase
-set smartcase
+set ignorecase smartcase
 set gdefault
 
 set encoding=utf-8
 set ambiwidth=single
 
-
 " =============================================================================
 " # Telescope
 " =============================================================================
 "
-noremap <leader>ft :Telescope git_files<CR>
-noremap <leader>fd :Telescope find_files<CR>
+noremap <C-p> :Telescope git_files<CR>
+noremap <leader>ff :Telescope find_files<CR>
 noremap <leader>; :Telescope buffers<CR>
-noremap <leader>s :Telescope grep_string<CR>
+noremap <leader>s :Telescope live_grep<CR>
 noremap <space>ca :Telescope lsp_code_actions<CR>
 noremap <space>d :Telescope diagnostics bufnr=0<CR>
 noremap <space>D :Telescope lsp_type_definitions<CR>
@@ -187,7 +178,6 @@ noremap gr :Telescope lsp_references<CR>
 
 " edit dotfiles
 noremap <leader>ed :Telescope git_files cwd=~/github/manzt/dotfiles<CR>
-
 
 lua << EOF
 require('telescope').load_extension('fzf')
@@ -233,6 +223,7 @@ local flags = { debounce_text_changes = 150 }
 local servers = { 'pyright', 'tsserver' }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
+    capabilities = capabilities,
     on_attach = on_attach,
     flags = flags,
   }
@@ -245,12 +236,7 @@ end
 --   flags,
 -- }
 
-
 require('rust-tools').setup {
-  tools = {
-    autoSetHints = true,
-    hover_with_actions = true,
-  },
   server = {
     on_attach = on_attach,
     flags = flags,
