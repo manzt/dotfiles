@@ -172,7 +172,7 @@ noremap <leader>ff :Telescope find_files<CR>
 noremap <leader>; :Telescope buffers<CR>
 noremap <leader>s :Telescope live_grep<CR>
 noremap <space>ca :Telescope lsp_code_actions<CR>
-noremap <space>d :Telescope diagnostics bufnr=0<CR>
+noremap <space>d :Telescope diagnostics<CR>
 noremap <space>D :Telescope lsp_type_definitions<CR>
 noremap gr :Telescope lsp_references<CR>
 
@@ -192,26 +192,18 @@ local nvim_lsp = require('lspconfig')
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(client, bufnr)
-  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
-  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  --Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
-  -- Mappings.
-  local opts = { noremap=true, silent=true }
-
+local on_attach = function()
    -- See `:help vim.lsp.*` for documentation on any of the below functions
-  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
-  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
-  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
-  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
-  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
-  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
-  buf_set_keymap('n', '<space>e', '<cmd>lua vim.diagnostic.open_float()<CR>', opts)
-  buf_set_keymap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
-  buf_set_keymap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0 })
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = 0 })
+  vim.keymap.set('n', 'gT', vim.lsp.buf.type_definition, { buffer = 0 })
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { buffer = 0 })
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { buffer = 0 })
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { buffer = 0 })
+  vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, { buffer = 0 })
+  vim.keymap.set('n', '<space>dn', vim.diagnostic.goto_next, { buffer = 0 })
+  vim.keymap.set('n', '<space>dp', vim.diagnostic.goto_prev, { buffer = 0 })
 end
 
 -- nvim-cmp supports additional completion capabilities
