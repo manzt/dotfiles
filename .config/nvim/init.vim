@@ -75,8 +75,8 @@ colorscheme base16-gruvbox-dark-hard
 " =============================================================================
 
 " Ctrl+j as Esc
-nnoremap <C-j> <Esc>
-inoremap <C-j> <Esc>
+" nnoremap <C-j> <Esc>
+" inoremap <C-j> <Esc>
 
 " Copy clipboard
 map <leader>y "*y
@@ -210,36 +210,21 @@ end
 local capabilities = require('cmp_nvim_lsp').update_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
-local flags = { debounce_text_changes = 150 }
 
-local servers = { 'pyright', 'tsserver' }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    capabilities = capabilities,
-    on_attach = on_attach,
-    flags = flags,
-  }
-end
+nvim_lsp.pyright.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
 
--- TODO(2022-10-01): Turn off for now. Issues with both denols/tsserver running for JS/TS.
--- nvim_lsp.denols.setup {
---   root_dir = nvim_lsp.util.root_pattern("deno.json"),
---   on_attach = on_attach,
---   flags,
--- }
+nvim_lsp.tsserver.setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
 
 require('rust-tools').setup {
   server = {
     on_attach = on_attach,
-    flags = flags,
-    settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = {
-          command = "clippy"
-        },
-      }
-    }
-  },
+  }
 }
 EOF
 
@@ -255,9 +240,6 @@ EOF
 set completeopt=menuone,noinsert,noselect
 
 lua <<EOF
-local lspkind = require 'lspkind'
-lspkind.init()
-
 local cmp = require 'cmp'
 cmp.setup {
   mapping = {
@@ -282,7 +264,7 @@ cmp.setup {
     end,
   },
   formatting = {
-    format = lspkind.cmp_format {
+    format = require('lspkind').cmp_format {
       with_text = true,
       menu = {
         buffer = "[buf]",

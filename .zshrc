@@ -71,7 +71,7 @@ alias icat="kitty +kitten icat"
 # tools
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
-eval "$(fnm env)"
+eval "$(fnm env --use-on-cd)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
