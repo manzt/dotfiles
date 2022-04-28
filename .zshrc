@@ -153,7 +153,7 @@ alias path="echo -e ${PATH//:/\\n}"
 alias tmux="tmux -2"
 alias R=radian
 alias icat="kitty +kitten icat"
-alias rust-analyzer="rustup run nightly rust-analyzer"
+alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 
 # tools
 eval "$(starship init zsh)"

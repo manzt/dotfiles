@@ -45,9 +45,9 @@ Plug 'tpope/vim-surround'
 Plug 'romainl/vim-cool'
 
 " Github Copilot
-Plug 'github/copilot.vim'
-imap <silent><script><expr> <C-m> copilot#Accept("\<CR>")
-let g:copilot_no_tab_map = v:true
+" Plug 'github/copilot.vim'
+" imap <silent><script><expr> <C-m> copilot#Accept("\<CR>")
+" let g:copilot_no_tab_map = v:true
 
 call plug#end()
 
@@ -223,7 +223,10 @@ nvim_lsp.tsserver.setup {
 
 require('rust-tools').setup {
   server = {
+    capabilities = capabilities,
     on_attach = on_attach,
+    standalone = false,
+    cmd = { "rustup", "run", "nightly", "rust-analyzer" },
   }
 }
 EOF
