@@ -17,15 +17,15 @@ Plug 'chriskempson/base16-vim'
 " Fuzzy finder
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Semantic language support
 Plug 'neovim/nvim-lspconfig'
-Plug 'hrsh7th/nvim-cmp'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/nvim-cmp'
 
 " Snippets
 Plug 'saadparwaiz1/cmp_luasnip'
@@ -43,6 +43,9 @@ Plug 'tpope/vim-surround'
 
 " make hlsearch nicer
 Plug 'romainl/vim-cool'
+
+" formatting
+Plug 'mhartington/formatter.nvim'
 
 " Github Copilot
 " Plug 'github/copilot.vim'
@@ -188,22 +191,24 @@ EOF
 " =============================================================================
 
 lua << EOF
-local nvim_lsp = require('lspconfig')
+local opts = { noremap = true, silent = true }
+vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '<space>dn', vim.diagnostic.goto_next, opts)
+vim.keymap.set('n', '<space>dp', vim.diagnostic.goto_prev, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function()
+local on_attach = function(_client, bufnr)
    -- See `:help vim.lsp.*` for documentation on any of the below functions
-  vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
-  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0 })
-  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, { buffer = 0 })
-  vim.keymap.set('n', 'gT', vim.lsp.buf.type_definition, { buffer = 0 })
-  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, { buffer = 0 })
-  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, { buffer = 0 })
-  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { buffer = 0 })
-  vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, { buffer = 0 })
-  vim.keymap.set('n', '<space>dn', vim.diagnostic.goto_next, { buffer = 0 })
-  vim.keymap.set('n', '<space>dp', vim.diagnostic.goto_prev, { buffer = 0 })
+  local bufopts = { noremap = true, silent = true, buffer = bufnr }
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+  vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+  vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+  vim.keymap.set('n', 'gT', vim.lsp.buf.type_definition, bufopts)
+  vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
+  vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+  vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+  vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -211,15 +216,31 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 
-nvim_lsp.pyright.setup {
+local nvim_lsp = require('lspconfig')
+
+nvim_lsp['pyright'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
 
-nvim_lsp.tsserver.setup {
+nvim_lsp['tsserver'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  root_dir = nvim_lsp.util.root_pattern("package.json")
+}
+
+nvim_lsp['denols'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  root_dir = nvim_lsp.util.root_pattern("deno.json")
+}
+
+nvim_lsp['svelte'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
+
+-- nvim_lsp['eslint'].setup { capabilities = capabilities, on_attach = on_attach, }
 
 require('rust-tools').setup {
   server = {
@@ -242,9 +263,10 @@ EOF
 " noselect: Do not select, force user to select one from the menu
 set completeopt=menuone,noinsert,noselect
 
+
 lua <<EOF
 local cmp = require 'cmp'
-cmp.setup {
+cmp.setup({
   mapping = {
     ["<C-d>"] = cmp.mapping.scroll_docs(-4),
     ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -254,6 +276,9 @@ cmp.setup {
       select = true,
     },
     ["<c-space>"] = cmp.mapping.complete(),
+    --- https://stackoverflow.com/questions/71914213/nvim-completion-menu-issue
+    ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item()),
+    ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item()),
   },
   sources = {
     { name = 'nvim_lsp' },
@@ -281,5 +306,58 @@ cmp.setup {
     native_menu = false,
     ghost_text = true,
   },
-}
+})
 EOF
+
+
+" =============================================================================
+" # Treesitter
+" =============================================================================
+lua <<EOF
+require('nvim-treesitter.configs').setup({
+  highlight = {
+    enable = true,
+    disable = { },
+    additional_vim_regex_highlighting = false,
+  },
+})
+
+EOF
+
+" =============================================================================
+" # Formatter
+" =============================================================================
+lua <<EOF
+local denofmt = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "-", "--options-use-tabs" },
+    stdin = true,
+  }
+end
+
+local black = function()
+  return {
+    exe = "black",
+    args = { '-' },
+    stdin = true,
+  }
+end
+
+require('formatter').setup({
+  filetype = {
+    python = { black },
+    javascript = { denofmt },
+    javascriptreact = { denofmt },
+    typescript = { denofmt },
+    typescriptreact = { denofmt },
+    html = { denofmt },
+    css = { denofmt },
+    json = { denofmt },
+    markdown = { denofmt },
+  }
+})
+EOF
+
+nnoremap <silent> <leader>f :Format<CR>
+set timeoutlen=300
