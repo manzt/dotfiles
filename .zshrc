@@ -175,3 +175,10 @@ compinit -u
 export PNPM_HOME="/Users/manzt/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
+
+# bun completions
+[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
+
+# Bun
+export BUN_INSTALL="/Users/manzt/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
