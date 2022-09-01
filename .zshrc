@@ -151,7 +151,7 @@ alias tree="exa --tree"
 alias vim=nvim
 alias path="echo -e ${PATH//:/\\n}"
 alias tmux="tmux -2"
-alias R=radian
+# alias R=radian
 alias icat="kitty +kitten icat"
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 

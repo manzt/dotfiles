@@ -44,6 +44,9 @@ Plug 'tpope/vim-surround'
 " make hlsearch nicer
 Plug 'romainl/vim-cool'
 
+" vim ui select
+Plug 'nvim-telescope/telescope-ui-select.nvim'
+
 " formatting
 Plug 'mhartington/formatter.nvim'
 
@@ -51,6 +54,9 @@ Plug 'mhartington/formatter.nvim'
 " Plug 'github/copilot.vim'
 " imap <silent><script><expr> <C-m> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
+
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 
 call plug#end()
 
@@ -174,7 +180,6 @@ noremap <C-p> :Telescope git_files<CR>
 noremap <leader>ff :Telescope find_files<CR>
 noremap <leader>; :Telescope buffers<CR>
 noremap <leader>s :Telescope live_grep<CR>
-noremap <space>ca :Telescope lsp_code_actions<CR>
 noremap <space>d :Telescope diagnostics<CR>
 noremap <space>D :Telescope lsp_type_definitions<CR>
 noremap gr :Telescope lsp_references<CR>
@@ -184,6 +189,7 @@ noremap <leader>ed :Telescope git_files cwd=~/github/manzt/dotfiles<CR>
 
 lua << EOF
 require('telescope').load_extension('fzf')
+require('telescope').load_extension('ui-select')
 EOF
 
 " =============================================================================
@@ -209,6 +215,7 @@ local on_attach = function(_client, bufnr)
   vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
   vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
   vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+  vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
 end
 
 -- nvim-cmp supports additional completion capabilities
@@ -240,15 +247,18 @@ nvim_lsp['svelte'].setup {
   on_attach = on_attach,
 }
 
--- nvim_lsp['eslint'].setup { capabilities = capabilities, on_attach = on_attach, }
+nvim_lsp['eslint'].setup { capabilities = capabilities, on_attach = on_attach }
 
 require('rust-tools').setup {
   server = {
     capabilities = capabilities,
     on_attach = on_attach,
-    standalone = false,
-    cmd = { "rustup", "run", "nightly", "rust-analyzer" },
-  }
+    settings = {
+      ["rust-analyzer"] = {
+        checkOnSave = { command = "clippy" },
+      }
+    }
+  },
 }
 EOF
 
