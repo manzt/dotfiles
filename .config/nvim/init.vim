@@ -21,6 +21,8 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Semantic language support
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 Plug 'neovim/nvim-lspconfig'
 Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
@@ -50,12 +52,12 @@ Plug 'nvim-telescope/telescope-ui-select.nvim'
 " formatting
 Plug 'mhartington/formatter.nvim'
 
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 " Github Copilot
 " Plug 'github/copilot.vim'
 " imap <silent><script><expr> <C-m> copilot#Accept("\<CR>")
 " let g:copilot_no_tab_map = v:true
-
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 
 
 call plug#end()
@@ -197,6 +199,9 @@ EOF
 " =============================================================================
 
 lua << EOF
+require("mason").setup()
+require("mason-lspconfig").setup()
+
 local opts = { noremap = true, silent = true }
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float, opts)
 vim.keymap.set('n', '<space>dn', vim.diagnostic.goto_next, opts)
@@ -223,43 +228,46 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(
   vim.lsp.protocol.make_client_capabilities()
 )
 
-local nvim_lsp = require('lspconfig')
-
-nvim_lsp['pyright'].setup {
+require('lspconfig')['solargraph'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
-
-nvim_lsp['tsserver'].setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern("package.json")
-}
-
-nvim_lsp['denols'].setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-  root_dir = nvim_lsp.util.root_pattern("deno.json")
-}
-
-nvim_lsp['svelte'].setup {
+require('lspconfig')['pyright'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
-
-nvim_lsp['eslint'].setup { capabilities = capabilities, on_attach = on_attach }
-
+require('lspconfig')['svelte'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
+require('lspconfig')['eslint'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
+require('lspconfig')['vuels'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
+require('lspconfig')['tsserver'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  root_dir = require('lspconfig').util.root_pattern('package.json'),
+}
+require('lspconfig')['denols'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
+}
 require('rust-tools').setup {
   server = {
     capabilities = capabilities,
     on_attach = on_attach,
     settings = {
-      ["rust-analyzer"] = {
-        checkOnSave = { command = "clippy" },
-      }
-    }
+      ["rust-analyzer"] = { checkOnSave = { command = "clippy" } },
+    },
   },
 }
+
 EOF
 
 " =============================================================================

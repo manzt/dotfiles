@@ -19,7 +19,7 @@ setopt HIST_IGNORE_ALL_DUPS
 #
 
 # Set editor default keymap to emacs (`-e`) or vi (`-v`)
-bindkey -e
+bindkey -v
 
 # Prompt for spelling correction of commands.
 #setopt CORRECT
@@ -141,18 +141,16 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # }}} End configuration added by Zim install
 
+export EDITOR=nvim
+
 export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
-export FZF_DEFAULT_COMMAND='rg --files'
 
 # aliases
 alias ls=exa
 alias tree="exa --tree"
 alias vim=nvim
 alias path="echo -e ${PATH//:/\\n}"
-alias tmux="tmux -2"
-# alias R=radian
-alias icat="kitty +kitten icat"
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 
 # tools
@@ -161,6 +159,7 @@ eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+alias fzf=fzf-tmux
 
 # deno
 fpath=(~/.zsh $fpath)
@@ -182,3 +181,4 @@ export PATH="$PNPM_HOME:$PATH"
 # Bun
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
