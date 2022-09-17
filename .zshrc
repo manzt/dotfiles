@@ -147,7 +147,6 @@ export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
 # aliases
-alias ls=exa
 alias tree="exa --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'

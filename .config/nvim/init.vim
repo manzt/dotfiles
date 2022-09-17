@@ -39,6 +39,7 @@ Plug 'onsails/lspkind-nvim'
 " Language/format-specific tools
 Plug 'simrat39/rust-tools.nvim'
 Plug 'snakemake/snakemake', {'rtp': 'misc/vim'}
+Plug 'jose-elias-alvarez/typescript.nvim'
 
 " Delete, change, add surrounding pairs
 Plug 'tpope/vim-surround'
@@ -53,12 +54,6 @@ Plug 'nvim-telescope/telescope-ui-select.nvim'
 Plug 'mhartington/formatter.nvim'
 
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
-
-" Github Copilot
-" Plug 'github/copilot.vim'
-" imap <silent><script><expr> <C-m> copilot#Accept("\<CR>")
-" let g:copilot_no_tab_map = v:true
-
 
 call plug#end()
 
@@ -92,14 +87,10 @@ colorscheme base16-gruvbox-dark-hard
 " Copy clipboard
 map <leader>y "*y
 
-" Toggle through buffers
-nnoremap <leader><leader> <c-^>
-
-" Insert a hash rocket with <c-l>
-imap <c-l> <space>=><space>
-
 " open current file with default app
-nmap <leader>x :!open %<cr><cr>
+nmap <leader>x :!open %<CR>
+
+xnoremap <leader>go <esc>:'<,'>:w !google<CR>
 
 " =============================================================================
 " # Editor settings
@@ -182,8 +173,8 @@ noremap <C-p> :Telescope git_files<CR>
 noremap <leader>ff :Telescope find_files<CR>
 noremap <leader>; :Telescope buffers<CR>
 noremap <leader>s :Telescope live_grep<CR>
-noremap <space>d :Telescope diagnostics<CR>
-noremap <space>D :Telescope lsp_type_definitions<CR>
+noremap <leader>d :Telescope diagnostics<CR>
+noremap <leader>D :Telescope lsp_type_definitions<CR>
 noremap gr :Telescope lsp_references<CR>
 
 " edit dotfiles
@@ -209,7 +200,7 @@ vim.keymap.set('n', '<space>dp', vim.diagnostic.goto_prev, opts)
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
-local on_attach = function(_client, bufnr)
+local on_attach = function(client, bufnr)
    -- See `:help vim.lsp.*` for documentation on any of the below functions
   local bufopts = { noremap = true, silent = true, buffer = bufnr }
   vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -248,15 +239,17 @@ require('lspconfig')['vuels'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
-require('lspconfig')['tsserver'].setup {
-  capabilities = capabilities,
-  on_attach = on_attach,
-  root_dir = require('lspconfig').util.root_pattern('package.json'),
-}
 require('lspconfig')['denols'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
   root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
+}
+require('typescript').setup {
+  server = {
+    capabilities = capabilities,
+    on_attach = on_attach,
+    root_dir = require('lspconfig').util.root_pattern('package.json'),
+  },
 }
 require('rust-tools').setup {
   server = {
@@ -335,11 +328,9 @@ lua <<EOF
 require('nvim-treesitter.configs').setup({
   highlight = {
     enable = true,
-    disable = { },
     additional_vim_regex_highlighting = false,
   },
 })
-
 EOF
 
 " =============================================================================
