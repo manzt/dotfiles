@@ -82,9 +82,11 @@ endif
 " # Key mappings
 " =============================================================================
 
-" Ctrl+j as Esc
-" nnoremap <C-j> <Esc>
-" inoremap <C-j> <Esc>
+" Toggle through buffers
+nnoremap <leader><leader> <c-^>
+
+" Insert a hash rocket with <c-l>
+imap <c-l> <space>=><space>
 
 " Copy clipboard
 map <leader>y "*y
