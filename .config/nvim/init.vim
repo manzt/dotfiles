@@ -174,13 +174,22 @@ set ambiwidth=single
 " # Telescope
 " =============================================================================
 "
-noremap <C-p> :Telescope git_files<CR>
 noremap <leader>ff :Telescope find_files<CR>
 noremap <leader>; :Telescope buffers<CR>
 noremap <leader>s :Telescope live_grep<CR>
 noremap <leader>d :Telescope diagnostics<CR>
 noremap <leader>D :Telescope lsp_type_definitions<CR>
 noremap gr :Telescope lsp_references<CR>
+
+lua << EOF
+local project_files = function()
+  local opts = {} -- define here if you want to define something
+  local ok = pcall(require"telescope.builtin".git_files, opts)
+  if not ok then require"telescope.builtin".find_files(opts) end
+end
+
+vim.keymap.set("n", "<C-p>", project_files, { noremap = false })
+EOF
 
 " edit dotfiles
 noremap <leader>ed :Telescope git_files cwd=~/github/manzt/dotfiles<CR>
