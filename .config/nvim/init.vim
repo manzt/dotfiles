@@ -362,6 +362,30 @@ local denofmt = function()
   }
 end
 
+local denofmtjson = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "-", "--options-use-tabs", "--ext", "json" },
+    stdin = true,
+  }
+end
+
+local denofmthtml = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "-", "--options-use-tabs", "--ext", "html" },
+    stdin = true,
+  }
+end
+
+local denofmtmd = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "--ext", "md" },
+    stdin = true,
+  }
+end
+
 local black = function()
   return {
     exe = "black",
@@ -377,10 +401,9 @@ require('formatter').setup({
     javascriptreact = { denofmt },
     typescript = { denofmt },
     typescriptreact = { denofmt },
-    html = { denofmt },
-    css = { denofmt },
-    json = { denofmt },
-    markdown = { denofmt },
+    html = { denofmthtml },
+    json = { denofmtjson },
+    markdown = { denofmtmd },
   }
 })
 EOF
