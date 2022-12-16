@@ -8,8 +8,4 @@
 # }}} End configuration added by Zim install
 
 . "$HOME/.cargo/env"
-
-. "$HOME/dev/miniforge3/bin"
-. "$HOME/dev/miniforge3/etc/profile.d/conda.sh"
-
 . "$HOME/.deno/bin"
