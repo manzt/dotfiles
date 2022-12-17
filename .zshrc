@@ -181,14 +181,6 @@ export PATH="$PNPM_HOME:$PATH"
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# theme
-BASE16_SHELL="$HOME/.config/base16-shell/"
-[ -n "$PS1" ] && \
-    [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
-        source "$BASE16_SHELL/profile_helper.sh"
-
-base16_gruvbox-dark-hard
-
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
 __conda_setup="$('/Users/manzt/dev/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"

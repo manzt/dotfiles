@@ -10,9 +10,7 @@ let mapleader="\<Space>"
 call plug#begin()
 
 Plug 'editorconfig/editorconfig-vim'
-
-" Color scheme
-Plug 'chriskempson/base16-vim'
+Plug 'olivercederborg/poimandres.nvim'
 
 " Fuzzy finder
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
@@ -72,12 +70,12 @@ autocmd BufReadPost *
 " =============================================================================
 " # Colors
 " =============================================================================
+"
 
-if exists('$BASE16_THEME')
-      \ && (!exists('g:colors_name') || g:colors_name != 'base16-$BASE16_THEME')
-    let base16colorspace=256
-    colorscheme base16-$BASE16_THEME
-endif
+lua << EOF
+  require('poimandres').setup()
+  vim.cmd('colorscheme poimandres')
+EOF
 
 " =============================================================================
 " # Key mappings
