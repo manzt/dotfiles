@@ -227,9 +227,7 @@ local on_attach = function(client, bufnr)
 end
 
 -- nvim-cmp supports additional completion capabilities
-local capabilities = require('cmp_nvim_lsp').update_capabilities(
-  vim.lsp.protocol.make_client_capabilities()
-)
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 require('lspconfig')['solargraph'].setup {
   capabilities = capabilities,
@@ -248,6 +246,10 @@ require('lspconfig')['eslint'].setup {
   on_attach = on_attach,
 }
 require('lspconfig')['vuels'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+}
+require('lspconfig')['astro'].setup {
   capabilities = capabilities,
   on_attach = on_attach,
 }
