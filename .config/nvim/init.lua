@@ -78,12 +78,6 @@ require('packer').startup(function(use)
 
   -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
-
-  -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
-  local has_plugins, plugins = pcall(require, 'custom.plugins')
-  if has_plugins then
-    plugins(use)
-  end
 end)
 
 -- Automatically source and re-compile packer whenever you save this init.lua
@@ -201,11 +195,23 @@ vim.keymap.set('n', '<leader>/', function()
   })
 end, { desc = '[/] Fuzzily search in current buffer]' })
 
-vim.keymap.set('n', '<C-p>', require('telescope.builtin').find_files)
+local project_files = function()
+  local opts = {} -- define here if you want to define something
+  local ok = pcall(require"telescope.builtin".git_files, opts)
+  if not ok then require"telescope.builtin".find_files(opts) end
+end
+
+vim.keymap.set('n', '<C-p>', project_files)
+vim.keymap.set('n', '<leader>ff', require('telescope.builtin').find_files, { desc = '[F]ind [F]iles' })
 vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc = '[S]earch [H]elp' })
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
+
+vim.keymap.set('n', '<leader>ed', function()
+  require('telescope.builtin').git_files({ cwd = '~/github/manzt/dotfiles' })
+end)
+
 
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
