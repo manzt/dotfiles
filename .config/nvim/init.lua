@@ -40,6 +40,9 @@ require('packer').startup(function(use)
     },
   }
 
+  -- Formatting
+  use 'mhartington/formatter.nvim'
+
   -- Theme
   use 'olivercederborg/poimandres.nvim'
 
@@ -91,8 +94,16 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   pattern = vim.fn.expand '$MYVIMRC',
 })
 
+vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
+
+vim.o.wrap = false
+
+-- Sane splits
+vim.o.splitright = true
+vim.o.splitbelow = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -129,7 +140,7 @@ vim.o.termguicolors = true
 vim.cmd [[colorscheme poimandres]]
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noselect'
+vim.o.completeopt = 'menuone,noselect,noinsert'
 
 -- [[ Basic Keymaps ]]
 -- Set <space> as the leader key
@@ -303,11 +314,6 @@ local on_attach = function(_, bufnr)
   nmap('<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
-
-  -- Create a command `:Format` local to the LSP buffer
-  vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
-    vim.lsp.buf.format()
-  end, { desc = 'Format current buffer with LSP' })
 end
 
 --  Add any additional overrides configuration in the following tables. They will be 
@@ -408,3 +414,60 @@ cmp.setup {
     ghost_text = true,
   },
 }
+
+
+
+local denofmt = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "-", "--options-use-tabs" },
+    stdin = true,
+  }
+end
+
+local denofmtjson = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "-", "--options-use-tabs", "--ext", "json" },
+    stdin = true,
+  }
+end
+
+local denofmthtml = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "-", "--options-use-tabs", "--ext", "html" },
+    stdin = true,
+  }
+end
+
+local denofmtmd = function()
+  return {
+    exe = "deno",
+    args = { "fmt", "--ext", "md" },
+    stdin = true,
+  }
+end
+
+local black = function()
+  return {
+    exe = "black",
+    args = { '-' },
+    stdin = true,
+  }
+end
+
+require('formatter').setup({
+  filetype = {
+    python = { black },
+    javascript = { denofmt },
+    javascriptreact = { denofmt },
+    typescript = { denofmt },
+    typescriptreact = { denofmt },
+    html = { denofmthtml },
+    json = { denofmtjson },
+    markdown = { denofmtmd },
+  }
+})
+
+vim.keymap.set('n', '<leader>f', ':Format<CR>')
