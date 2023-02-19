@@ -62,16 +62,9 @@ require('packer').startup(function(use)
   }
 
   -- Additional text objects via treesitter
-  use {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    after = 'nvim-treesitter',
-  }
-
-  use {
-    'nvim-telescope/telescope-ui-select.nvim',
-    after = 'nvim-treesitter',
-  }
-
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
+  use 'nvim-telescope/telescope-ui-select.nvim'
+  use 'nvim-treesitter/playground'
 
   -- Fuzzy Finder (files, lsp, etc)
   use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
@@ -218,7 +211,7 @@ end)
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help', 'vim' },
-
+  playground = { enable = true },
   highlight = { enable = true },
   indent = { enable = true, disable = { 'python' } },
   incremental_selection = {
