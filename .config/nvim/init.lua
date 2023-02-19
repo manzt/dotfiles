@@ -371,11 +371,10 @@ require('fidget').setup()
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
-local luasnip = require 'luasnip'
 cmp.setup {
   snippet = {
     expand = function(args)
-      luasnip.lsp_expand(args.body)
+      require('luasnip').lsp_expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert {
@@ -470,3 +469,13 @@ require('formatter').setup({
 })
 
 vim.keymap.set('n', '<leader>f', ':Format<CR>')
+
+-- Jump to last position in the file
+vim.api.nvim_create_autocmd('BufReadPost',{
+  callback = function()
+    local row, col = unpack(vim.api.nvim_buf_get_mark(0, "\""))
+    if {row, col} ~= {0, 0} then
+      vim.api.nvim_win_set_cursor(0, {row, col})
+    end
+  end,
+})
