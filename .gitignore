@@ -1,0 +1,14 @@
+/*
+/.config/gh
+/.config/github-copilot
+/.config/neofetch
+/.config/tabtab
+/.config/rstudio
+/.config/htop
+
+!/.config/
+!/.gitignore
+!/.tmux.conf
+!/.zimrc
+!/.zshenv
+!/.zshrc

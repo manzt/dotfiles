@@ -121,6 +121,7 @@ vim.o.scrolloff = 3
 
 -- Default settings for spacing
 vim.o.tabstop = 4
+vim.o.shiftwidth = 4
 
 -- Set colorscheme
 vim.o.termguicolors = true
@@ -202,7 +203,7 @@ vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
 
 vim.keymap.set('n', '<leader>ed', function()
-  require('telescope.builtin').git_files({ cwd = '~/github/manzt/dotfiles' })
+  require('telescope.builtin').git_files({ cwd = '~' })
 end)
 
 
@@ -212,7 +213,10 @@ require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
   ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help', 'vim' },
   playground = { enable = true },
-  highlight = { enable = true },
+  highlight = {
+    enable = true,
+    additional_vim_regex_highlighting = false,
+  },
   indent = { enable = true, disable = { 'python' } },
   incremental_selection = {
     enable = true,
@@ -324,10 +328,26 @@ local servers = {
         workspace = { checkThirdParty = false },
         telemetry = { enable = false },
       },
-    }
+    },
+    root_dir = function(fname)
+      local root = require('lspconfig').util.root_pattern(
+        '.luarc.json',
+        '.luarc.jsonc',
+        '.luacheckrc',
+        '.stylua.toml',
+        'stylua.toml',
+        'selene.toml',
+        'selene.yml',
+        '.git'
+      )(fname)
+      -- prevent workspace from being set to root
+      if root == vim.loop.os_homedir() then return nil end
+      return root or fname
+    end,
   },
   denols = {
     root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
+    single_file_support = false,
   }
 }
 
@@ -350,8 +370,12 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
+    if server_name == 'denols' then
+      -- disable deno for now. Issues with multiple servers.
+      return
+    end
     local opts = { capabilities = capabilities, on_attach = on_attach }
-    for key, value in ipairs(servers[server_name] or {}) do
+    for key, value in pairs(servers[server_name] or {}) do
       opts[key] = value
     end
     require('lspconfig')[server_name].setup(opts)
@@ -396,7 +420,7 @@ cmp.setup {
     { name = 'luasnip' },
     { name = 'buffer' },
   },
-     formatting = {
+  formatting = {
     format = require('lspkind').cmp_format {
       with_text = true,
       menu = {
