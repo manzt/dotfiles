@@ -370,10 +370,6 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
-    if server_name == 'denols' then
-      -- disable deno for now. Issues with multiple servers.
-      return
-    end
     local opts = { capabilities = capabilities, on_attach = on_attach }
     for key, value in pairs(servers[server_name] or {}) do
       opts[key] = value
