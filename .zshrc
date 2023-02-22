@@ -200,3 +200,5 @@ if [ -f "/Users/manzt/dev/mambaforge/etc/profile.d/mamba.sh" ]; then
 fi
 # <<< conda initialize <<<
 
+# SML/NJ
+export PATH=/usr/local/smlnj/bin:"$PATH"
