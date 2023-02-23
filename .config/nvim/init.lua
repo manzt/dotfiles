@@ -46,10 +46,6 @@ require('packer').startup(function(use)
   -- Theme
   use 'olivercederborg/poimandres.nvim'
 
-  -- Language/format-specific tools
-  use 'simrat39/rust-tools.nvim'
-  use 'jose-elias-alvarez/typescript.nvim'
-
   -- Pretty icons for LSP
   use 'onsails/lspkind-nvim'
 
@@ -347,6 +343,9 @@ local servers = {
   },
   denols = {
     root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
+  },
+  tsserver = {
+    root_dir = require('lspconfig').util.root_pattern("package.json"),
     single_file_support = false,
   }
 }
@@ -376,14 +375,6 @@ mason_lspconfig.setup_handlers {
     end
     require('lspconfig')[server_name].setup(opts)
   end
-}
-
-require('typescript').setup {
-  server = {
-    capabilities = capabilities,
-    on_attach = on_attach,
-    root_dir = require('lspconfig').util.root_pattern('package.json'),
-  },
 }
 
 -- Turn on lsp status information
