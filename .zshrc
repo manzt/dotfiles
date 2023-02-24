@@ -181,24 +181,24 @@ export PATH="$PNPM_HOME:$PATH"
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/manzt/dev/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/manzt/dev/mambaforge/etc/profile.d/conda.sh" ]; then
-        . "/Users/manzt/dev/mambaforge/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/manzt/dev/mambaforge/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
-if [ -f "/Users/manzt/dev/mambaforge/etc/profile.d/mamba.sh" ]; then
-    . "/Users/manzt/dev/mambaforge/etc/profile.d/mamba.sh"
-fi
-# <<< conda initialize <<<
-
 # SML/NJ
 export PATH=/usr/local/smlnj/bin:"$PATH"
+
+# >>> mamba initialize >>>
+# !! Contents within this block are managed by 'mamba init' !!
+export MAMBA_EXE="/Users/manzt/.local/bin/micromamba";
+export MAMBA_ROOT_PREFIX="/Users/manzt/micromamba";
+__mamba_setup="$("$MAMBA_EXE" shell hook --shell zsh --prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__mamba_setup"
+else
+    if [ -f "/Users/manzt/micromamba/etc/profile.d/micromamba.sh" ]; then
+        . "/Users/manzt/micromamba/etc/profile.d/micromamba.sh"
+    else
+        export  PATH="/Users/manzt/micromamba/bin:$PATH"  # extra space after export prevents interference from conda init
+    fi
+fi
+unset __mamba_setup
+# <<< mamba initialize <<<
+
+alias mamba=micromamba
