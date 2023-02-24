@@ -1,11 +1,28 @@
-require('packer').startup(function(use)
-  -- Package manager
-  use 'wbthomason/packer.nvim'
+-- bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
 
+-- Set <space> as the leader key
+-- See `:help mapleader`
+--  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
+
+require('lazy').setup {
   -- LSP Configuration & Plugins
-  use {
+  {
     'neovim/nvim-lspconfig',
-    requires = {
+    dependencies = {
       -- Automatically install LSPs to stdpath for neovim
       'williamboman/mason.nvim',
       'williamboman/mason-lspconfig.nvim',
@@ -16,21 +33,21 @@ require('packer').startup(function(use)
       -- Useful status updates for LSP
       'folke/neodev.nvim',
     },
-  }
+  },
 
   -- Delete, change, add surrounding pairs
-  use 'tpope/vim-surround'
+  'tpope/vim-surround',
 
   -- Detect tabstop and shiftwidth automatically
-  use 'tpope/vim-sleuth'
+  'tpope/vim-sleuth',
 
   -- Make highlight search nicer
-  use 'romainl/vim-cool'
+  'romainl/vim-cool',
 
   -- Autocompletion
-  use {
+  {
     'hrsh7th/nvim-cmp',
-    requires = {
+    dependencies = {
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-buffer',
         'hrsh7th/cmp-path',
@@ -38,44 +55,36 @@ require('packer').startup(function(use)
         'L3MON4D3/LuaSnip',
         'saadparwaiz1/cmp_luasnip',
     },
-  }
+  },
 
   -- Formatting
-  use 'mhartington/formatter.nvim'
+  'mhartington/formatter.nvim',
 
   -- Theme
-  use 'olivercederborg/poimandres.nvim'
+  'olivercederborg/poimandres.nvim',
 
   -- Pretty icons for LSP
-  use 'onsails/lspkind-nvim'
+  'onsails/lspkind-nvim',
 
   -- Highlight, edit, and navigate code
-  use {
+  {
     'nvim-treesitter/nvim-treesitter',
-    run = function()
+    build = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
     end,
-  }
+  },
 
   -- Additional text objects via treesitter
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
-  use 'nvim-telescope/telescope-ui-select.nvim'
-  use 'nvim-treesitter/playground'
+  'nvim-treesitter/nvim-treesitter-textobjects',
+  'nvim-telescope/telescope-ui-select.nvim',
+  'nvim-treesitter/playground',
 
   -- Fuzzy Finder (files, lsp, etc)
-  use { 'nvim-telescope/telescope.nvim', branch = '0.1.x', requires = { 'nvim-lua/plenary.nvim' } }
+  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
 
-  -- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
-  use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make', cond = vim.fn.executable 'make' == 1 }
-end)
-
--- Automatically source and re-compile packer whenever you save this init.lua
-local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
-vim.api.nvim_create_autocmd('BufWritePost', {
-  command = 'source <afile> | silent! LspStop | silent! LspStart | PackerCompile',
-  group = packer_group,
-  pattern = vim.fn.expand '$MYVIMRC',
-})
+  -- Fuzzy Finder Algorithm which dependencies local dependencies to be built. Only load if `make` is available
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', cond = vim.fn.executable 'make' == 1 }
+}
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
 
@@ -126,12 +135,6 @@ vim.cmd [[colorscheme poimandres]]
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect,noinsert'
 
--- [[ Basic Keymaps ]]
--- Set <space> as the leader key
--- See `:help mapleader`
---  NOTE: Must happen before plugins are required (otherwise wrong leader will be used)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`

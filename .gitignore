@@ -5,6 +5,8 @@
 /.config/tabtab
 /.config/rstudio
 /.config/htop
+/.config/nvim/lazy-lock.json
+
 
 !/.config/
 !/.gitignore
