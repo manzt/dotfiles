@@ -28,22 +28,19 @@ require('lazy').setup {
       'williamboman/mason-lspconfig.nvim',
 
       -- Useful status updates for LSP
-      'j-hui/fidget.nvim',
+      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- Useful status updates for LSP
-      'folke/neodev.nvim',
+      { 'folke/neodev.nvim', opts = {} },
     },
   },
-
   -- Delete, change, add surrounding pairs
   'tpope/vim-surround',
-
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
-
   -- Make highlight search nicer
   'romainl/vim-cool',
-
   -- Autocompletion
   {
     'hrsh7th/nvim-cmp',
@@ -56,34 +53,40 @@ require('lazy').setup {
         'saadparwaiz1/cmp_luasnip',
     },
   },
-
-  -- Formatting
-  'mhartington/formatter.nvim',
-
   -- Theme
-  'olivercederborg/poimandres.nvim',
-
-  -- Pretty icons for LSP
-  'onsails/lspkind-nvim',
-
+  {
+    'olivercederborg/poimandres.nvim',
+    config = function()
+      vim.o.termguicolors = true
+      vim.cmd.colorscheme 'poimandres'
+    end
+  },
   -- Highlight, edit, and navigate code
   {
     'nvim-treesitter/nvim-treesitter',
-    build = function()
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      'nvim-telescope/telescope-ui-select.nvim',
+      'nvim-treesitter/playground',
+    },
+    config = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
     end,
   },
-
-  -- Additional text objects via treesitter
-  'nvim-treesitter/nvim-treesitter-textobjects',
-  'nvim-telescope/telescope-ui-select.nvim',
-  'nvim-treesitter/playground',
-
   -- Fuzzy Finder (files, lsp, etc)
   { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
-
   -- Fuzzy Finder Algorithm which dependencies local dependencies to be built. Only load if `make` is available
-  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make', cond = vim.fn.executable 'make' == 1 }
+  {
+    'nvim-telescope/telescope-fzf-native.nvim',
+    build = 'make',
+    cond = function()
+      return vim.fn.executable 'make' == 1
+    end
+  },
+  -- Formatting
+  'mhartington/formatter.nvim',
+  -- Pretty icons for LSP
+  'onsails/lspkind-nvim',
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -127,10 +130,6 @@ vim.o.scrolloff = 3
 -- Default settings for spacing
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
-
--- Set colorscheme
-vim.o.termguicolors = true
-vim.cmd [[colorscheme poimandres]]
 
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect,noinsert'
@@ -353,9 +352,6 @@ local servers = {
   }
 }
 
--- Setup neovim lua configuration
-require('neodev').setup()
-
 -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
@@ -379,9 +375,6 @@ mason_lspconfig.setup_handlers {
     require('lspconfig')[server_name].setup(opts)
   end
 }
-
--- Turn on lsp status information
-require('fidget').setup()
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
