@@ -65,8 +65,8 @@ require('lazy').setup {
   {
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
+      { 'nvim-treesitter/nvim-treesitter-context', opts = {} },
       'nvim-treesitter/nvim-treesitter-textobjects',
-      'nvim-telescope/telescope-ui-select.nvim',
       'nvim-treesitter/playground',
     },
     config = function()
@@ -74,7 +74,11 @@ require('lazy').setup {
     end,
   },
   -- Fuzzy Finder (files, lsp, etc)
-  { 'nvim-telescope/telescope.nvim', branch = '0.1.x', dependencies = { 'nvim-lua/plenary.nvim' } },
+  {
+    'nvim-telescope/telescope.nvim',
+    branch = '0.1.x',
+    dependencies = { 'nvim-lua/plenary.nvim' }
+  },
   -- Fuzzy Finder Algorithm which dependencies local dependencies to be built. Only load if `make` is available
   {
     'nvim-telescope/telescope-fzf-native.nvim',
@@ -83,10 +87,13 @@ require('lazy').setup {
       return vim.fn.executable 'make' == 1
     end
   },
+  'nvim-telescope/telescope-ui-select.nvim',
   -- Formatting
   'mhartington/formatter.nvim',
   -- Pretty icons for LSP
   'onsails/lspkind-nvim',
+  -- copilot
+  'github/copilot.vim',
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -199,7 +206,6 @@ vim.keymap.set('n', '<leader>sh', require('telescope.builtin').help_tags, { desc
 vim.keymap.set('n', '<leader>sw', require('telescope.builtin').grep_string, { desc = '[S]earch current [W]ord' })
 vim.keymap.set('n', '<leader>sg', require('telescope.builtin').live_grep, { desc = '[S]earch by [G]rep' })
 vim.keymap.set('n', '<leader>sd', require('telescope.builtin').diagnostics, { desc = '[S]earch [D]iagnostics' })
-
 vim.keymap.set('n', '<leader>ed', function()
   require('telescope.builtin').git_files({ cwd = '~' })
 end)
@@ -269,6 +275,11 @@ require('nvim-treesitter.configs').setup {
       },
     },
   },
+}
+
+vim.diagnostic.config {
+  virtual_text = { source = true },
+  float = { source = true },
 }
 
 -- Diagnostic keymaps
