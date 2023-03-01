@@ -156,6 +156,7 @@ alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
+eval "$(gh completion --shell zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias fzf=fzf-tmux
