@@ -5,6 +5,7 @@
 /.config/tabtab
 /.config/rstudio
 /.config/htop
+/.config/zellij
 /.config/nvim/lazy-lock.json
 
 
