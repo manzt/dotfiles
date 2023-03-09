@@ -157,6 +157,12 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
+eval "$(mcfly init zsh)"
+
+# https://github.com/cantino/mcfly
+export MCFLY_KEY_SCHEME=vim
+export MCFLY_FUZZY=2
+export MCFLY_PROMPT="❯"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias fzf=fzf-tmux
