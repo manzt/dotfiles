@@ -277,6 +277,13 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
+vim.filetype.add({ extension = { mdx = 'mdx' }})
+
+local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
+
+ft_to_parser.mdx = "markdown"
+
+
 vim.diagnostic.config {
   virtual_text = { source = true },
   float = { source = true },
@@ -331,6 +338,15 @@ end
 --  Add any additional overrides configuration in the following tables. They will be 
 --  merged with the `capabilities` and `on_attach` parameters.
 local servers = {
+  rust_analyzer = {
+    settings = {
+      ["rust-analyzer"] = {
+        diagnostics = {
+          disabled = { "unresolved-proc-macro" },
+        },
+      }
+    }
+  },
   lua_ls = {
     settings = {
       Lua = {
