@@ -152,6 +152,9 @@ alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+alias fzf=fzf-tmux
+
 # tools
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
@@ -162,10 +165,8 @@ eval "$(mcfly init zsh)"
 # https://github.com/cantino/mcfly
 export MCFLY_KEY_SCHEME=vim
 export MCFLY_FUZZY=2
+export MCFLY_RESULTS=20
 export MCFLY_PROMPT="❯"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-alias fzf=fzf-tmux
 
 # deno
 fpath=(~/.zsh $fpath)

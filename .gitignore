@@ -1,12 +1,13 @@
 /*
 /.config/gh
 /.config/github-copilot
-/.config/neofetch
-/.config/tabtab
-/.config/rstudio
 /.config/htop
-/.config/zellij
+/.config/neofetch
 /.config/nvim/lazy-lock.json
+/.config/rstudio
+/.config/tabtab
+/.config/zed
+/.config/zellij
 
 
 !/.config/
