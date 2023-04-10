@@ -141,6 +141,8 @@ vim.o.shiftwidth = 4
 -- Set completeopt to have a better completion experience
 vim.o.completeopt = 'menuone,noselect,noinsert'
 
+-- set :substitute flag to g, so that it replaces all occurrences in a line
+vim.o.gdefault = true
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
@@ -220,6 +222,12 @@ require('nvim-treesitter.configs').setup {
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
+    -- disable = function(lang, bufnr)
+    --   return (
+    --     vim.api.nvim_buf_line_count(bufnr) > 50000 or
+    --     vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr)) > 512 * 1024
+    --   )
+    -- end,
   },
   indent = { enable = true, disable = { 'python' } },
   incremental_selection = {
@@ -513,3 +521,9 @@ vim.api.nvim_create_autocmd('BufReadPost',{
     end
   end,
 })
+
+vim.cmd [[
+  augroup strdr4605
+    autocmd FileType typescript,typescriptreact compiler tsc | setlocal makeprg=npx\ tsc
+  augroup END
+]]

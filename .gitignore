@@ -4,6 +4,7 @@
 /.config/htop
 /.config/neofetch
 /.config/nvim/lazy-lock.json
+/.config/planetscale
 /.config/rstudio
 /.config/tabtab
 /.config/zed
