@@ -168,6 +168,8 @@ export MCFLY_FUZZY=2
 export MCFLY_RESULTS=20
 export MCFLY_PROMPT="❯"
 
+export BAT_THEME="TwoDark"
+
 # deno
 fpath=(~/.zsh $fpath)
 autoload -Uz compinit
