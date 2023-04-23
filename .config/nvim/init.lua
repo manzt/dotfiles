@@ -387,10 +387,6 @@ local servers = {
   }
 }
 
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
 -- Setup mason so it can manage external tooling
 require('mason').setup()
 
@@ -403,10 +399,19 @@ mason_lspconfig.setup {
 
 mason_lspconfig.setup_handlers {
   function(server_name)
+    -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+    if server_name == 'clangd' then
+      capabilities.offsetEncoding = 'utf-8'
+    end
+
     local opts = { capabilities = capabilities, on_attach = on_attach }
     for key, value in pairs(servers[server_name] or {}) do
       opts[key] = value
     end
+
     require('lspconfig')[server_name].setup(opts)
   end
 }
