@@ -352,6 +352,9 @@ local servers = {
         diagnostics = {
           disabled = { "unresolved-proc-macro" },
         },
+        checkOnSave = {
+          command = "clippy",
+        },
       }
     }
   },
@@ -384,7 +387,18 @@ local servers = {
   tsserver = {
     root_dir = require('lspconfig').util.root_pattern("package.json"),
     single_file_support = false,
-  }
+  },
+  pyright = {
+    settings = {
+      python = {
+        analysis = {
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "openFilesOnly",
+        },
+      },
+    },
+  },
 }
 
 -- Setup mason so it can manage external tooling
