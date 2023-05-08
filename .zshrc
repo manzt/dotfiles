@@ -151,6 +151,7 @@ alias tree="exa --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
+alias mm=micromamba
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias fzf=fzf-tmux
@@ -161,6 +162,7 @@ eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
 eval "$(mcfly init zsh)"
+eval "$(micromamba shell hook --shell=zsh)"
 
 # https://github.com/cantino/mcfly
 export MCFLY_KEY_SCHEME=vim
@@ -193,25 +195,3 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # SML/NJ
 export PATH=/usr/local/smlnj/bin:"$PATH"
-
-alias mamba=micromamba
-
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/manzt/dev/mambaforge/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/manzt/dev/mambaforge/etc/profile.d/conda.sh" ]; then
-        . "/Users/manzt/dev/mambaforge/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/manzt/dev/mambaforge/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-
-if [ -f "/Users/manzt/dev/mambaforge/etc/profile.d/mamba.sh" ]; then
-    . "/Users/manzt/dev/mambaforge/etc/profile.d/mamba.sh"
-fi
-# <<< conda initialize <<<
-
