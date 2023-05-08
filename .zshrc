@@ -148,7 +148,7 @@ export PATH="$HOME/go/bin:$PATH"
 
 # aliases
 alias tree="exa --tree"
-alias vim=nvim
+alias vi=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 alias mm=micromamba
@@ -157,12 +157,12 @@ alias mm=micromamba
 alias fzf=fzf-tmux
 
 # tools
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
 eval "$(mcfly init zsh)"
 eval "$(micromamba shell hook --shell=zsh)"
+eval "$(starship init zsh)"
+eval "$(zoxide init zsh)"
 
 # https://github.com/cantino/mcfly
 export MCFLY_KEY_SCHEME=vim
