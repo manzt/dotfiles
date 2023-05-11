@@ -286,11 +286,7 @@ require('nvim-treesitter.configs').setup {
 }
 
 vim.filetype.add({ extension = { mdx = 'mdx' }})
-
-local ft_to_parser = require("nvim-treesitter.parsers").filetype_to_parsername
-
-ft_to_parser.mdx = "markdown"
-
+vim.treesitter.language.register('mdx', 'markdown')
 
 vim.diagnostic.config {
   virtual_text = { source = true },
@@ -470,7 +466,8 @@ cmp.setup {
   },
   experimental = {
     native_menu = false,
-    ghost_text = true,
+    -- ghost_text = true,
+    ghost_text = {},
   },
 }
 
