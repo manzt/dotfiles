@@ -94,6 +94,11 @@ require('lazy').setup {
   'onsails/lspkind-nvim',
   -- copilot
   'github/copilot.vim',
+  -- python type-stubs (for pyright)
+  {
+    'microsoft/python-type-stubs',
+    cond = false,
+  }
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -388,9 +393,9 @@ local servers = {
     settings = {
       python = {
         analysis = {
-          autoSearchPaths = true,
-          useLibraryCodeForTypes = true,
-          diagnosticMode = "openFilesOnly",
+          useLibraryCodeForTypes = false,
+          diagnosticMode = 'openFilesOnly',
+          stubPath = vim.fn.stdpath('data') .. '/lazy/python-type-stubs',
         },
       },
     },
