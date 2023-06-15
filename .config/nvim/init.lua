@@ -350,9 +350,6 @@ local servers = {
   rust_analyzer = {
     settings = {
       ["rust-analyzer"] = {
-        diagnostics = {
-          disabled = { "unresolved-proc-macro" },
-        },
         checkOnSave = {
           command = "clippy",
         },
