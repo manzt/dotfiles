@@ -29,7 +29,12 @@ require('lazy').setup {
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim', opts = {} },
+      {
+        "j-hui/fidget.nvim",
+        tag = "legacy",
+        event = "LspAttach",
+        opts = {},
+      },
 
       -- Useful status updates for LSP
       { 'folke/neodev.nvim', opts = {} },
@@ -98,7 +103,7 @@ require('lazy').setup {
   {
     'microsoft/python-type-stubs',
     cond = false,
-  }
+  },
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
