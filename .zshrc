@@ -152,6 +152,8 @@ alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 alias mm=micromamba
+alias rm="safe-rm"
+alias ll="ls -l"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 alias fzf=fzf-tmux
