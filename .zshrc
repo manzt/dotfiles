@@ -147,7 +147,7 @@ export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
 # aliases
-alias tree="exa --tree"
+alias tree="exa --group-directories-first --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
