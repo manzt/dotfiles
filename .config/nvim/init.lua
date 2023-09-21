@@ -103,7 +103,7 @@ require('lazy').setup {
   {
     'microsoft/python-type-stubs',
     cond = false,
-  },
+  }
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -222,31 +222,24 @@ vim.keymap.set('n', '<leader>ed', function()
   require('telescope.builtin').git_files({ cwd = '~' })
 end)
 
-
 -- [[ Configure Treesitter ]]
 -- See `:help nvim-treesitter`
 require('nvim-treesitter.configs').setup {
   -- Add languages to be installed here that you want installed for treesitter
-  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help', 'vim' },
-  playground = { enable = true },
-  highlight = {
-    enable = true,
-    additional_vim_regex_highlighting = false,
-    -- disable = function(lang, bufnr)
-    --   return (
-    --     vim.api.nvim_buf_line_count(bufnr) > 50000 or
-    --     vim.fn.getfsize(vim.api.nvim_buf_get_name(bufnr)) > 512 * 1024
-    --   )
-    -- end,
-  },
-  indent = { enable = true, disable = { 'python' } },
+  ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim' },
+
+  -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
+  auto_install = false,
+
+  highlight = { enable = true },
+  indent = { enable = true },
   incremental_selection = {
     enable = true,
     keymaps = {
       init_selection = '<c-space>',
       node_incremental = '<c-space>',
       scope_incremental = '<c-s>',
-      node_decremental = '<c-backspace>',
+      node_decremental = '<M-space>',
     },
   },
   textobjects = {
@@ -295,9 +288,6 @@ require('nvim-treesitter.configs').setup {
   },
 }
 
-vim.filetype.add({ extension = { mdx = 'mdx' }})
-vim.treesitter.language.register('mdx', 'markdown')
-
 vim.diagnostic.config {
   virtual_text = { source = true },
   float = { source = true },
@@ -308,6 +298,14 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+
+-- Inlay hints
+vim.keymap.set(
+  'n',
+  '<leader>ih',
+  function() vim.lsp.inlay_hint(0, nil) end,
+  { desc = '[I]nlay [H]int' }
+)
 
 -- LSP settings.
 --  This function gets run when an LSP connects to a particular buffer.
@@ -366,6 +364,7 @@ local servers = {
       Lua = {
         workspace = { checkThirdParty = false },
         telemetry = { enable = false },
+        hint = { enable = true },
       },
     },
     root_dir = function(fname)
@@ -390,6 +389,31 @@ local servers = {
   tsserver = {
     root_dir = require('lspconfig').util.root_pattern("package.json"),
     single_file_support = false,
+    settings = {
+      -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
+      javascript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+      typescript = {
+        inlayHints = {
+          includeInlayEnumMemberValueHints = true,
+          includeInlayFunctionLikeReturnTypeHints = true,
+          includeInlayFunctionParameterTypeHints = true,
+          includeInlayParameterNameHints = 'all',
+          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+          includeInlayPropertyDeclarationTypeHints = true,
+          includeInlayVariableTypeHints = true,
+        },
+      },
+    }
   },
   pyright = {
     settings = {
