@@ -99,11 +99,6 @@ require('lazy').setup {
   'onsails/lspkind-nvim',
   -- copilot
   'github/copilot.vim',
-  -- python type-stubs (for pyright)
-  {
-    'microsoft/python-type-stubs',
-    cond = false,
-  }
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -415,17 +410,7 @@ local servers = {
       },
     }
   },
-  pyright = {
-    settings = {
-      python = {
-        analysis = {
-          useLibraryCodeForTypes = false,
-          diagnosticMode = 'openFilesOnly',
-          stubPath = vim.fn.stdpath('data') .. '/lazy/python-type-stubs',
-        },
-      },
-    },
-  },
+  pyright = {}
 }
 
 -- Setup mason so it can manage external tooling
@@ -443,12 +428,8 @@ mason_lspconfig.setup_handlers {
     -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
-
-    if server_name == 'clangd' then
-      capabilities.offsetEncoding = 'utf-8'
-    end
-
     local opts = { capabilities = capabilities, on_attach = on_attach }
+
     for key, value in pairs(servers[server_name] or {}) do
       opts[key] = value
     end
