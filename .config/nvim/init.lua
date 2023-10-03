@@ -379,11 +379,15 @@ local servers = {
     end,
   },
   denols = {
-    root_dir = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc'),
+    root_dir = require('lspconfig').util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
   },
   tsserver = {
-    root_dir = require('lspconfig').util.root_pattern("package.json"),
-    single_file_support = false,
+    root_dir = function(fname)
+      local deno_root = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc')(fname)
+      if deno_root then return nil end
+      return require('lspconfig').util.root_pattern('package.json')(fname)
+    end,
+    single_file_support =  false,
     settings = {
       -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
       javascript = {
@@ -408,7 +412,7 @@ local servers = {
           includeInlayVariableTypeHints = true,
         },
       },
-    }
+    },
   },
   pyright = {}
 }
@@ -429,11 +433,9 @@ mason_lspconfig.setup_handlers {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
     local opts = { capabilities = capabilities, on_attach = on_attach }
-
     for key, value in pairs(servers[server_name] or {}) do
       opts[key] = value
     end
-
     require('lspconfig')[server_name].setup(opts)
   end
 }
