@@ -518,9 +518,9 @@ local denofmtmd = function()
   }
 end
 
-local black = function()
+local rufffmt = function()
   return {
-    exe = "black",
+    exe = "ruff format",
     args = { '-' },
     stdin = true,
   }
@@ -528,7 +528,7 @@ end
 
 require('formatter').setup({
   filetype = {
-    python = { black },
+    python = { rufffmt },
     javascript = { denofmt },
     javascriptreact = { denofmt },
     typescript = { denofmt },
