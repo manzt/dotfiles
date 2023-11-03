@@ -99,6 +99,12 @@ require('lazy').setup {
   'onsails/lspkind-nvim',
   -- copilot
   'github/copilot.vim',
+  -- justfile
+  {
+    "NoahTheDuke/vim-just",
+    event = { "BufReadPre", "BufNewFile" },
+    ft = { "\\cjustfile", "*.just", ".justfile" },
+  }
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
