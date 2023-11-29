@@ -197,3 +197,4 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # SML/NJ
 export PATH=/usr/local/smlnj/bin:"$PATH"
+export PATH=$PATH:/Users/manzt/.pixi/bin
