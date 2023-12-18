@@ -191,6 +191,3 @@ export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 export PATH=$PATH:/Users/manzt/.local/bin
-
-export PATH=$PATH:/Users/manzt/.pixi/bin
-eval "$(pixi completion --shell zsh)"

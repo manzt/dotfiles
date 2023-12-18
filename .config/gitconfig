@@ -1,0 +1,43 @@
+# A partial gitconfig file. It is meant to be included in a
+# larger .gitconfig (with user.name, user.email, etc.).
+#
+# To use this file, add the following to your ~/.gitconfig:
+#
+# ```
+# [user]
+#    name = Your Name
+#    email = <your email>
+# [include]
+#    path = ~/.config/gitconfig # or wherever you put this file
+# ```
+[alias]
+	co = checkout
+	lol = log --graph --decorate --pretty=oneline --abbrev-commit
+	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+[init]
+	defaultBranch = main
+[core]
+	editor = nvim
+	pager = delta
+[interactive]
+	diffFilter = delta --color-only
+[delta]
+	navigate = true  # use n and N to move between diff sections
+	light = false
+	side-by-side = true
+[merge]
+	conflictstyle = diff3
+[diff]
+	colorMoved = default
+[push]
+	followTags = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
