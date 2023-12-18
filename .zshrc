@@ -147,11 +147,10 @@ export PATH="$HOME/.deno/bin:$PATH"
 export PATH="$HOME/go/bin:$PATH"
 
 # aliases
-alias tree="exa --group-directories-first --tree"
+alias tree="eza --group-directories-first --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
-alias mm=micromamba
 alias rm="safe-rm"
 alias ll="ls -l"
 
@@ -159,10 +158,10 @@ alias ll="ls -l"
 alias fzf=fzf-tmux
 
 # tools
+eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
 eval "$(mcfly init zsh)"
-eval "$(micromamba shell hook --shell=zsh)"
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
@@ -179,10 +178,6 @@ fpath=(~/.zsh $fpath)
 autoload -Uz compinit
 compinit -u
 
-# tabtab source for packages
-# uninstall by removing these lines
-[[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
-
 # pnpm
 export PNPM_HOME="/Users/manzt/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
@@ -195,6 +190,7 @@ export PATH="$PNPM_HOME:$PATH"
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-# SML/NJ
-export PATH=/usr/local/smlnj/bin:"$PATH"
+export PATH=$PATH:/Users/manzt/.local/bin
+
 export PATH=$PATH:/Users/manzt/.pixi/bin
+eval "$(pixi completion --shell zsh)"
