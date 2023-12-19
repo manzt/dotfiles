@@ -433,11 +433,12 @@ mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }
 
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
 mason_lspconfig.setup_handlers {
   function(server_name)
     -- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-    local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
     local opts = { capabilities = capabilities, on_attach = on_attach }
     for key, value in pairs(servers[server_name] or {}) do
       opts[key] = value
@@ -445,6 +446,13 @@ mason_lspconfig.setup_handlers {
     require('lspconfig')[server_name].setup(opts)
   end
 }
+
+require('lspconfig').sourcekit.setup({
+  cmd = { 'xcrun', 'sourcekit-lsp' },
+  filetypes = { 'swift', 'objective-c', 'objective-cpp' },
+  capabilities = capabilities,
+  on_attach = on_attach,
+})
 
 -- nvim-cmp setup
 local cmp = require 'cmp'
