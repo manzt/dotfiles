@@ -422,8 +422,13 @@ require('lspconfig').sourcekit.setup({
   on_attach = on_attach,
 })
 
--- nvim-cmp setup
+-- [[ Configure nvim-cmp ]]
+-- See `:help cmp`
 local cmp = require 'cmp'
+local luasnip = require 'luasnip'
+require('luasnip.loaders.from_vscode').lazy_load()
+luasnip.config.setup {}
+
 cmp.setup {
   snippet = {
     expand = function(args)
@@ -431,6 +436,8 @@ cmp.setup {
     end,
   },
   mapping = cmp.mapping.preset.insert {
+    ['<C-n>'] = cmp.mapping.select_next_item(),
+    ['<C-p>'] = cmp.mapping.select_prev_item(),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-f>'] = cmp.mapping.scroll_docs(4),
     ['<C-e>'] = cmp.mapping.close(),
@@ -459,11 +466,7 @@ cmp.setup {
         path = "[path]",
       },
     },
-  },
-  experimental = {
-    native_menu = false,
-    ghost_text = {},
-  },
+  }
 }
 
 local denofmt = function()
