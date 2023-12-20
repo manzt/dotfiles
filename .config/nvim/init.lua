@@ -19,6 +19,12 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 require('lazy').setup {
+  -- Delete, change, add surrounding pairs
+  'tpope/vim-surround',
+  -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth',
+  -- Make highlight search nicer
+  'romainl/vim-cool',
   -- LSP Configuration & Plugins
   {
     'neovim/nvim-lspconfig',
@@ -29,42 +35,29 @@ require('lazy').setup {
 
       -- Useful status updates for LSP
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      {
-        "j-hui/fidget.nvim",
-        tag = "legacy",
-        event = "LspAttach",
-        opts = {},
-      },
+      { "j-hui/fidget.nvim", opts = {} },
 
       -- Useful status updates for LSP
-      { 'folke/neodev.nvim', opts = {} },
+      'folke/neodev.nvim',
     },
   },
-  -- Delete, change, add surrounding pairs
-  'tpope/vim-surround',
-  -- Detect tabstop and shiftwidth automatically
-  'tpope/vim-sleuth',
-  -- Make highlight search nicer
-  'romainl/vim-cool',
   -- Autocompletion
   {
     'hrsh7th/nvim-cmp',
     dependencies = {
+        -- Snippet Engine & its associated nvim-cmp source
+        'L3MON4D3/LuaSnip',
+        'saadparwaiz1/cmp_luasnip',
+
+        -- Adds LSP completion capabilities
         'hrsh7th/cmp-nvim-lsp',
         'hrsh7th/cmp-buffer',
         'hrsh7th/cmp-path',
         'hrsh7th/nvim-cmp',
-        'L3MON4D3/LuaSnip',
-        'saadparwaiz1/cmp_luasnip',
+
+        -- Adds a number of user-friendly snippets
+        'rafamadriz/friendly-snippets',
     },
-  },
-  -- Theme
-  {
-    'olivercederborg/poimandres.nvim',
-    config = function()
-      vim.o.termguicolors = true
-      vim.cmd.colorscheme 'poimandres'
-    end
   },
   -- Highlight, edit, and navigate code
   {
@@ -82,29 +75,32 @@ require('lazy').setup {
   {
     'nvim-telescope/telescope.nvim',
     branch = '0.1.x',
-    dependencies = { 'nvim-lua/plenary.nvim' }
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      -- Fuzzy Finder Algorithm which dependencies local dependencies to be built. Only load if `make` is available
+      {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        build = 'make',
+        cond = function()
+          return vim.fn.executable 'make' == 1
+        end
+      },
+    }
   },
-  -- Fuzzy Finder Algorithm which dependencies local dependencies to be built. Only load if `make` is available
-  {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    build = 'make',
-    cond = function()
-      return vim.fn.executable 'make' == 1
-    end
-  },
-  'nvim-telescope/telescope-ui-select.nvim',
   -- Formatting
   'mhartington/formatter.nvim',
   -- Pretty icons for LSP
   'onsails/lspkind-nvim',
-  -- copilot
+  -- Copilot
   'github/copilot.vim',
-  -- justfile
+  -- Theme
   {
-    "NoahTheDuke/vim-just",
-    event = { "BufReadPre", "BufNewFile" },
-    ft = { "\\cjustfile", "*.just", ".justfile" },
-  }
+    'olivercederborg/poimandres.nvim',
+    config = function()
+      vim.o.termguicolors = true
+      vim.cmd.colorscheme 'poimandres'
+    end
+  },
 }
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -194,7 +190,6 @@ require('telescope').setup {
 
 -- Enable telescope fzf native, if installed
 pcall(require('telescope').load_extension, 'fzf')
-pcall(require('telescope').load_extension, 'ui-select')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
@@ -363,27 +358,28 @@ local servers = {
   lua_ls = {
     settings = {
       Lua = {
-        workspace = { checkThirdParty = false },
-        telemetry = { enable = false },
-        hint = { enable = true },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = { 'vim', 'require' },
+        },
+        workspace = {
+          -- Make the server aware of Neovim runtime files
+          library = vim.api.nvim_get_runtime_file("", true),
+        },
+        -- Do not send telemetry data containing a randomized but unique identifier
+        telemetry = {
+          enable = false,
+        },
       },
     },
     root_dir = function(fname)
-      local root = require('lspconfig').util.root_pattern(
-        '.luarc.json',
-        '.luarc.jsonc',
-        '.luacheckrc',
-        '.stylua.toml',
-        'stylua.toml',
-        'selene.toml',
-        'selene.yml',
-        '.git'
-      )(fname)
-      -- prevent workspace from being set to root
+      -- Copied from default, but we don't want to set the workspace to the root
+      local root = require('lspconfig').util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git')(fname) -- prevent workspace from being set to root
       if root == vim.loop.os_homedir() then return nil end
       return root or fname
     end,
   },
+  -- Workaround so that deno and tsserver don't conflict. We prefer deno for single file mode.
   denols = {
     root_dir = require('lspconfig').util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
   },
@@ -394,33 +390,7 @@ local servers = {
       return require('lspconfig').util.root_pattern('package.json')(fname)
     end,
     single_file_support =  false,
-    settings = {
-      -- taken from https://github.com/typescript-language-server/typescript-language-server#workspacedidchangeconfiguration
-      javascript = {
-        inlayHints = {
-          includeInlayEnumMemberValueHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayParameterNameHints = 'all',
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayVariableTypeHints = true,
-        },
-      },
-      typescript = {
-        inlayHints = {
-          includeInlayEnumMemberValueHints = true,
-          includeInlayFunctionLikeReturnTypeHints = true,
-          includeInlayFunctionParameterTypeHints = true,
-          includeInlayParameterNameHints = 'all',
-          includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-          includeInlayPropertyDeclarationTypeHints = true,
-          includeInlayVariableTypeHints = true,
-        },
-      },
-    },
   },
-  pyright = {}
 }
 
 -- Setup mason so it can manage external tooling
@@ -447,6 +417,8 @@ mason_lspconfig.setup_handlers {
   end
 }
 
+-- Manual setup for Swift.
+-- Not supported in Mason, so we have to set it up manually.
 require('lspconfig').sourcekit.setup({
   cmd = { 'xcrun', 'sourcekit-lsp' },
   filetypes = { 'swift', 'objective-c', 'objective-cpp' },
@@ -564,9 +536,3 @@ vim.api.nvim_create_autocmd('BufReadPost',{
     end
   end,
 })
-
-vim.cmd [[
-  augroup strdr4605
-    autocmd FileType typescript,typescriptreact compiler tsc | setlocal makeprg=npx\ tsc
-  augroup END
-]]
