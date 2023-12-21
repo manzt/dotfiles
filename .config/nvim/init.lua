@@ -101,6 +101,10 @@ require('lazy').setup({
       vim.cmd.colorscheme 'poimandres'
     end
   },
+  {
+    'stevearc/dressing.nvim',
+    opts = {},
+  }
 })
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
