@@ -9,6 +9,7 @@
 /.config/tabtab
 /.config/zed
 /.config/zellij
+/.config/op
 
 
 !/.config/

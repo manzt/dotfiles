@@ -18,7 +18,7 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
-require('lazy').setup {
+require('lazy').setup({
   -- Delete, change, add surrounding pairs
   'tpope/vim-surround',
   -- Detect tabstop and shiftwidth automatically
@@ -38,7 +38,7 @@ require('lazy').setup {
       { "j-hui/fidget.nvim", opts = {} },
 
       -- Useful status updates for LSP
-      'folke/neodev.nvim',
+      { "folke/neodev.nvim", opts = {} }
     },
   },
   -- Autocompletion
@@ -101,7 +101,7 @@ require('lazy').setup {
       vim.cmd.colorscheme 'poimandres'
     end
   },
-}
+})
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
 
