@@ -104,7 +104,12 @@ require('lazy').setup({
   {
     'stevearc/dressing.nvim',
     opts = {},
-  }
+  },
+  {
+    "NoahTheDuke/vim-just",
+    ft = { "just" },
+  },
+  "sourcegraph/sg.nvim"
 })
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -324,7 +329,7 @@ local on_attach = function(_, bufnr)
 
   nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
   nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-  nmap('gI', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
+  nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
   nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
   nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
   nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
@@ -513,6 +518,14 @@ local rufffmt = function()
   }
 end
 
+local rustfmt = function()
+  return {
+    exe = "rustfmt",
+    args = { "--emit=stdout", "--" },
+    stdin = true,
+  }
+end
+
 require('formatter').setup({
   filetype = {
     python = { rufffmt },
@@ -523,6 +536,7 @@ require('formatter').setup({
     html = { denofmthtml },
     json = { denofmtjson },
     markdown = { denofmtmd },
+    rust = { rustfmt },
   }
 })
 
@@ -537,3 +551,7 @@ vim.api.nvim_create_autocmd('BufReadPost',{
     end
   end,
 })
+
+vim.keymap.set('n', '<leader>ss', function()
+  require('sg.extensions.telescope').fuzzy_search_results()
+end)
