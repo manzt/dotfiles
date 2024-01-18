@@ -109,7 +109,8 @@ require('lazy').setup({
     "NoahTheDuke/vim-just",
     ft = { "just" },
   },
-  "sourcegraph/sg.nvim"
+  "sourcegraph/sg.nvim",
+  "ThePrimeagen/vim-be-good",
 })
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -204,12 +205,16 @@ pcall(require('telescope').load_extension, 'fzf')
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
 vim.keymap.set('n', '<leader>fb', require('telescope.builtin').buffers, { desc = '[F]ind existing [B]uffers' })
 vim.keymap.set('n', '<leader>/', function()
-  -- You can pass additional configuration to telescope to change theme, layout, etc.
-  require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
-    winblend = 10,
-    previewer = false,
-  })
-end, { desc = '[/] Fuzzily search in current buffer]' })
+    require('telescope.builtin').current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+      winblend = 10,
+      previewer = false,
+    })
+  end,
+  { desc = '[/] Fuzzily search in current buffer]' }
+)
+vim.keymap.set('n', '<leader>ss', function()
+  require('sg.extensions.telescope').fuzzy_search_results()
+end)
 
 local project_files = function()
   local opts = {} -- define here if you want to define something
@@ -521,7 +526,7 @@ end
 local rustfmt = function()
   return {
     exe = "rustfmt",
-    args = { "--emit=stdout", "--" },
+    args = { "--emit=stdout", "--edition=2018", "--" },
     stdin = true,
   }
 end
@@ -551,7 +556,3 @@ vim.api.nvim_create_autocmd('BufReadPost',{
     end
   end,
 })
-
-vim.keymap.set('n', '<leader>ss', function()
-  require('sg.extensions.telescope').fuzzy_search_results()
-end)
