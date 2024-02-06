@@ -87,8 +87,6 @@ require('lazy').setup({
       },
     }
   },
-  -- Formatting
-  'mhartington/formatter.nvim',
   -- Pretty icons for LSP
   'onsails/lspkind-nvim',
   -- Copilot
@@ -111,6 +109,8 @@ require('lazy').setup({
   },
   "sourcegraph/sg.nvim",
   "ThePrimeagen/vim-be-good",
+  -- Open files in the browser
+  "almo7aya/openingh.nvim",
 })
 
 vim.cmd [[ set statusline=%<%f\ (%{&ft})\ %-4(%m%)%=%-19(%3l,%02c%03V%) ]]
@@ -483,69 +483,9 @@ cmp.setup {
   }
 }
 
-local denofmt = function()
-  return {
-    exe = "deno",
-    args = { "fmt", "-", "--options-use-tabs" },
-    stdin = true,
-  }
-end
-
-local denofmtjson = function()
-  return {
-    exe = "deno",
-    args = { "fmt", "-", "--options-use-tabs", "--ext", "json" },
-    stdin = true,
-  }
-end
-
-local denofmthtml = function()
-  return {
-    exe = "deno",
-    args = { "fmt", "-", "--options-use-tabs", "--ext", "html" },
-    stdin = true,
-  }
-end
-
-local denofmtmd = function()
-  return {
-    exe = "deno",
-    args = { "fmt", "--ext", "md" },
-    stdin = true,
-  }
-end
-
-local rufffmt = function()
-  return {
-    exe = "ruff format",
-    args = { '-' },
-    stdin = true,
-  }
-end
-
-local rustfmt = function()
-  return {
-    exe = "rustfmt",
-    args = { "--emit=stdout", "--edition=2018", "--" },
-    stdin = true,
-  }
-end
-
-require('formatter').setup({
-  filetype = {
-    python = { rufffmt },
-    javascript = { denofmt },
-    javascriptreact = { denofmt },
-    typescript = { denofmt },
-    typescriptreact = { denofmt },
-    html = { denofmthtml },
-    json = { denofmtjson },
-    markdown = { denofmtmd },
-    rust = { rustfmt },
-  }
-})
-
-vim.keymap.set('n', '<leader>f', ':Format<CR>')
+vim.keymap.set('n', '<leader>f', function ()
+  vim.lsp.buf.format({ async = true, bufnr = 0 })
+end);
 
 -- Jump to last position in the file
 vim.api.nvim_create_autocmd('BufReadPost',{
