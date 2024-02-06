@@ -45,18 +45,18 @@ require('lazy').setup({
   {
     'hrsh7th/nvim-cmp',
     dependencies = {
-        -- Snippet Engine & its associated nvim-cmp source
-        'L3MON4D3/LuaSnip',
-        'saadparwaiz1/cmp_luasnip',
+      -- Snippet Engine & its associated nvim-cmp source
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
 
-        -- Adds LSP completion capabilities
-        'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-path',
-        'hrsh7th/nvim-cmp',
+      -- Adds LSP completion capabilities
+      'hrsh7th/cmp-nvim-lsp',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path',
+      'hrsh7th/nvim-cmp',
 
-        -- Adds a number of user-friendly snippets
-        'rafamadriz/friendly-snippets',
+      -- Adds a number of user-friendly snippets
+      'rafamadriz/friendly-snippets',
     },
   },
   -- Highlight, edit, and navigate code
@@ -174,6 +174,11 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', '"*y')
 -- Open current file with default app
 vim.keymap.set('n', '<leader>x', ':!open %<CR>')
 
+--  Open in lines on GitHub in browser
+vim.keymap.set('n', '<leader>gh', ':OpenInGHFile <CR>', { silent = true, noremap = true })
+vim.keymap.set('v', '<leader>gh', ':OpenInGHFileLines <CR>', { silent = true, noremap = true })
+
+
 -- [[ Highlight on yank ]]
 -- See `:help vim.highlight.on_yank()`
 local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
@@ -218,8 +223,8 @@ end)
 
 local project_files = function()
   local opts = {} -- define here if you want to define something
-  local ok = pcall(require"telescope.builtin".git_files, opts)
-  if not ok then require"telescope.builtin".find_files(opts) end
+  local ok = pcall(require "telescope.builtin".git_files, opts)
+  if not ok then require "telescope.builtin".find_files(opts) end
 end
 
 vim.keymap.set('n', '<C-p>', project_files)
@@ -350,9 +355,12 @@ local on_attach = function(_, bufnr)
   nmap('<leader>wl', function()
     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end, '[W]orkspace [L]ist Folders')
+
+  -- Format the current buffer
+  nmap('<leader>f', vim.lsp.buf.format, '[F]ormat');
 end
 
---  Add any additional overrides configuration in the following tables. They will be 
+--  Add any additional overrides configuration in the following tables. They will be
 --  merged with the `capabilities` and `on_attach` parameters.
 local servers = {
   rust_analyzer = {
@@ -383,7 +391,8 @@ local servers = {
     },
     root_dir = function(fname)
       -- Copied from default, but we don't want to set the workspace to the root
-      local root = require('lspconfig').util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git')(fname) -- prevent workspace from being set to root
+      local root = require('lspconfig').util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml',
+        'stylua.toml', 'selene.toml', 'selene.yml', '.git')(fname) -- prevent workspace from being set to root
       if root == vim.loop.os_homedir() then return nil end
       return root or fname
     end,
@@ -398,7 +407,7 @@ local servers = {
       if deno_root then return nil end
       return require('lspconfig').util.root_pattern('package.json')(fname)
     end,
-    single_file_support =  false,
+    single_file_support = false,
   },
 }
 
@@ -483,16 +492,12 @@ cmp.setup {
   }
 }
 
-vim.keymap.set('n', '<leader>f', function ()
-  vim.lsp.buf.format({ async = true, bufnr = 0 })
-end);
-
 -- Jump to last position in the file
-vim.api.nvim_create_autocmd('BufReadPost',{
+vim.api.nvim_create_autocmd('BufReadPost', {
   callback = function()
     local row, col = unpack(vim.api.nvim_buf_get_mark(0, "\""))
-    if {row, col} ~= {0, 0} then
-      vim.api.nvim_win_set_cursor(0, {row, col})
+    if { row, col } ~= { 0, 0 } then
+      vim.api.nvim_win_set_cursor(0, { row, col })
     end
   end,
 })
