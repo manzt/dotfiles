@@ -6,8 +6,6 @@ vim.g.maplocalleader = ' '
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
 
 -- Make line numbers default
 vim.wo.number = true
@@ -19,11 +17,6 @@ vim.o.mouse = 'a'
 
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
-
--- Sync clipboard between OS and Neovim.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.opt.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -87,6 +80,16 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', '"*y')
 
 -- Open current file with default app
 vim.keymap.set('n', '<leader>x', ':!open %<CR>')
+
+-- Jump to last position in the file
+vim.api.nvim_create_autocmd('BufReadPost', {
+  callback = function()
+    local row, col = unpack(vim.api.nvim_buf_get_mark(0, "\""))
+    if { row, col } ~= { 0, 0 } then
+      vim.api.nvim_win_set_cursor(0, { row, col })
+    end
+  end,
+})
 
 -- Diagnostic keymaps
 vim.diagnostic.config {
@@ -201,7 +204,6 @@ require('lazy').setup({
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim',
       -- Useful status updates for LSP
-      -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
       { "j-hui/fidget.nvim", opts = {} },
       -- Useful status updates for LSP
       { "folke/neodev.nvim", opts = {} }
@@ -210,43 +212,28 @@ require('lazy').setup({
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
-          -- LSP settings.
-          --  This function gets run when an LSP connects to a particular buffer.
-          local on_attach = function(_, bufnr)
-            -- NOTE: Remember that lua is a real programming language, and as such it is possible
-            -- to define small helper and utility functions so you don't have to repeat yourself
-            -- many times.
-            --
-            -- In this case, we create a function that lets us more easily define mappings specific
-            -- for LSP related items. It sets the mode, buffer and description for us each time.
-            local nmap = function(keys, func, desc)
-              if desc then
-                desc = 'LSP: ' .. desc
-              end
-
-              vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-            end
-
-            -- Essential LSP navigation
-            nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-            nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-            nmap('gi', vim.lsp.buf.implementation, '[G]oto [I]mplementation')
-            nmap('<leader>D', vim.lsp.buf.type_definition, 'Type [D]efinition')
-            nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-            nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
-
-            -- LSP actions
-            nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-            nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-            nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-            nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-            -- Lesser used LSP functionality
-            nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-            -- Format the current buffer
-            nmap('<leader>f', vim.lsp.buf.format, '[F]ormat');
+          local nmap = function(keys, func, desc)
+            vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
           end
+          -- Navigation
+          nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+          nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+          nmap('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+          nmap('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
+          nmap('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+          nmap('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+          -- LSP actions
+          nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+          nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+          nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+          nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+          -- Lesser used LSP functionality
+          nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+
+          -- Format the current buffer
+          nmap('<leader>f', vim.lsp.buf.format, '[F]ormat');
         end
       })
 
@@ -319,10 +306,7 @@ require('lazy').setup({
       -- Ensure the servers above are installed
       local mason_lspconfig = require('mason-lspconfig')
       local ensure_installed = vim.tbl_keys(servers or {})
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Used to format lua code
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      mason_lspconfig.setup { ensure_installed = ensure_installed }
       mason_lspconfig.setup {
         handlers = {
           function(server_name)
@@ -356,6 +340,13 @@ require('lazy').setup({
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
+      local lspkind = require("lspkind")
+      lspkind.init({
+        symbol_map = {
+          Copilot = "",
+        },
+      })
+      vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
 
       cmp.setup {
         snippet = {
@@ -397,29 +388,29 @@ require('lazy').setup({
           end, { 'i', 's' }),
         },
         sources = {
-          { name = 'nvim_lsp' },
-          { name = 'path' },
-          { name = 'luasnip' },
-          { name = 'buffer' },
+          { name = 'copilot',  group_index = 2 },
+          { name = 'nvim_lsp', group_index = 2 },
+          { name = 'path',     group_index = 2 },
+          { name = 'luasnip',  group_index = 2 },
+          { name = 'buffer',   group_index = 2 },
         },
         formatting = {
-          format = require('lspkind').cmp_format {
-            with_text = true,
-            menu = {
-              buffer = "[buf]",
-              nvim_lsp = "[LSP]",
-              luasnip = "[snip]",
-              path = "[path]",
-            },
-          },
+          format = lspkind.cmp_format {
+            mode = "symbol",
+            max_width = 50,
+            symbol_map = { Copilot = "" }
+          }
         }
       }
     end
   },
-  -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
-  -- Highlight, edit, and navigate code
-  {
+  { -- Highlight todo, notes, etc in comments
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false }
+  },
+  { -- Treesitter, syntax highlighting, text objects
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
     dependencies = {
@@ -430,13 +421,8 @@ require('lazy').setup({
     config = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
       vim.filetype.add({ extension = { wgsl = "wgsl" } })
-        require('nvim-treesitter.configs').setup {
-
+      require('nvim-treesitter.configs').setup {
         -- Add languages to be installed here that you want installed for treesitter
-        ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim', 'bash', 'wgsl' },
-
-        -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
-        auto_install = false,
         highlight = { enable = true },
         indent = { enable = true },
         incremental_selection = {
@@ -493,45 +479,24 @@ require('lazy').setup({
           },
         },
       }
-
-
-
     end,
   },
-  -- Fuzzy Finder (files, lsp, etc)
-  {
-    'nvim-telescope/telescope.nvim',
-    branch = '0.1.x',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      -- Fuzzy Finder Algorithm which dependencies local dependencies to be built. Only load if `make` is available
-      {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        cond = function()
-          return vim.fn.executable 'make' == 1
-        end
-      },
-    }
+  { -- Nice status line
+    'stevearc/dressing.nvim',
+    opts = {},
   },
-  -- Theme
-  {
+  { -- Theme
     'olivercederborg/poimandres.nvim',
     config = function()
       vim.o.termguicolors = true
       vim.cmd.colorscheme 'poimandres'
     end
   },
-  {
-    'stevearc/dressing.nvim',
-    opts = {},
-  },
-  {
+  { -- justfile syntax
     "NoahTheDuke/vim-just",
     ft = { "just" },
   },
-  -- Open files in the browser
-  {
+  { -- Open files on GitHub in browser
     "almo7aya/openingh.nvim",
     config = function()
       --  Open in lines on GitHub in browser
@@ -539,16 +504,18 @@ require('lazy').setup({
       vim.keymap.set('v', '<leader>gh', ':OpenInGHFileLines <CR>', { silent = true, noremap = true })
     end
   },
-  -- Copilot
-  'github/copilot.vim',
-})
-
--- Jump to last position in the file
-vim.api.nvim_create_autocmd('BufReadPost', {
-  callback = function()
-    local row, col = unpack(vim.api.nvim_buf_get_mark(0, "\""))
-    if { row, col } ~= { 0, 0 } then
-      vim.api.nvim_win_set_cursor(0, { row, col })
-    end
-  end,
+  { -- Copilot
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    -- NOTE: experiment with moving completions to cmp
+    dependencies = { "zbirenbaum/copilot-cmp" },
+    config = function()
+      require("copilot").setup {
+        suggestion = { enabled = false },
+        panel = { enabled = false },
+      }
+      require("copilot_cmp").setup()
+    end,
+  }
 })
