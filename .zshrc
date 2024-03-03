@@ -160,6 +160,7 @@ alias fzf=fzf-tmux
 # tools
 if [[ "$(uname -m)" == "arm64" ]]; then
     eval "$(/opt/homebrew/bin/brew shellenv)"
+    export SSL_CERT_FILE=/etc/ssl/cert.pem
 else
     eval "$(/usr/local/bin/brew shellenv)"
 fi
@@ -194,5 +195,4 @@ export PATH="$PNPM_HOME:$PATH"
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
-export SSL_CERT_FILE=/etc/ssl/cert.pem
 export PATH=$PATH:/Users/manzt/.local/bin
