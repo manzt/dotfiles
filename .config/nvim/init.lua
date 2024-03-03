@@ -401,12 +401,6 @@ require('lazy').setup({
       }
     end
   },
-  { -- Highlight todo, notes, etc in comments
-    'folke/todo-comments.nvim',
-    event = 'VimEnter',
-    dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false }
-  },
   { -- Treesitter, syntax highlighting, text objects
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
@@ -477,6 +471,12 @@ require('lazy').setup({
         },
       }
     end,
+  },
+  { -- Highlight todo, notes, etc in comments
+    'folke/todo-comments.nvim',
+    event = 'VimEnter',
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    opts = { signs = false }
   },
   { -- Nice status line
     'stevearc/dressing.nvim',
