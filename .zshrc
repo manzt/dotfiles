@@ -194,4 +194,5 @@ export PATH="$PNPM_HOME:$PATH"
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
+export SSL_CERT_FILE=/etc/ssl/cert.pem
 export PATH=$PATH:/Users/manzt/.local/bin
