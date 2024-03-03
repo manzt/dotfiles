@@ -340,13 +340,6 @@ require('lazy').setup({
       local cmp = require 'cmp'
       local luasnip = require 'luasnip'
       luasnip.config.setup {}
-      local lspkind = require("lspkind")
-      lspkind.init({
-        symbol_map = {
-          Copilot = "",
-        },
-      })
-      vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
 
       cmp.setup {
         snippet = {
@@ -395,11 +388,15 @@ require('lazy').setup({
           { name = 'buffer',   group_index = 2 },
         },
         formatting = {
-          format = lspkind.cmp_format {
-            mode = "symbol",
-            max_width = 50,
-            symbol_map = { Copilot = "" }
-          }
+          format = require('lspkind').cmp_format {
+            with_text = true,
+            menu = {
+              buffer = "[buf]",
+              nvim_lsp = "[lsp]",
+              luasnip = "[snip]",
+              path = "[path]",
+            },
+          },
         }
       }
     end
@@ -508,14 +505,15 @@ require('lazy').setup({
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
     event = "InsertEnter",
-    -- NOTE: experiment with moving completions to cmp
     dependencies = { "zbirenbaum/copilot-cmp" },
     config = function()
       require("copilot").setup {
         suggestion = { enabled = false },
-        panel = { enabled = false },
+        panel = { enabled = false }
       }
-      require("copilot_cmp").setup()
+      require('copilot_cmp').setup()
+      require('lspkind').init { symbol_map = { Copilot = '', } }
+      vim.api.nvim_set_hl(0, 'CmpItemKindCopilot', { fg = '#6CC644' })
     end,
   }
 })
