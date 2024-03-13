@@ -250,6 +250,9 @@ require('lazy').setup({
               checkOnSave = {
                 command = "clippy",
               },
+              files = {
+                excludeDirs = { ".venv", "node_modules" }
+              },
             }
           }
         },

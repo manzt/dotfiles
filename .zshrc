@@ -151,7 +151,7 @@ alias tree="eza --group-directories-first --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
-alias rm="safe-rm"
+# alias rm="safe-rm"
 alias ll="ls -l"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

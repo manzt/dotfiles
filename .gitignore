@@ -10,6 +10,7 @@
 /.config/zed
 /.config/zellij
 /.config/op
+/.config/uv
 
 
 !/.config/
