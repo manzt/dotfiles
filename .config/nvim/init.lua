@@ -58,6 +58,9 @@ vim.o.scrolloff = 3
 -- Set :substitute flag to g, so that it replaces all occurrences in a line
 vim.o.gdefault = true
 
+-- set tabstop
+vim.o.tabstop = 4
+
 -- Disable line wrapping
 vim.o.wrap = false
 
