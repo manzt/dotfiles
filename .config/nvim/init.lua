@@ -387,7 +387,6 @@ require('lazy').setup({
           end, { 'i', 's' }),
         },
         sources = {
-          { name = 'copilot',  group_index = 2 },
           { name = 'nvim_lsp', group_index = 2 },
           { name = 'path',     group_index = 2 },
           { name = 'luasnip',  group_index = 2 },
@@ -417,7 +416,8 @@ require('lazy').setup({
     },
     config = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
-      vim.filetype.add({ extension = { wgsl = "wgsl" } })
+      vim.filetype.add({ extension = { wgsl = "wgsl", mdx = "mdx" } })
+      vim.treesitter.language.register('markdown', 'mdx')
       require('nvim-treesitter.configs').setup {
         -- Add languages to be installed here that you want installed for treesitter
         highlight = { enable = true },
@@ -507,26 +507,13 @@ require('lazy').setup({
       vim.keymap.set('v', '<leader>gh', ':OpenInGHFileLines <CR>', { silent = true, noremap = true })
     end
   },
-  { -- Copilot
-    "zbirenbaum/copilot.lua",
-    cmd = "Copilot",
-    event = "InsertEnter",
-    dependencies = { "zbirenbaum/copilot-cmp" },
-    config = function()
-      require("copilot").setup {
-        suggestion = { enabled = false },
-        panel = { enabled = false }
-      }
-      require('copilot_cmp').setup()
-      require('lspkind').init { symbol_map = { Copilot = '', } }
-      vim.api.nvim_set_hl(0, 'CmpItemKindCopilot', { fg = '#6CC644' })
-    end,
-  },
   {
     'saecki/crates.nvim',
     tag = 'stable',
     config = function()
       require('crates').setup()
     end,
-  }
+  },
+  'github/copilot.vim',
+  'f-person/git-blame.nvim'
 })
