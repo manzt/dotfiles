@@ -11,6 +11,7 @@
 /.config/zellij
 /.config/op
 /.config/uv
+/.config/atuin
 
 
 !/.config/
