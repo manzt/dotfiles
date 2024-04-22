@@ -303,6 +303,19 @@ require('lazy').setup({
             return require('lspconfig').util.root_pattern('package.json')(fname)
           end,
           single_file_support = false,
+          commands = {
+            OrganizeImports = {
+              function()
+                local params = {
+                  command = '_typescript.organizeImports',
+                  arguments = { vim.api.nvim_buf_get_name(0) },
+                  title = ''
+                }
+                vim.lsp.buf.execute_command(params)
+              end,
+              description = 'Organize Imports',
+            }
+          }
         },
         pyright = {
           settings = {
