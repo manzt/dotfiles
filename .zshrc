@@ -141,10 +141,9 @@ bindkey -M vicmd 'k' history-substring-search-up
 bindkey -M vicmd 'j' history-substring-search-down
 # }}} End configuration added by Zim install
 
-export EDITOR=nvim
+## Trevor's config
 
-export PATH="$HOME/.deno/bin:$PATH"
-export PATH="$HOME/go/bin:$PATH"
+export EDITOR=nvim
 
 # aliases
 alias tree="eza --group-directories-first --tree"
@@ -154,16 +153,7 @@ alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 # alias rm="safe-rm"
 alias ll="ls -l"
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-alias fzf=fzf-tmux
-
-# tools
-if [[ "$(uname -m)" == "arm64" ]]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    export SSL_CERT_FILE=/etc/ssl/cert.pem
-else
-    eval "$(/usr/local/bin/brew shellenv)"
-fi
+# tools (installed with nix)
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
 eval "$(starship init zsh)"
@@ -173,6 +163,7 @@ eval "$(atuin init zsh --disable-up-arrow)"
 export BAT_THEME="TwoDark"
 
 # deno
+export PATH="$HOME/.deno/bin:$PATH"
 fpath=(~/.zsh $fpath)
 autoload -Uz compinit
 compinit -u
@@ -182,10 +173,8 @@ export PNPM_HOME="/Users/manzt/Library/pnpm"
 export PATH="$PNPM_HOME:$PATH"
 # pnpm end
 
-# bun completions
-[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
-
 # Bun
+[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
 export BUN_INSTALL="/Users/manzt/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
