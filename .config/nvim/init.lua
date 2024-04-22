@@ -103,6 +103,9 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
+vim.keymap.set('n', '<leader>ih', function(bufnr)
+  vim.lsp.inlay_hint.enable(bufnr, not vim.lsp.inlay_hint.is_enabled())
+end, { desc = 'Toggle [I]nlay [H]int' })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -162,7 +165,7 @@ require('lazy').setup({
       local builtin = require 'telescope.builtin'
 
       -- Enable telescope extensions, if they are installed
-      pcall(require('telescope').load_extension, 'fzf')
+      -- pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
 
       -- See `:help telescope.builtin`
@@ -301,6 +304,18 @@ require('lazy').setup({
           end,
           single_file_support = false,
         },
+        pyright = {
+          settings = {
+            python = {
+              analysis = {
+                -- FIX: I don't think this is doing anything
+                -- ref: https://github.com/microsoft/pyright/issues/4878#issuecomment-1553156526
+                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
+                useLibraryCodeForTypes = false,
+              }
+            }
+          }
+        }
       }
       -- Setup mason so it can manage external tooling
       require('mason').setup()
@@ -516,5 +531,14 @@ require('lazy').setup({
     opts = {
       enabled = false
     }
-  }
+  },
+  { -- https://github.com/microsoft/pyright/issues/4878#issuecomment-1553156526
+    "microsoft/python-type-stubs",
+    cond = false
+  },
+  { -- Another nice theme
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000
+  },
 })
