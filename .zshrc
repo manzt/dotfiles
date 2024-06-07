@@ -182,3 +182,5 @@ export PATH=$PATH:/Users/manzt/.local/bin
 export PATH=$PATH:~/.zig
 # enable metal hud profiling
 # export MTL_HUD_ENABLED=1
+
+alias pnpm="corepack pnpm"
