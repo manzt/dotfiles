@@ -335,9 +335,8 @@ require('lazy').setup({
 
       -- Ensure the servers above are installed
       local mason_lspconfig = require('mason-lspconfig')
-      local ensure_installed = vim.tbl_keys(servers or {})
-      mason_lspconfig.setup { ensure_installed = ensure_installed }
       mason_lspconfig.setup {
+        automatic_installation = false,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -442,6 +441,7 @@ require('lazy').setup({
       pcall(require('nvim-treesitter.install').update { with_sync = true })
       vim.filetype.add({ extension = { wgsl = "wgsl", mdx = "mdx" } })
       vim.treesitter.language.register('markdown', 'mdx')
+      vim.keymap.set('n', '<leader>tc', ":TSContextToggle<CR>", { desc = '[T]oggle [C]ontext' })
       require('nvim-treesitter.configs').setup {
         -- Add languages to be installed here that you want installed for treesitter
         highlight = { enable = true },
