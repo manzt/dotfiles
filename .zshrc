@@ -184,4 +184,4 @@ export PATH=$PATH:~/.zig
 # export MTL_HUD_ENABLED=1
 
 export UV_PYTHON="python"
-. "$HOME/.cargo/env"
+source "$HOME/.rye/env"

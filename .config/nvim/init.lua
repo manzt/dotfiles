@@ -560,5 +560,5 @@ require('lazy').setup({
     opts = {
       enabled = false
     }
-  },
+  }
 })
