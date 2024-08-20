@@ -184,4 +184,3 @@ export PATH=$PATH:~/.zig
 # export MTL_HUD_ENABLED=1
 
 export UV_PYTHON="python"
-source "$HOME/.rye/env"
