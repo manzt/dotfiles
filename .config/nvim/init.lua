@@ -106,7 +106,6 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>ih', function(bufnr)
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = 'Toggle [I]nlay [H]int' })
-vim.keymap.set('n', '<leader>tt', ':TSContextToggle<CR>', { desc = '[T]oggle [T]reesitter context' })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info

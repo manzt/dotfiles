@@ -184,3 +184,5 @@ export PATH=$PATH:~/.zig
 # export MTL_HUD_ENABLED=1
 
 . "$HOME/.cargo/env"
+
+export HOMEBREW_NO_AUTO_UPDATE=1
