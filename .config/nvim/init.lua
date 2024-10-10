@@ -513,10 +513,14 @@ require('lazy').setup({
     opts = {},
   },
   { -- Theme
-    'olivercederborg/poimandres.nvim',
+    -- "olivercederborg/poimandres.nvim",
+    "catppuccin/nvim",
+    lazy = false,
+    priority = 1000,
     config = function()
       vim.o.termguicolors = true
-      vim.cmd.colorscheme 'poimandres'
+      -- vim.cmd.colorscheme "poimandres"
+      vim.cmd.colorscheme "catppuccin-mocha"
     end
   },
   { -- justfile syntax
@@ -548,11 +552,6 @@ require('lazy').setup({
   { -- https://github.com/microsoft/pyright/issues/4878#issuecomment-1553156526
     "microsoft/python-type-stubs",
     cond = false
-  },
-  { -- Another nice theme
-    "catppuccin/nvim",
-    name = "catppuccin",
-    priority = 1000
   },
   {
     "m4xshen/hardtime.nvim",
