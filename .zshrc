@@ -152,6 +152,7 @@ alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 # alias rm="safe-rm"
 alias ll="ls -l"
+alias n='nvim -c "lua require(\"telescope\").load_extension(\"oldfiles\")" -c "Telescope oldfiles"'
 
 # tools (installed with nix)
 eval "$(fnm env --use-on-cd)"

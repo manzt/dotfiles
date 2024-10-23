@@ -80,6 +80,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', '"*y')
 -- Open current file with default app
 vim.keymap.set('n', '<leader>x', ':!open %<CR>')
 
+-- avante.nivm: views can only be fully collapsed with the global statusline
+vim.opt.laststatus = 3
+
 -- Jump to last position in the file
 vim.api.nvim_create_autocmd('BufReadPost', {
   callback = function()
@@ -555,5 +558,22 @@ require('lazy').setup({
     opts = {
       enabled = false
     }
+  },
+  {
+    "yetone/avante.nvim",
+    event = "VeryLazy",
+    lazy = false,
+    version = false,
+    opts = {},
+    build = "make",
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter",
+      "stevearc/dressing.nvim",
+      "nvim-lua/plenary.nvim",
+      "MunifTanjim/nui.nvim",
+      --- The below dependencies are optional,
+      "nvim-tree/nvim-web-devicons",
+      -- { 'MeanderingProgrammer/render-markdown.nvim', opts = { file_types = { "markdown", "Avante" } }, ft = { "markdown", "Avante" }, },
+    },
   }
 })
