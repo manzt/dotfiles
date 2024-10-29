@@ -36,4 +36,4 @@ theme = catppuccin-mocha
 font-family = Comic Code
 font-size = 16
 shell-integration-features = no-cursor
-keybind = global:cmd+j=toggle_quick_terminal
+keybind = global:cmd+shift+j=toggle_quick_terminal

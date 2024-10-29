@@ -181,9 +181,13 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 export PATH=$PATH:/Users/manzt/.local/bin
 export PATH=$PATH:~/.zig
-# enable metal hud profiling
-# export MTL_HUD_ENABLED=1
 
 . "$HOME/.cargo/env"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
+export JUV_RUN_MODE=managed
+export JUV_CELLMAGIC=1
+
+export UV_PYTHON_PREFERENCE=only-managed
+
+alias "pyenv version-name"="uv run python --version | sed 's/Python //g'"
