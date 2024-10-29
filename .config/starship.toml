@@ -1,6 +1,9 @@
 [git_status]
 disabled = true
 
+[nodejs]
+detect_extensions =[]
+
 # [python]
 # pyenv_version_name = true
 # pyenv_prefix = "v"

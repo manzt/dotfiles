@@ -295,7 +295,7 @@ require('lazy').setup({
         denols = {
           root_dir = require('lspconfig').util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
         },
-        tsserver = {
+        ts_ls = {
           root_dir = function(fname)
             local deno_root = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc')(fname)
             if deno_root then return nil end
@@ -313,18 +313,6 @@ require('lazy').setup({
                 vim.lsp.buf.execute_command(params)
               end,
               description = 'Organize Imports',
-            }
-          }
-        },
-        pyright = {
-          settings = {
-            python = {
-              analysis = {
-                -- FIX: I don't think this is doing anything
-                -- ref: https://github.com/microsoft/pyright/issues/4878#issuecomment-1553156526
-                stubPath = vim.fn.stdpath("data") .. "/lazy/python-type-stubs",
-                useLibraryCodeForTypes = false,
-              }
             }
           }
         }
