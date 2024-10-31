@@ -296,25 +296,12 @@ require('lazy').setup({
           root_dir = require('lspconfig').util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
         },
         ts_ls = {
+          single_file_support = false,
           root_dir = function(fname)
             local deno_root = require('lspconfig').util.root_pattern('deno.json', 'deno.jsonc')(fname)
             if deno_root then return nil end
             return require('lspconfig').util.root_pattern('package.json')(fname)
           end,
-          single_file_support = false,
-          commands = {
-            OrganizeImports = {
-              function()
-                local params = {
-                  command = '_typescript.organizeImports',
-                  arguments = { vim.api.nvim_buf_get_name(0) },
-                  title = ''
-                }
-                vim.lsp.buf.execute_command(params)
-              end,
-              description = 'Organize Imports',
-            }
-          }
         }
       }
       -- Setup mason so it can manage external tooling

@@ -185,9 +185,16 @@ export PATH=$PATH:~/.zig
 . "$HOME/.cargo/env"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
+
+# uv stuff
+export UV_PYTHON_PREFERENCE=only-managed
+alias "pyenv version-name"="$(uv python find) --version | sed 's/Python //g'"
+
+# juv stuff
+export JUV_JUPYTER=nbclassic
 export JUV_RUN_MODE=managed
 export JUV_CELLMAGIC=1
 
-export UV_PYTHON_PREFERENCE=only-managed
-
-alias "pyenv version-name"="uv run python --version | sed 's/Python //g'"
+juvx() {
+    jq -r '.cells[] | select(.cell_type == "code") | (.source | join("")) + "\n"' "$1" | uv run -
+}
