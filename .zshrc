@@ -194,7 +194,12 @@ alias "pyenv version-name"="$(uv python find) --version | sed 's/Python //g'"
 export JUV_JUPYTER=nbclassic
 export JUV_RUN_MODE=managed
 export JUV_CELLMAGIC=1
+export JUV_PAGER=bat
 
 juvx() {
     jq -r '.cells[] | select(.cell_type == "code") | (.source | join("")) + "\n"' "$1" | uv run -
 }
+
+export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
+export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"

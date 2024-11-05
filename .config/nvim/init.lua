@@ -302,7 +302,15 @@ require('lazy').setup({
             if deno_root then return nil end
             return require('lspconfig').util.root_pattern('package.json')(fname)
           end,
-        }
+        },
+        pyright = {
+          settings = {
+            python = {
+              venvPath = ".venv",
+              pythonPath = ".venv/bin/python",
+            }
+          },
+        },
       }
       -- Setup mason so it can manage external tooling
       require('mason').setup()
@@ -523,15 +531,11 @@ require('lazy').setup({
       enabled = false
     }
   },
-  { -- https://github.com/microsoft/pyright/issues/4878#issuecomment-1553156526
-    "microsoft/python-type-stubs",
-    cond = false
-  },
   {
     "m4xshen/hardtime.nvim",
     dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     opts = {
-      enabled = false
+      enabled = true
     }
   },
   {
