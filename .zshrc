@@ -188,7 +188,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 # uv stuff
 export UV_PYTHON_PREFERENCE=only-managed
-alias "pyenv version-name"="$(uv python find) --version | sed 's/Python //g'"
+# alias "pyenv version-name"="$(uv python find) --version | sed 's/Python //g'"
 
 # juv stuff
 export JUV_JUPYTER=nbclassic

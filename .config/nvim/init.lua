@@ -535,7 +535,7 @@ require('lazy').setup({
     "m4xshen/hardtime.nvim",
     dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
     opts = {
-      enabled = true
+      enabled = false
     }
   },
   {
@@ -554,5 +554,13 @@ require('lazy').setup({
       "nvim-tree/nvim-web-devicons",
       -- { 'MeanderingProgrammer/render-markdown.nvim', opts = { file_types = { "markdown", "Avante" } }, ft = { "markdown", "Avante" }, },
     },
-  }
+  },
+  {
+  "rbong/vim-flog",
+    lazy = true,
+    cmd = { "Flog", "Flogsplit", "Floggit" },
+    dependencies = {
+      "tpope/vim-fugitive",
+    },
+  },
 })
