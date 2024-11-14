@@ -80,6 +80,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', '"*y')
 -- Open current file with default app
 vim.keymap.set('n', '<leader>x', ':!open %<CR>')
 
+-- vim-flog (log viewer)
+vim.keymap.set('n', '<leader>l', ':Flog<CR>')
+
 -- avante.nivm: views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
 
@@ -294,6 +297,7 @@ require('lazy').setup({
         -- Workaround so that deno and tsserver don't conflict. We prefer deno for single file mode.
         denols = {
           root_dir = require('lspconfig').util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
+          single_file_support = false,
         },
         ts_ls = {
           single_file_support = false,
@@ -417,7 +421,6 @@ require('lazy').setup({
     dependencies = {
       { 'nvim-treesitter/nvim-treesitter-context', opts = {} },
       'nvim-treesitter/nvim-treesitter-textobjects',
-      'nvim-treesitter/playground',
     },
     config = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
@@ -428,59 +431,6 @@ require('lazy').setup({
         -- Add languages to be installed here that you want installed for treesitter
         highlight = { enable = true },
         indent = { enable = true },
-        incremental_selection = {
-          enable = true,
-          keymaps = {
-            init_selection = '<c-space>',
-            node_incremental = '<c-space>',
-            scope_incremental = '<c-s>',
-            node_decremental = '<M-space>',
-          },
-        },
-        textobjects = {
-          select = {
-            enable = true,
-            lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
-            keymaps = {
-              -- You can use the capture groups defined in textobjects.scm
-              ['aa'] = '@parameter.outer',
-              ['ia'] = '@parameter.inner',
-              ['af'] = '@function.outer',
-              ['if'] = '@function.inner',
-              ['ac'] = '@class.outer',
-              ['ic'] = '@class.inner',
-            },
-          },
-          move = {
-            enable = true,
-            set_jumps = true, -- whether to set jumps in the jumplist
-            goto_next_start = {
-              [']m'] = '@function.outer',
-              [']]'] = '@class.outer',
-            },
-            goto_next_end = {
-              [']M'] = '@function.outer',
-              [']['] = '@class.outer',
-            },
-            goto_previous_start = {
-              ['[m'] = '@function.outer',
-              ['[['] = '@class.outer',
-            },
-            goto_previous_end = {
-              ['[M'] = '@function.outer',
-              ['[]'] = '@class.outer',
-            },
-          },
-          swap = {
-            enable = true,
-            swap_next = {
-              ['<leader>a'] = '@parameter.inner',
-            },
-            swap_previous = {
-              ['<leader>A'] = '@parameter.inner',
-            },
-          },
-        },
       }
     end,
   },
@@ -524,16 +474,11 @@ require('lazy').setup({
       require('crates').setup()
     end,
   },
-  'github/copilot.vim',
   {
-    'f-person/git-blame.nvim',
-    opts = {
-      enabled = false
-    }
+    'github/copilot.vim',
   },
   {
-    "m4xshen/hardtime.nvim",
-    dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+    'f-person/git-blame.nvim',
     opts = {
       enabled = false
     }
@@ -552,15 +497,13 @@ require('lazy').setup({
       "MunifTanjim/nui.nvim",
       --- The below dependencies are optional,
       "nvim-tree/nvim-web-devicons",
-      -- { 'MeanderingProgrammer/render-markdown.nvim', opts = { file_types = { "markdown", "Avante" } }, ft = { "markdown", "Avante" }, },
+      { 'MeanderingProgrammer/render-markdown.nvim', opts = { file_types = { "markdown", "Avante" } }, ft = { "markdown", "Avante" }, },
     },
   },
   {
-  "rbong/vim-flog",
+    "rbong/vim-flog",
     lazy = true,
     cmd = { "Flog", "Flogsplit", "Floggit" },
-    dependencies = {
-      "tpope/vim-fugitive",
-    },
-  },
+    dependencies = { "tpope/vim-fugitive" }
+  }
 })
