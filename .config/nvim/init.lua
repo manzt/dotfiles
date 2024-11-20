@@ -419,7 +419,7 @@ require('lazy').setup({
     'nvim-treesitter/nvim-treesitter',
     build = ":TSUpdate",
     dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-context', opts = {} },
+      { 'nvim-treesitter/nvim-treesitter-context', opts = { max_lines = 1 } },
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     config = function()
