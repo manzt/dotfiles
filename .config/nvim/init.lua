@@ -80,11 +80,9 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', '"*y')
 -- Open current file with default app
 vim.keymap.set('n', '<leader>x', ':!open %<CR>')
 
--- vim-flog (log viewer)
-vim.keymap.set('n', '<leader>l', ':Flog<CR>')
-
 -- avante.nivm: views can only be fully collapsed with the global statusline
 vim.opt.laststatus = 3
+
 
 -- Jump to last position in the file
 vim.api.nvim_create_autocmd('BufReadPost', {
@@ -117,6 +115,9 @@ if not vim.loop.fs_stat(lazypath) then
   vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
+
+-- for vim-flog, show the git log
+vim.keymap.set('n', '<leader>l', ':Flog<CR>')
 
 require('lazy').setup({
   -- Delete, change, add surrounding pairs
@@ -435,13 +436,13 @@ require('lazy').setup({
     end,
   },
   { -- Highlight todo, notes, etc in comments
-    'folke/todo-comments.nvim',
+    "folke/todo-comments.nvim",
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
     opts = { signs = false }
   },
   { -- Nice status line
-    'stevearc/dressing.nvim',
+    "stevearc/dressing.nvim",
     opts = {},
   },
   { -- Theme
@@ -454,10 +455,6 @@ require('lazy').setup({
       -- vim.cmd.colorscheme "poimandres"
       vim.cmd.colorscheme "catppuccin-mocha"
     end
-  },
-  { -- justfile syntax
-    "NoahTheDuke/vim-just",
-    ft = { "just" },
   },
   { -- Open files on GitHub in browser
     "almo7aya/openingh.nvim",
@@ -475,35 +472,19 @@ require('lazy').setup({
     end,
   },
   {
-    'github/copilot.vim',
-  },
-  {
-    'f-person/git-blame.nvim',
-    opts = {
-      enabled = false
-    }
-  },
-  {
-    "yetone/avante.nvim",
-    event = "VeryLazy",
-    lazy = false,
-    version = false,
-    opts = {},
-    build = "make",
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter",
-      "stevearc/dressing.nvim",
-      "nvim-lua/plenary.nvim",
-      "MunifTanjim/nui.nvim",
-      --- The below dependencies are optional,
-      "nvim-tree/nvim-web-devicons",
-      { 'MeanderingProgrammer/render-markdown.nvim', opts = { file_types = { "markdown", "Avante" } }, ft = { "markdown", "Avante" }, },
-    },
-  },
-  {
+    -- Fancy git log viewer
     "rbong/vim-flog",
     lazy = true,
     cmd = { "Flog", "Flogsplit", "Floggit" },
-    dependencies = { "tpope/vim-fugitive" }
+    dependencies = { "tpope/vim-fugitive" },
+  },
+  { -- GitHub Copilot
+    "github/copilot.vim"
+  },
+  { -- nice icons
+    "nvim-tree/nvim-web-devicons"
+  },
+  { -- Fancy markdown renderer (don't know if I love this)
+    "MeanderingProgrammer/render-markdown.nvim"
   }
 })
