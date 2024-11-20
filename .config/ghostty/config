@@ -37,3 +37,4 @@ font-family = Comic Code
 font-size = 16
 shell-integration-features = no-cursor
 keybind = global:cmd+shift+j=toggle_quick_terminal
+macos-titlebar-proxy-icon = hidden
