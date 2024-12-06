@@ -447,12 +447,16 @@ require('lazy').setup({
   },
   { -- Theme
     -- "olivercederborg/poimandres.nvim",
+    -- "EdenEast/nightfox.nvim",
+    -- "yorickpeterse/vim-paper",
     "catppuccin/nvim",
     lazy = false,
     priority = 1000,
     config = function()
       vim.o.termguicolors = true
       -- vim.cmd.colorscheme "poimandres"
+      -- vim.cmd.colorscheme "dawnfox"
+      -- vim.cmd.colorscheme "paper"
       vim.cmd.colorscheme "catppuccin-mocha"
     end
   },
@@ -484,7 +488,5 @@ require('lazy').setup({
   { -- nice icons
     "nvim-tree/nvim-web-devicons"
   },
-  { -- Fancy markdown renderer (don't know if I love this)
-    "MeanderingProgrammer/render-markdown.nvim"
-  }
+  -- { -- Fancy markdown renderer (don't know if I love this) "MeanderingProgrammer/render-markdown.nvim" }
 })
