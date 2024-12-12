@@ -179,7 +179,7 @@ require('lazy').setup({
       end)
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
+      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]ind [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -199,6 +199,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>ed', function()
         builtin.git_files { cwd = '~' }
       end, { desc = '[E]dit [D]otfiles' })
+
     end,
   },
   {
@@ -482,11 +483,9 @@ require('lazy').setup({
     cmd = { "Flog", "Flogsplit", "Floggit" },
     dependencies = { "tpope/vim-fugitive" },
   },
-  { -- GitHub Copilot
-    "github/copilot.vim"
-  },
   { -- nice icons
     "nvim-tree/nvim-web-devicons"
   },
+  -- { -- GitHub Copilot "github/copilot.vim" },
   -- { -- Fancy markdown renderer (don't know if I love this) "MeanderingProgrammer/render-markdown.nvim" }
 })
