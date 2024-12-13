@@ -56,6 +56,7 @@ vim.o.gdefault = true
 
 -- set tabstop
 vim.o.tabstop = 4
+vim.o.shiftwidth = 4
 
 -- Disable line wrapping
 vim.o.wrap = false
