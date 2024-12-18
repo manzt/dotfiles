@@ -178,6 +178,7 @@ require('lazy').setup({
         local ok = pcall(builtin.git_files, opts)
         if not ok then builtin.find_files(opts) end
       end)
+
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]ind [F]iles' })
@@ -200,7 +201,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>ed', function()
         builtin.git_files { cwd = '~' }
       end, { desc = '[E]dit [D]otfiles' })
-
     end,
   },
   {
@@ -432,7 +432,17 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>tc', ":TSContextToggle<CR>", { desc = '[T]oggle [C]ontext' })
       require('nvim-treesitter.configs').setup {
         -- Add languages to be installed here that you want installed for treesitter
-        highlight = { enable = true },
+        highlight = {
+          enable = true,
+          -- disable slow treesitter highlight for large files
+          disable = function(_, buf)
+            local max_filesize = 300 * 1024 -- 300 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+              return true
+            end
+          end,
+        },
         indent = { enable = true },
       }
     end,
@@ -487,6 +497,4 @@ require('lazy').setup({
   { -- nice icons
     "nvim-tree/nvim-web-devicons"
   },
-  -- { -- GitHub Copilot "github/copilot.vim" },
-  -- { -- Fancy markdown renderer (don't know if I love this) "MeanderingProgrammer/render-markdown.nvim" }
 })
