@@ -203,6 +203,7 @@ require('lazy').setup({
       end, { desc = '[E]dit [D]otfiles' })
     end,
   },
+  -- Autocompletion
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -213,7 +214,7 @@ require('lazy').setup({
       -- Useful status updates for LSP
       { "j-hui/fidget.nvim", opts = {} },
       -- Useful status updates for LSP
-      { "folke/neodev.nvim", opts = {} }
+      { "folke/neodev.nvim", opts = {} },
     },
     config = function()
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -245,8 +246,9 @@ require('lazy').setup({
       })
 
       -- Make nvim-cmp aware of LSP capabilities
-      local capabilities = vim.lsp.protocol.make_client_capabilities()
-      capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+      local capabilities = require("blink.cmp").get_lsp_capabilities(
+        vim.lsp.protocol.make_client_capabilities()
+      )
 
       --  Add any additional overrides configuration in the following tables. They will be
       --  merged with the `capabilities` and `on_attach` parameters.
@@ -326,97 +328,28 @@ require('lazy').setup({
       local mason_lspconfig = require('mason-lspconfig')
       mason_lspconfig.setup {
         automatic_installation = false,
+        ensure_installed = {},
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
+            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+            require("lspconfig")[server_name].setup(server)
           end
         }
       }
     end
   },
-  -- Autocompletion
   {
-    'hrsh7th/nvim-cmp',
-    event = "InsertEnter",
-    dependencies = {
-      -- Snippet Engine & its associated nvim-cmp source
-      'L3MON4D3/LuaSnip',
-      'saadparwaiz1/cmp_luasnip',
-      -- Adds LSP completion capabilities
-      'hrsh7th/cmp-nvim-lsp',
-      'hrsh7th/cmp-path',
-      'hrsh7th/cmp-buffer',
-      -- Adds a number of user-friendly snippets
-      'rafamadriz/friendly-snippets',
-      -- Pretty icons for LSP
-      'onsails/lspkind-nvim',
+    "saghen/blink.cmp",
+    dependencies = "rafamadriz/friendly-snippets",
+    version = "*",
+    opts = {
+      keymap = { preset = "default" },
+      sources = {
+        default = { "lsp", "path", "snippets", "buffer" },
+      },
     },
-    config = function()
-      -- See `:help cmp`
-      local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
-      luasnip.config.setup {}
-
-      cmp.setup {
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
-        completion = { completeopt = 'menu,menuone,noinsert' },
-        mapping = cmp.mapping.preset.insert {
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          -- Select the [p]revious item
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
-          -- Accept ([y]es) the completion.
-          --  This will auto-import if your LSP supports it.
-          --  This will expand snippets if the LSP sent a snippet.
-          ['<C-y>'] = cmp.mapping.confirm { select = true },
-          -- Manually trigger a completion from nvim-cmp.
-          --  Generally you don't need this, because nvim-cmp will display
-          --  completions whenever it has completion options available.
-          ['<C-Space>'] = cmp.mapping.complete {},
-
-          -- Think of <c-l> as moving to the right of your snippet expansion.
-          --  So if you have a snippet that's like:
-          --  function $name($args)
-          --    $body
-          --  end
-          --
-          -- <c-l> will move you to the right of each of the expansion locations.
-          -- <c-h> is similar, except moving you backwards.
-          ['<C-l>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
-        },
-        sources = {
-          { name = 'nvim_lsp', group_index = 2 },
-          { name = 'path',     group_index = 2 },
-          { name = 'luasnip',  group_index = 2 },
-          { name = 'buffer',   group_index = 2 },
-        },
-        formatting = {
-          format = require('lspkind').cmp_format {
-            with_text = true,
-            menu = {
-              buffer = "[buf]",
-              nvim_lsp = "[lsp]",
-              luasnip = "[snip]",
-              path = "[path]",
-            },
-          },
-        }
-      }
-    end
+    opts_extend = { "sources.default" }
   },
   { -- Treesitter, syntax highlighting, text objects
     'nvim-treesitter/nvim-treesitter',
@@ -497,4 +430,10 @@ require('lazy').setup({
   { -- nice icons
     "nvim-tree/nvim-web-devicons"
   },
+  { -- edit files
+    "stevearc/oil.nvim",
+    opts = {},
+  }
 })
+
+-- require("marimo").setup()
