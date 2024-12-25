@@ -234,8 +234,8 @@ require('lazy').setup({
           -- LSP actions
           nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
           nmap('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-          nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-          nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+          nmap('K', vim.lsp.buf.hover, "Hover Documentation")
+          nmap('<C-k>', vim.lsp.buf.signature_help, "Signature Documentation")
 
           -- Lesser used LSP functionality
           nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -268,15 +268,15 @@ require('lazy').setup({
         lua_ls = {
           settings = {
             Lua = {
-              runtime = { version = 'LuaJIT' },
+              runtime = { version = "LuaJIT" },
               diagnostics = {
                 -- Get the language server to recognize the `vim` global
-                globals = { 'vim', 'require' },
+                globals = { "vim", "require" },
               },
               workspace = {
                 checkThirdParty = false,
                 library = {
-                  '${3rd}/luv/library',
+                  "${3rd}/luv/library",
                   unpack(vim.api.nvim_get_runtime_file('', true)),
                 },
                 -- If lua_ls is really slow on your computer, you can try this instead:
@@ -286,18 +286,10 @@ require('lazy').setup({
                 enable = false,
               },
               completion = {
-                callSnippet = 'Replace',
+                callSnippet = "Replace",
               },
             },
           },
-          root_dir = function(fname)
-            -- Copied from default, but we don't want to set the workspace to the root
-            local root = require('lspconfig').util.root_pattern('.luarc.json', '.luarc.jsonc', '.luacheckrc',
-              '.stylua.toml',
-              'stylua.toml', 'selene.toml', 'selene.yml', '.git')(fname) -- prevent workspace from being set to root
-            if root == vim.loop.os_homedir() then return nil end
-            return root or fname
-          end,
         },
         -- Workaround so that deno and tsserver don't conflict. We prefer deno for single file mode.
         denols = {
@@ -321,12 +313,8 @@ require('lazy').setup({
           },
         },
       }
-      -- Setup mason so it can manage external tooling
-      require('mason').setup()
-
-      -- Ensure the servers above are installed
-      local mason_lspconfig = require('mason-lspconfig')
-      mason_lspconfig.setup {
+      require("mason").setup()
+      require("mason-lspconfig").setup({
         automatic_installation = false,
         ensure_installed = {},
         handlers = {
@@ -336,7 +324,7 @@ require('lazy').setup({
             require("lspconfig")[server_name].setup(server)
           end
         }
-      }
+      })
     end
   },
   {
@@ -347,16 +335,17 @@ require('lazy').setup({
       keymap = { preset = "default" },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
+        cmdline = {}, -- disable autocomplete for cmdline
       },
     },
     opts_extend = { "sources.default" }
   },
   { -- Treesitter, syntax highlighting, text objects
-    'nvim-treesitter/nvim-treesitter',
+    "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
     dependencies = {
-      { 'nvim-treesitter/nvim-treesitter-context', opts = { max_lines = 1 } },
-      'nvim-treesitter/nvim-treesitter-textobjects',
+      { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 1 } },
+      "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function()
       pcall(require('nvim-treesitter.install').update { with_sync = true })
