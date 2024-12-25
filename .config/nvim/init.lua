@@ -104,7 +104,7 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
-vim.keymap.set('n', '<leader>ih', function(bufnr)
+vim.keymap.set('n', '<leader>ih', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = 'Toggle [I]nlay [H]int' })
 
@@ -413,11 +413,11 @@ require('lazy').setup({
       vim.keymap.set('v', '<leader>gh', ':OpenInGHFileLines <CR>', { silent = true, noremap = true })
     end
   },
-  {
-    'saecki/crates.nvim',
+  { -- Update deps in Cargo.toml
+    "saecki/crates.nvim",
     tag = 'stable',
     config = function()
-      require('crates').setup()
+      require("crates").setup()
     end,
   },
   {
