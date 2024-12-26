@@ -13,7 +13,7 @@ vim.wo.relativenumber = true
 vim.o.numberwidth = 4
 
 -- Enable mouse mode
-vim.o.mouse = 'a'
+vim.o.mouse = "a"
 
 -- Don't show the mode, since it's already in status line
 vim.opt.showmode = false
@@ -64,6 +64,9 @@ vim.o.wrap = false
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Diagnostic keymaps
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
+
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -96,14 +99,6 @@ vim.api.nvim_create_autocmd('BufReadPost', {
 })
 
 -- Diagnostic keymaps
-vim.diagnostic.config {
-  virtual_text = { source = true },
-  float = { source = true },
-}
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
 vim.keymap.set('n', '<leader>ih', function()
   vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 end, { desc = 'Toggle [I]nlay [H]int' })
@@ -245,11 +240,6 @@ require('lazy').setup({
         end
       })
 
-      -- Make nvim-cmp aware of LSP capabilities
-      local capabilities = require("blink.cmp").get_lsp_capabilities(
-        vim.lsp.protocol.make_client_capabilities()
-      )
-
       --  Add any additional overrides configuration in the following tables. They will be
       --  merged with the `capabilities` and `on_attach` parameters.
       local servers = {
@@ -293,8 +283,8 @@ require('lazy').setup({
         },
         -- Workaround so that deno and tsserver don't conflict. We prefer deno for single file mode.
         denols = {
-          root_dir = require('lspconfig').util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
-          single_file_support = false,
+          root_dir = require("lspconfig").util.root_pattern('mod.ts', 'deno.json', 'deno.jsonc'),
+          single_file_support = true,
         },
         ts_ls = {
           single_file_support = false,
@@ -320,6 +310,11 @@ require('lazy').setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
+            -- Make nvim-cmp aware of LSP capabilities
+            local capabilities = require("blink.cmp").get_lsp_capabilities(
+              vim.lsp.protocol.make_client_capabilities()
+            )
+
             server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             require("lspconfig")[server_name].setup(server)
           end
@@ -404,7 +399,7 @@ require('lazy').setup({
   },
   { -- Update deps in Cargo.toml
     "saecki/crates.nvim",
-    tag = 'stable',
+    tag = "stable",
     config = function()
       require("crates").setup()
     end,
@@ -425,4 +420,8 @@ require('lazy').setup({
   }
 })
 
--- require("marimo").setup()
+-- To appropriately highlight codefences returned from denols, you
+-- will need to augment vim.g.markdown_fenced languages in your init.lua.
+vim.g.markdown_fenced_languages = {
+  "ts=typescript"
+}
