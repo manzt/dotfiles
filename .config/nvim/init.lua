@@ -319,11 +319,13 @@ require("lazy").setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            -- Make nvim-cmp aware of LSP capabilities
-            local capabilities = require("blink.cmp").get_lsp_capabilities(
-              vim.lsp.protocol.make_client_capabilities()
+            server.capabilities = vim.tbl_deep_extend("force",
+              {},
+              require("blink.cmp").get_lsp_capabilities(
+                vim.lsp.protocol.make_client_capabilities()
+              ),
+              server.capabilities or {}
             )
-            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             require("lspconfig")[server_name].setup(server)
           end
         }
@@ -384,7 +386,8 @@ require("lazy").setup({
     -- "olivercederborg/poimandres.nvim",
     -- "EdenEast/nightfox.nvim",
     -- "yorickpeterse/vim-paper",
-    "catppuccin/nvim",
+    -- "catppuccin/nvim",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
     config = function()
@@ -392,7 +395,8 @@ require("lazy").setup({
       -- vim.cmd.colorscheme "poimandres"
       -- vim.cmd.colorscheme "dawnfox"
       -- vim.cmd.colorscheme "paper"
-      vim.cmd.colorscheme "catppuccin-mocha"
+      -- vim.cmd.colorscheme "catppuccin-mocha"
+      vim.cmd.colorscheme "tokyonight"
     end
   },
   { -- Open files on GitHub in browser

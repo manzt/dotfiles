@@ -32,7 +32,8 @@
 # # White
 # palette = 7=#ffffff
 # palette = 15=#ffffff
-theme = catppuccin-mocha
+# theme = catppuccin-mocha
+theme = dark:tokyonight,light:tokyonight-day
 # theme = tomorrow
 font-family = Comic Code
 font-size = 16
@@ -46,3 +47,4 @@ keybind = global:cmd+shift+j=toggle_quick_terminal
 # macos-icon-frame = aluminum
 # macos-icon-ghost-color = yellow
 # macos-icon-screen-color = dark goldenrod,dark khaki
+# background-opacity = 0.94
