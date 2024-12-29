@@ -152,6 +152,11 @@ require("lazy").setup({
 
       -- See `:help telescope.builtin`
       local builtin = require "telescope.builtin"
+      vim.keymap.set("n", "<C-p>", function()
+        local opts = {} -- define here if you want to define something
+        local ok = pcall(builtin.git_files, opts)
+        if not ok then builtin.find_files(opts) end
+      end)
       vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
       vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
