@@ -98,11 +98,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- Diagnostic keymaps
-vim.keymap.set("n", "<leader>ih", function()
-  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
-end, { desc = "Toggle [I]nlay [H]int" })
-
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
@@ -196,45 +191,74 @@ require("lazy").setup({
       end, { desc = "[E]dit [D]otfiles" })
     end,
   },
-  -- Autocompletion
+  -- LSP Stuff
+  {
+    -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+    -- used for completion, annotations and signatures of Neovim apis
+    "folke/lazydev.nvim",
+    ft = "lua",
+    opts = {
+      library = {
+        -- Load luvit types when the `vim.uv` word is found
+        { path = "luvit-meta/library", words = { "vim%.uv" } },
+      },
+    },
+  },
+  { "Bilal2453/luvit-meta", lazy = true },
   {
     "neovim/nvim-lspconfig",
     dependencies = {
       -- Automatically install LSPs to stdpath for neovim
-      "williamboman/mason.nvim",
+      { "williamboman/mason.nvim", config = true },
       "williamboman/mason-lspconfig.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
       -- Useful status updates for LSP
-      { "j-hui/fidget.nvim", opts = {} },
-      -- Useful status updates for LSP
-      { "folke/neodev.nvim", opts = {} },
+      { "j-hui/fidget.nvim",       opts = {} },
     },
     config = function()
       vim.api.nvim_create_autocmd("LspAttach", {
         group = vim.api.nvim_create_augroup("kickstart-lsp-attach", { clear = true }),
         callback = function(event)
-          local nmap = function(keys, func, desc)
-            vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+          local map = function(keys, func, desc, mode)
+            vim.keymap.set(mode or "n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
           end
+
           -- Navigation
-          nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-          nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-          nmap("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-          nmap("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
-          nmap("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
-          nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+          map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+          map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+          map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+          map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+          map("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+          -- Jump to the type of the word under your cursor.
+          --  Useful when you're not sure what type a variable is and you want to see
+          --  the definition of its *type*, not where it was *defined*.
+          map("<leader>D", require("telescope.builtin").lsp_type_definitions, "Type [D]efinition")
 
           -- LSP actions
-          nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
-          nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
-          nmap("K", vim.lsp.buf.hover, "Hover Documentation")
-          nmap("<C-k>", vim.lsp.buf.signature_help, "Signature Documentation")
+          map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+          map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
           -- Lesser used LSP functionality
-          nmap("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+          -- WARN: This is not Goto Definition, this is Goto Declaration.
+          --  For example, in C this would take you to the header.
+          map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
 
           -- Format the current buffer
-          nmap("<leader>f", vim.lsp.buf.format, "[F]ormat");
+          map("<leader>f", vim.lsp.buf.format, "[F]ormat");
+          -- Hover diagnostic
+          map("<leader>ee", vim.diagnostic.open_float, "Hover [E]rrors")
+
+          local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+          -- The following code creates a keymap to toggle inlay hints in your
+          -- code, if the language server you are using supports them
+          --
+          -- This may be unwanted, since they displace some of your code
+          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+            map('<leader>th', function()
+              vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+            end, '[T]oggle Inlay [H]ints')
+          end
         end
       })
 
@@ -256,26 +280,8 @@ require("lazy").setup({
         lua_ls = {
           settings = {
             Lua = {
-              runtime = { version = "LuaJIT" },
-              diagnostics = {
-                -- Get the language server to recognize the `vim` global
-                globals = { "vim", "require" },
-              },
-              workspace = {
-                checkThirdParty = false,
-                library = {
-                  "${3rd}/luv/library",
-                  unpack(vim.api.nvim_get_runtime_file('', true)),
-                },
-                -- If lua_ls is really slow on your computer, you can try this instead:
-                -- library = { vim.env.VIMRUNTIME },
-              },
-              telemetry = {
-                enable = false,
-              },
-              completion = {
-                callSnippet = "Replace",
-              },
+              completion = { callSnippet = "Replace" },
+              diagnostics = { disable = { "missing-fields" } },
             },
           },
         },
