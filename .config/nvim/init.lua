@@ -117,9 +117,10 @@ require("lazy").setup({
   "tpope/vim-sleuth",
 
   { -- Fuzzy Finder (files, lsp, etc)
-    'nvim-telescope/telescope.nvim',
+    "nvim-telescope/telescope.nvim",
     event = 'VimEnter',
-    branch = '0.1.x',
+    -- branch = '0.1.x',
+    commit = "2eca9ba",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
@@ -386,17 +387,16 @@ require("lazy").setup({
     -- "olivercederborg/poimandres.nvim",
     -- "EdenEast/nightfox.nvim",
     -- "yorickpeterse/vim-paper",
-    -- "catppuccin/nvim",
-    "folke/tokyonight.nvim",
+    "catppuccin/nvim",
+    -- "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.o.termguicolors = true
       -- vim.cmd.colorscheme "poimandres"
       -- vim.cmd.colorscheme "dawnfox"
       -- vim.cmd.colorscheme "paper"
-      -- vim.cmd.colorscheme "catppuccin-mocha"
-      vim.cmd.colorscheme "tokyonight"
+      vim.cmd.colorscheme "catppuccin"
+      -- vim.cmd.colorscheme "tokyonight"
     end
   },
   { -- Open files on GitHub in browser
