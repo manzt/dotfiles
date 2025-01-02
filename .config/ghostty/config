@@ -1,6 +1,6 @@
 theme = dark:catppuccin-mocha,light:catppuccin-latte
 # theme = dark:tokyonight,light:tokyonight-day
-# theme = tomorrow
+# theme = dark:tomorrow,light:tomorrow
 font-family = Comic Code
 font-size = 16
 shell-integration-features = no-cursor
