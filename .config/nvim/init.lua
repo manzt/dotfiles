@@ -49,7 +49,7 @@ vim.opt.listchars = { tab = "→ ", trail = "·", nbsp = "␣" }
 vim.opt.inccommand = "split"
 
 -- Keep more context when scrolling
-vim.o.scrolloff = 3
+vim.o.scrolloff = 10
 
 -- Set :substitute flag to g, so that it replaces all occurrences in a line
 vim.o.gdefault = true
@@ -68,25 +68,16 @@ vim.o.wrap = false
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
-vim.opt.hlsearch = true
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
-vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 
 -- Toggle buffers
 vim.keymap.set("n", "<leader><leader>", "<c-^>")
 
 -- Copy clipboard
 vim.keymap.set({ "n", "v" }, "<leader>y", "\"*y")
-
--- Open current file with default app
-vim.keymap.set("n", "<leader>x", ":!open %<CR>")
-
--- avante.nivm: views can only be fully collapsed with the global statusline
-vim.opt.laststatus = 3
-
 
 -- Jump to last position in the file
 vim.api.nvim_create_autocmd("BufReadPost", {
@@ -98,17 +89,31 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
+-- for vim-flog, show the git log
+vim.keymap.set("n", "<leader>l", ":Flog<CR>")
+
+-- DENO. To appropriately highlight codefences returned from denols
+vim.g.markdown_fenced_languages = {
+  "ts=typescript"
+}
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  vim.fn.system { "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath }
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local out = vim.fn.system {
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "--branch=stable",
+    "https://github.com/folke/lazy.nvim.git",
+    lazypath
+  }
+  if vim.v.shell_error ~= 0 then
+    error("Error cloning lazy.nvim:\n" .. out)
+  end
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
-
--- for vim-flog, show the git log
-vim.keymap.set("n", "<leader>l", ":Flog<CR>")
 
 require("lazy").setup({
   -- Delete, change, add surrounding pairs
@@ -274,12 +279,8 @@ require("lazy").setup({
         rust_analyzer = {
           settings = {
             ["rust-analyzer"] = {
-              checkOnSave = {
-                command = "clippy",
-              },
-              files = {
-                excludeDirs = { ".venv", "node_modules" }
-              },
+              checkOnSave = { command = "clippy" },
+              files = { excludeDirs = { ".venv", "node_modules" } },
             }
           }
         },
@@ -294,7 +295,7 @@ require("lazy").setup({
         -- Workaround so that deno and tsserver don't conflict. We prefer deno for single file mode.
         denols = {
           root_dir = require("lspconfig").util.root_pattern("mod.ts", "deno.json", "deno.jsonc"),
-          single_file_support = true,
+          single_file_support = false,
         },
         ts_ls = {
           single_file_support = false,
@@ -313,6 +314,9 @@ require("lazy").setup({
           },
         },
       }
+      local capabilities = require("blink.cmp").get_lsp_capabilities(
+        vim.lsp.protocol.make_client_capabilities()
+      )
       require("mason").setup()
       require("mason-lspconfig").setup({
         automatic_installation = false,
@@ -320,13 +324,7 @@ require("lazy").setup({
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
-            server.capabilities = vim.tbl_deep_extend("force",
-              {},
-              require("blink.cmp").get_lsp_capabilities(
-                vim.lsp.protocol.make_client_capabilities()
-              ),
-              server.capabilities or {}
-            )
+            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
             require("lspconfig")[server_name].setup(server)
           end
         }
@@ -351,13 +349,10 @@ require("lazy").setup({
     build = ":TSUpdate",
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 1 } },
-      "nvim-treesitter/nvim-treesitter-textobjects",
     },
     config = function()
       pcall(require("nvim-treesitter.install").update { with_sync = true })
-      vim.keymap.set("n", "<leader>tc", ":TSContextToggle<CR>", { desc = "[T]oggle [C]ontext" })
       require("nvim-treesitter.configs").setup {
-        -- Add languages to be installed here that you want installed for treesitter
         highlight = {
           enable = true,
           -- disable slow treesitter highlight for large files
@@ -410,6 +405,7 @@ require("lazy").setup({
   { -- Update deps in Cargo.toml
     "saecki/crates.nvim",
     tag = "stable",
+    event = { "BufRead Cargo.toml" },
     config = function()
       require("crates").setup({})
     end,
@@ -429,9 +425,3 @@ require("lazy").setup({
     opts = {},
   }
 })
-
--- To appropriately highlight codefences returned from denols, you
--- will need to augment vim.g.markdown_fenced languages in your init.lua.
-vim.g.markdown_fenced_languages = {
-  "ts=typescript"
-}
