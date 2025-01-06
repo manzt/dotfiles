@@ -160,9 +160,20 @@ require("lazy").setup({
       local builtin = require "telescope.builtin"
       vim.keymap.set("n", "<C-p>", function()
         local opts = {} -- define here if you want to define something
-        local ok = pcall(builtin.git_files, opts)
-        if not ok then builtin.find_files(opts) end
+
+        -- Check if we are in a Git directory, but not if the `.git` directory is $HOME
+        local is_home_git = vim.fn.system("git rev-parse --show-toplevel 2>/dev/null"):gsub("\n", "") == vim.env.HOME
+
+        if not is_home_git then
+          local ok = pcall(builtin.git_files, opts)
+          if not ok then
+            builtin.find_files(opts)
+          end
+        else
+          builtin.find_files(opts)
+        end
       end)
+
       vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
       vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
       vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
