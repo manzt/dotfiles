@@ -61,6 +61,12 @@ vim.o.shiftwidth = 4
 -- Disable line wrapping
 vim.o.wrap = false
 
+-- For deno formatting ts blocks correctly
+vim.g.markdown_fenced_languages = {
+  "ts=typescript"
+}
+
+
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -303,7 +309,7 @@ require("lazy").setup({
             },
           },
         },
-        -- Workaround so that deno and tsserver don't conflict. We prefer deno for single file mode.
+        -- Workaround so that deno and tsserver don't conflict.
         denols = {
           root_dir = require("lspconfig").util.root_pattern("mod.ts", "deno.json", "deno.jsonc"),
           single_file_support = false,

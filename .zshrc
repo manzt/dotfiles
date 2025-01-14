@@ -161,23 +161,11 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 eval "$(atuin init zsh --disable-up-arrow)"
 
-export BAT_THEME="TwoDark"
-
 # deno
 export PATH="$HOME/.deno/bin:$PATH"
 fpath=(~/.zsh $fpath)
 autoload -Uz compinit
 compinit -u
-
-# pnpm
-export PNPM_HOME="/Users/manzt/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-# pnpm end
-
-# Bun
-[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
-export BUN_INSTALL="/Users/manzt/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 
 export PATH=$PATH:/Users/manzt/.local/bin
 export PATH=$PATH:~/.zig
@@ -188,7 +176,6 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 
 # uv stuff
 export UV_PYTHON_PREFERENCE=only-managed
-# alias "pyenv version-name"="$(uv python find) --version | sed 's/Python //g'"
 
 # juv stuff
 export JUV_JUPYTER=nbclassic
@@ -196,12 +183,10 @@ export JUV_RUN_MODE=managed
 export JUV_CELLMAGIC=1
 export JUV_PAGER=bat
 
-juvx() {
-    jq -r '.cells[] | select(.cell_type == "code") | (.source | join("")) + "\n"' "$1" | uv run -
-}
-
-export PATH="/opt/homebrew/opt/llvm/bin:$PATH"
-export PATH="/Users/manzt/.go/bin:$PATH"
-export LDFLAGS="-L/opt/homebrew/opt/llvm/lib"
-export CPPFLAGS="-I/opt/homebrew/opt/llvm/include"
-export PATH="/Users/manzt/.pixi/bin:$PATH"
+# pnpm
+export PNPM_HOME="/Users/manzt/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
