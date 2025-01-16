@@ -14,6 +14,7 @@
 /.config/btop
 /.config/marimo
 
+/.config/nvim/lua/marimo.lua
 
 !/.config/
 !/.gitignore
