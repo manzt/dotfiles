@@ -6,12 +6,3 @@ font-family = Comic Code
 font-size = 16
 shell-integration-features = no-cursor
 keybind = global:cmd+shift+j=toggle_quick_terminal
-# macos-titlebar-proxy-icon = hidden
-# macos-icon = custom-style
-# macos-icon-frame = beige
-# macos-icon-frame = plastic
-# macos-icon-frame = chrome
-# macos-icon-frame = aluminum
-# macos-icon-ghost-color = yellow
-# macos-icon-screen-color = dark goldenrod,dark khaki
-# background-opacity = 0.94
