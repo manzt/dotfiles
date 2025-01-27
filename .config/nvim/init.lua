@@ -312,15 +312,10 @@ require("lazy").setup({
         -- Workaround so that deno and tsserver don't conflict.
         denols = {
           root_dir = require("lspconfig").util.root_pattern("mod.ts", "deno.json", "deno.jsonc"),
-          single_file_support = false,
         },
         ts_ls = {
           single_file_support = false,
-          root_dir = function(fname)
-            local deno_root = require("lspconfig").util.root_pattern("deno.json", "deno.jsonc")(fname)
-            if deno_root then return nil end
-            return require("lspconfig").util.root_pattern("package.json")(fname)
-          end,
+          root_dir = require("lspconfig").util.root_pattern("package.json")
         },
         pyright = {
           settings = {
