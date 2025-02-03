@@ -131,7 +131,7 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     event = 'VimEnter',
     -- branch = '0.1.x',
-    commit = "2eca9ba",
+    commit = "415af52",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
@@ -273,6 +273,7 @@ require("lazy").setup({
 
           -- Format the current buffer
           map("<leader>f", vim.lsp.buf.format, "[F]ormat");
+
           -- Hover diagnostic
           map("<leader>ee", vim.diagnostic.open_float, "Hover [E]rrors")
 
@@ -311,6 +312,7 @@ require("lazy").setup({
         },
         -- Workaround so that deno and tsserver don't conflict.
         denols = {
+          single_file_support = false,
           root_dir = require("lspconfig").util.root_pattern("mod.ts", "deno.json", "deno.jsonc"),
         },
         ts_ls = {
