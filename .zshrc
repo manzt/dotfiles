@@ -179,7 +179,7 @@ export HOMEBREW_NO_AUTO_UPDATE=1
 export UV_PYTHON_PREFERENCE=only-managed
 
 # juv stuff
-export JUV_JUPYTER=nbclassic
+export JUV_JUPYTER=lab
 export JUV_RUN_MODE=managed
 export JUV_CELLMAGIC=1
 export JUV_PAGER=bat
