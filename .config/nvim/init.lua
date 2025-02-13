@@ -364,9 +364,11 @@ require("lazy").setup({
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 1 } },
     },
+
     config = function()
       pcall(require("nvim-treesitter.install").update { with_sync = true })
       require("nvim-treesitter.configs").setup {
+        ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
         highlight = {
           enable = true,
           -- disable slow treesitter highlight for large files
