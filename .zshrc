@@ -160,7 +160,6 @@ eval "$(gh completion --shell zsh)"
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 eval "$(atuin init zsh --disable-up-arrow)"
-eval "$(mise activate zsh)"
 
 # deno
 export PATH="$HOME/.deno/bin:$PATH"
