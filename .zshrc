@@ -183,6 +183,9 @@ export JUV_RUN_MODE=managed
 export JUV_CELLMAGIC=1
 export JUV_PAGER=bat
 
+# higlass
+export HIGLASS_MOCKS_DIR=/Users/manzt/github/higlass/higlass-test-mocks/
+
 # pnpm
 export PNPM_HOME="/Users/manzt/Library/pnpm"
 case ":$PATH:" in

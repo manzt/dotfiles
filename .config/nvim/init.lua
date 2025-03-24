@@ -353,7 +353,6 @@ require("lazy").setup({
       keymap = { preset = "default" },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
-        cmdline = {}, -- disable autocomplete for cmdline
       },
     },
     opts_extend = { "sources.default" }
@@ -420,7 +419,7 @@ require("lazy").setup({
   },
   { -- Update deps in Cargo.toml
     "saecki/crates.nvim",
-    tag = "stable",
+    tag = "unstable",
     event = { "BufRead Cargo.toml" },
     config = function()
       require("crates").setup({})
@@ -439,7 +438,19 @@ require("lazy").setup({
   { -- edit files
     "stevearc/oil.nvim",
     opts = {},
-  }
+  },
+  {
+    "Fildo7525/pretty_hover",
+    event = "LspAttach",
+    opts = {}
+  },
+  {
+    "FabijanZulj/blame.nvim",
+    lazy = false,
+    config = function()
+      require('blame').setup {}
+    end,
+  },
 })
 
 
