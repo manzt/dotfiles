@@ -439,12 +439,7 @@ require("lazy").setup({
     "stevearc/oil.nvim",
     opts = {},
   },
-  {
-    "Fildo7525/pretty_hover",
-    event = "LspAttach",
-    opts = {}
-  },
-  {
+  { -- :BlameToggle
     "FabijanZulj/blame.nvim",
     lazy = false,
     config = function()
