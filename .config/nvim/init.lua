@@ -278,12 +278,11 @@ require("lazy").setup({
           map("<leader>ee", vim.diagnostic.open_float, "Hover [E]rrors")
 
           local client = vim.lsp.get_client_by_id(event.data.client_id)
-
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
             end, '[T]oggle Inlay [H]ints')
@@ -291,6 +290,46 @@ require("lazy").setup({
         end
       })
 
+      -- Diagnostic Config
+      -- See :help vim.diagnostic.Opts
+      vim.diagnostic.config {
+        severity_sort = true,
+        float = { border = 'rounded', source = 'if_many' },
+        underline = { severity = vim.diagnostic.severity.ERROR },
+        signs = vim.g.have_nerd_font and {
+          text = {
+            [vim.diagnostic.severity.ERROR] = '󰅚 ',
+            [vim.diagnostic.severity.WARN] = '󰀪 ',
+            [vim.diagnostic.severity.INFO] = '󰋽 ',
+            [vim.diagnostic.severity.HINT] = '󰌶 ',
+          },
+        } or {},
+        virtual_text = {
+          source = 'if_many',
+          spacing = 2,
+          format = function(diagnostic)
+            local diagnostic_message = {
+              [vim.diagnostic.severity.ERROR] = diagnostic.message,
+              [vim.diagnostic.severity.WARN] = diagnostic.message,
+              [vim.diagnostic.severity.INFO] = diagnostic.message,
+              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+          end,
+        },
+        virtual_lines = {
+          current_line = true,
+          format = function(diagnostic)
+            local diagnostic_message = {
+              [vim.diagnostic.severity.ERROR] = diagnostic.message,
+              [vim.diagnostic.severity.WARN] = diagnostic.message,
+              [vim.diagnostic.severity.INFO] = diagnostic.message,
+              [vim.diagnostic.severity.HINT] = diagnostic.message,
+            }
+            return diagnostic_message[diagnostic.severity]
+          end,
+        },
+      }
       --  Add any additional overrides configuration in the following tables. They will be
       --  merged with the `capabilities` and `on_attach` parameters.
       local servers = {
@@ -324,6 +363,7 @@ require("lazy").setup({
             python = {
               venvPath = ".venv",
               pythonPath = ".venv/bin/python",
+              analysis = { diagnosticMode = "off", typeCheckingMode = "off" },
             }
           },
         },
@@ -463,7 +503,7 @@ local function virtual_text_document(params)
   local client = clients[1]
   local method = "deno/virtualTextDocument"
   local req_params = { textDocument = { uri = actual_path } }
-  local response = client.request_sync(method, req_params, 2000, 0)
+  local response = client:request_sync(method, req_params, 2000, 0)
   if not response or type(response.result) ~= "string" then
     return
   end
