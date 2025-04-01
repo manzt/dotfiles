@@ -527,3 +527,7 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
   pattern = { "deno:/*" },
   callback = virtual_text_document,
 })
+
+-- Custom language servers ...
+require("learn-lsp").setup()
+require("red-knot").setup()

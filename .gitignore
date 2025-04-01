@@ -15,9 +15,6 @@
 /.config/marimo
 /.config/mise
 
-/.config/nvim/lua/marimo.lua
-/.config/nvim/lua/red_knot.lua
-
 !/.config/
 !/.gitignore
 !/.tmux.conf
