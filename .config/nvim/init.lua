@@ -459,11 +459,8 @@ require("lazy").setup({
   },
   { -- Update deps in Cargo.toml
     "saecki/crates.nvim",
-    tag = "unstable",
-    event = { "BufRead Cargo.toml" },
-    config = function()
-      require("crates").setup({})
-    end,
+    tag = "stable",
+    opts = {},
   },
   {
     -- Fancy git log viewer
