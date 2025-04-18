@@ -363,7 +363,7 @@ require("lazy").setup({
             python = {
               venvPath = ".venv",
               pythonPath = ".venv/bin/python",
-              analysis = { diagnosticMode = "off", typeCheckingMode = "off" },
+              -- analysis = { diagnosticMode = "off", typeCheckingMode = "off" },
             }
           },
         },
