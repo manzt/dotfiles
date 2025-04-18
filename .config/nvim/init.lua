@@ -348,6 +348,13 @@ require("lazy").setup({
               diagnostics = { disable = { "missing-fields" } },
             },
           },
+          root_dir = function(fname)
+            local root = require("lspconfig.configs").lua_ls.config_def.default_config.root_dir(fname);
+            if root == vim.loop.os_homedir() then
+              return nil -- prevent LSP from attaching to $HOME
+            end
+            return root
+          end,
         },
         -- Workaround so that deno and tsserver don't conflict.
         denols = {
