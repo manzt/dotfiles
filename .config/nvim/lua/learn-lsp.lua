@@ -1,20 +1,12 @@
 local M = {}
 
 M.setup = function()
-  local lspconfig = require 'lspconfig'
-  local configs = require 'lspconfig.configs'
-
-  if not configs.marimo then
-    configs.marimo = {
-      default_config = {
-        cmd = { 'deno', 'run', '-A', '/Users/manzt/demos/learn-lsp/server.ts' },
-        root_dir = lspconfig.util.root_pattern('.git'),
-        filetypes = { 'markdown' },
-      },
-    }
-  end
-
-  lspconfig.marimo.setup {}
+  vim.lsp.config("learn_lsp", {
+    cmd = { 'deno', 'run', '-A', '/Users/manzt/demos/learn-lsp/server/main.ts' },
+    filetypes = { 'markdown' },
+    single_file_support = true,
+  });
+  vim.lsp.enable("learn_lsp")
 end
 
 return M
