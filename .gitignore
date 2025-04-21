@@ -1,19 +1,20 @@
 /*
+/.config/atuin
+/.config/btop
+/.config/cargo-dist
 /.config/gh
 /.config/github-copilot
 /.config/htop
+/.config/marimo
+/.config/mise
 /.config/neofetch
+/.config/op
 /.config/planetscale
 /.config/rstudio
 /.config/tabtab
+/.config/uv
 /.config/zed
 /.config/zellij
-/.config/op
-/.config/uv
-/.config/atuin
-/.config/btop
-/.config/marimo
-/.config/mise
 
 !/.config/
 !/.gitignore
