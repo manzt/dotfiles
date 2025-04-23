@@ -61,11 +61,6 @@ vim.o.shiftwidth = 4
 -- Disable line wrapping
 vim.o.wrap = false
 
--- For deno formatting ts blocks correctly
-vim.g.markdown_fenced_languages = {
-  "ts=typescript"
-}
-
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
@@ -74,9 +69,6 @@ vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagn
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
-
--- Keymaps for better default experience
--- See `:help vim.keymap.set()`
 
 -- Toggle buffers
 vim.keymap.set("n", "<leader><leader>", "<c-^>")
@@ -99,7 +91,6 @@ vim.keymap.set("n", "<leader>l", ":Flog<CR>")
 
 -- Open oil.nvim
 vim.keymap.set("n", "-", ":Oil<CR>")
-
 
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
