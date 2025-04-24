@@ -146,15 +146,17 @@ bindkey -M vicmd 'j' history-substring-search-down
 export EDITOR=nvim
 
 # aliases
-alias tree="eza --group-directories-first --tree"
+alias ls="eza --group-directories-first"
+alias ll="ls -l"        # Long format, git status
+alias l="ll -a"               # Long format, all files
+alias tree="ls --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
 alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 # alias rm="safe-rm"
-alias ll="ls -l"
 alias n='nvim -c "lua require(\"telescope\").load_extension(\"oldfiles\")" -c "Telescope oldfiles"'
 
-# tools (installed with nix)
+eval "$(/opt/homebrew/bin/brew shellenv)"
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
 eval "$(starship init zsh)"
@@ -163,13 +165,6 @@ eval "$(atuin init zsh --disable-up-arrow)"
 
 # deno
 export PATH="$HOME/.deno/bin:$PATH"
-fpath=(~/.zsh $fpath)
-autoload -Uz compinit
-compinit -u
-
-export PATH=$PATH:~/.zig
-
-. "$HOME/.cargo/env"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
@@ -192,8 +187,6 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
-export PATH="/Users/manzt/.pixi/bin:$PATH"
-
 
 # BEGIN opam configuration
 # This is useful if you're using opam as it adds:
@@ -202,3 +195,6 @@ export PATH="/Users/manzt/.pixi/bin:$PATH"
 # This section can be safely removed at any time if needed.
 [[ ! -r '/Users/manzt/.opam/opam-init/init.zsh' ]] || source '/Users/manzt/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 # END opam configuration
+
+. "$HOME/.local/bin/env"
+
