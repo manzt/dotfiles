@@ -86,12 +86,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- for vim-flog, show the git log
-vim.keymap.set("n", "<leader>l", ":Flog<CR>")
-
--- Open oil.nvim
-vim.keymap.set("n", "-", ":Oil<CR>")
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -434,11 +428,10 @@ require("lazy").setup({
   },
   { -- Open files on GitHub in browser
     "almo7aya/openingh.nvim",
-    config = function()
-      --  Open in lines on GitHub in browser
-      vim.keymap.set("n", "<leader>gh", ":OpenInGHFile <CR>", { silent = true, noremap = true })
-      vim.keymap.set("v", "<leader>gh", ":OpenInGHFileLines <CR>", { silent = true, noremap = true })
-    end
+    keys = {
+      { "<leader>gh", ":OpenInGHFile <CR>",      mode = "n" },
+      { "<leader>gh", ":OpenInGHFileLines <CR>", mode = "v" }
+    }
   },
   { -- Update deps in Cargo.toml
     "saecki/crates.nvim",
@@ -451,6 +444,7 @@ require("lazy").setup({
     lazy = true,
     cmd = { "Flog", "Flogsplit", "Floggit" },
     dependencies = { "tpope/vim-fugitive" },
+    keys = { { "<leader>l", ":Flog<CR>" } }
   },
   { -- nice icons
     "nvim-tree/nvim-web-devicons"
@@ -458,6 +452,7 @@ require("lazy").setup({
   { -- edit files
     "stevearc/oil.nvim",
     opts = {},
+    keys = { { "-", ":Oil<CR>" } }
   },
   { -- :BlameToggle
     "FabijanZulj/blame.nvim",
