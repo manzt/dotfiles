@@ -451,7 +451,10 @@ require("lazy").setup({
   },
   { -- edit files
     "stevearc/oil.nvim",
-    opts = {},
+    event = { "VimEnter */*,.*", "BufNew */*,.*" },
+    opts = {
+      default_file_explorer = true,
+    },
     keys = { { "-", ":Oil<CR>" } }
   },
   { -- :BlameToggle
