@@ -198,3 +198,12 @@ esac
 
 . "$HOME/.local/bin/env"
 
+
+# >>> juliaup initialize >>>
+
+# !! Contents within this block are managed by juliaup !!
+
+path=('/Users/manzt/.juliaup/bin' $path)
+export PATH
+
+# <<< juliaup initialize <<<
