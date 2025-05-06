@@ -508,5 +508,5 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
 })
 
 -- Custom language servers ...
--- require("red-knot").setup()
+-- require("ty").setup()
 require("learn-lsp").setup()
