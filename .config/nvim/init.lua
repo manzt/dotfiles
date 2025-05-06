@@ -510,3 +510,10 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
 -- Custom language servers ...
 -- require("ty").setup()
 require("learn-lsp").setup()
+
+vim.lsp.config("sourcekit-lsp", {
+  cmd = { '/usr/bin/sourcekit-lsp' },
+  filetypes = { 'swift' },
+  single_file_support = true,
+});
+vim.lsp.enable("sourcekit-lsp")
