@@ -112,7 +112,7 @@ require("lazy").setup({
     "nvim-telescope/telescope.nvim",
     event = 'VimEnter',
     -- branch = '0.1.x',
-    commit = "a4ed825",
+    commit = "b4da76b",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-telescope/telescope-ui-select.nvim",
@@ -273,7 +273,7 @@ require("lazy").setup({
       -- See :help vim.diagnostic.Opts
       vim.diagnostic.config {
         severity_sort = true,
-        float = { border = 'rounded', source = 'if_many' },
+        float = { border = "rounded", source = "if_many" },
         underline = { severity = vim.diagnostic.severity.ERROR },
         signs = vim.g.have_nerd_font and {
           text = {
@@ -284,7 +284,7 @@ require("lazy").setup({
           },
         } or {},
         virtual_text = {
-          source = 'if_many',
+          source = "if_many",
           spacing = 2,
           format = function(diagnostic)
             local diagnostic_message = {
@@ -389,7 +389,6 @@ require("lazy").setup({
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 1 } },
     },
-
     config = function()
       pcall(require("nvim-treesitter.install").update { with_sync = true })
       require("nvim-treesitter.configs").setup {
@@ -461,7 +460,7 @@ require("lazy").setup({
     "FabijanZulj/blame.nvim",
     lazy = false,
     config = function()
-      require('blame').setup {}
+      require("blame").setup {}
     end,
   },
 })
@@ -511,9 +510,9 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
 -- require("ty").setup()
 require("learn-lsp").setup()
 
-vim.lsp.config("sourcekit-lsp", {
-  cmd = { '/usr/bin/sourcekit-lsp' },
-  filetypes = { 'swift' },
+vim.lsp.config("tombi", {
+  cmd = { "uvx", "tombi", "lsp" },
+  filetypes = { "toml" },
   single_file_support = true,
 });
-vim.lsp.enable("sourcekit-lsp")
+vim.lsp.enable("tombi")
