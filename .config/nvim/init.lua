@@ -256,6 +256,11 @@ require("lazy").setup({
           -- Hover diagnostic
           map("<leader>ee", vim.diagnostic.open_float, "Hover [E]rrors")
 
+          -- Document hover
+          map("K", function()
+            vim.lsp.buf.hover({ border = "rounded", max_height = 25, max_width = 120 })
+          end, "Document hover")
+
           local client = vim.lsp.get_client_by_id(event.data.client_id)
           -- The following code creates a keymap to toggle inlay hints in your
           -- code, if the language server you are using supports them
