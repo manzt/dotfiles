@@ -461,13 +461,6 @@ require("lazy").setup({
     },
     keys = { { "-", ":Oil<CR>" } }
   },
-  { -- :BlameToggle
-    "FabijanZulj/blame.nvim",
-    lazy = false,
-    config = function()
-      require("blame").setup {}
-    end,
-  },
 })
 
 -- Work around to get Deno virtual LSP locations working

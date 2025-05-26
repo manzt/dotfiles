@@ -200,10 +200,8 @@ esac
 
 
 # >>> juliaup initialize >>>
-
 # !! Contents within this block are managed by juliaup !!
-
-path=('/Users/manzt/.juliaup/bin' $path)
-export PATH
-
+export PATH="/Users/manzt/.juliaup/bin:$PATH"
 # <<< juliaup initialize <<<
+
+export PATH="/Users/manzt/.pixi/bin:$PATH"

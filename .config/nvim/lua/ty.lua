@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
   vim.lsp.config("ty", {
     cmd = { "uvx", "ty", "server" },
-    filetypes = { 'python' },
+    filetypes = { "python" },
     single_file_support = true,
   });
   vim.lsp.enable("ty")
