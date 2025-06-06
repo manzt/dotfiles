@@ -3,6 +3,7 @@
 /.config/btop
 /.config/cargo-dist
 /.config/gh
+/.config/git
 /.config/github-copilot
 /.config/htop
 /.config/marimo
