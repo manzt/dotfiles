@@ -205,3 +205,5 @@ export PATH="/Users/manzt/.juliaup/bin:$PATH"
 # <<< juliaup initialize <<<
 
 export PATH="/Users/manzt/.pixi/bin:$PATH"
+
+alias mokill="uvx marimo development ps killall"
