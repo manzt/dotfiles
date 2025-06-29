@@ -16,6 +16,7 @@
 /.config/uv
 /.config/zed
 /.config/zellij
+/.config/configstore
 
 !/.config/
 !/.gitignore
