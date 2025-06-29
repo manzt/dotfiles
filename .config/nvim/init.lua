@@ -76,6 +76,10 @@ vim.keymap.set("n", "<leader><leader>", "<c-^>")
 -- Copy clipboard
 vim.keymap.set({ "n", "v" }, "<leader>y", "\"*y")
 
+vim.keymap.set('n', '<leader>cfp', function()
+  vim.fn.setreg('+', vim.fn.expand('%:p'))
+end, { desc = 'Copy current file path to clipboard' })
+
 -- Jump to last position in the file
 vim.api.nvim_create_autocmd("BufReadPost", {
   callback = function()
