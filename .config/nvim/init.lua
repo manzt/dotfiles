@@ -524,7 +524,7 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
 })
 
 -- Custom language servers ...
-require("learn-lsp").setup()
+-- require("learn-lsp").setup()
 
 vim.lsp.config("tombi", {
   cmd = { "uvx", "tombi", "lsp" },
