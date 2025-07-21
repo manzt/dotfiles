@@ -207,3 +207,10 @@ export PATH="/Users/manzt/.juliaup/bin:$PATH"
 export PATH="/Users/manzt/.pixi/bin:$PATH"
 
 alias mokill="uvx marimo development ps killall"
+
+# bun completions
+[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
