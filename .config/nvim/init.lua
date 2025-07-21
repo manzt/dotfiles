@@ -388,6 +388,11 @@ require("lazy").setup({
       keymap = { preset = "default" },
       sources = {
         default = { "lsp", "path", "snippets", "buffer" },
+        providers = {
+          -- Fixes really annoying behavior where "buffer" sources are ignored
+          -- when LSP is attached enabled.
+          lsp = { fallbacks = {} }
+        }
       },
     },
     opts_extend = { "sources.default" }
