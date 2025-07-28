@@ -9,3 +9,4 @@
 
 . "$HOME/.cargo/env"
 . "$HOME/.deno/bin"
+. "$HOME/.local/share/bob/env/env.sh"
