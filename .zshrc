@@ -152,7 +152,6 @@ alias l="ll -a"               # Long format, all files
 alias tree="ls --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
-alias nbcat="jupyter nbconvert --log-level WARN --stdout --to markdown $1"
 # alias rm="safe-rm"
 alias n='nvim -c "lua require(\"telescope\").load_extension(\"oldfiles\")" -c "Telescope oldfiles"'
 
