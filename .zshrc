@@ -214,3 +214,6 @@ alias mokill="uvx marimo development ps killall"
 # bun
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
+
+# claude
+export PATH="$HOME/.claude/local:$PATH"

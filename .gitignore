@@ -1,5 +1,4 @@
 /*
-/.config/atuin
 /.config/btop
 /.config/cargo-dist
 /.config/gh
@@ -17,6 +16,7 @@
 /.config/zed
 /.config/zellij
 /.config/configstore
+/.config/jj
 
 !/.config/
 !/.gitignore
