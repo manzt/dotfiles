@@ -329,25 +329,12 @@ require("lazy").setup({
       })
       vim.lsp.config("lua_ls", {
         capabilities = extend_capabilities("lua_ls"),
-        settings = {
-          Lua = {
-            completion = { callSnippet = "Replace" },
-            diagnostics = { disable = { "missing-fields" } },
-          },
-        },
-        root_dir = function(fname)
-          local root = require("lspconfig.configs").lua_ls.config_def.default_config.root_dir(fname);
-          if root == vim.loop.os_homedir() then
-            return nil -- prevent LSP from attaching to $HOME
-          end
-          return root
-        end,
       })
       vim.lsp.config("denols", {
         capabilities = extend_capabilities("denols"),
         single_file_support = false,
         workspace_required = true,
-        root_markers = {"deno.json", "deno.jsonc", "deno.lock"}
+        root_markers = { "deno.json", "deno.jsonc", "deno.lock" }
       })
       vim.lsp.config("ts_ls", {
         capabilities = extend_capabilities("ts_ls"),
@@ -373,6 +360,12 @@ require("lazy").setup({
           }
         },
       })
+      vim.lsp.config("tombi", {
+        cmd = { "uvx", "tombi", "lsp" },
+        filetypes = { "toml" },
+        single_file_support = true,
+      });
+      vim.lsp.enable("tombi")
     end
   },
   {
@@ -489,9 +482,11 @@ local function virtual_text_document(params)
   end
 
   local client = clients[1]
-  local method = "deno/virtualTextDocument"
-  local req_params = { textDocument = { uri = actual_path } }
-  local response = client:request_sync(method, req_params, 2000, 0)
+  local response = client:request_sync("deno/virtualTextDocument",
+    { textDocument = { uri = actual_path } },
+    2000,
+    0
+  )
   if not response or type(response.result) ~= "string" then
     return
   end
@@ -520,10 +515,3 @@ vim.api.nvim_create_autocmd({ "BufReadCmd" }, {
 
 -- Custom language servers ...
 -- require("learn-lsp").setup()
-
-vim.lsp.config("tombi", {
-  cmd = { "uvx", "tombi", "lsp" },
-  filetypes = { "toml" },
-  single_file_support = true,
-});
-vim.lsp.enable("tombi")
