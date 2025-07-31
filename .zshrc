@@ -216,3 +216,6 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # claude
 export PATH="$HOME/.claude/local:$PATH"
+
+# jj completions
+source <(COMPLETE=zsh jj)
