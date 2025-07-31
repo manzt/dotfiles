@@ -6,15 +6,15 @@ email = "trevor.j.manz@gmail.com"
 
 [template-aliases]
 'format_short_id(id)' = "id.shortest()"
+git_push_bookmark = '"manzt/" ++ description.first_line().lower().split_whitespace().join("-")'
 
 [colors]
-"diff token" = { underline = false }
-"diff removed token" = { bg = "#221111" }
-"diff added token" = { bg = "#002200" }
+"diff token" = { underline = true }
 
 [aliases]
 jj = []
 l = ["log", "-r", "ancestors(reachable(@, mutable()), 2)"]
+tug = ["bookmark", "move", "--from", "heads(::@- & bookmarks())", "--to", "@-"]
 
 [ui]
 default-command = "l"
