@@ -353,6 +353,9 @@ require("lazy").setup({
       vim.lsp.config("basedpyright", {
         capabilities = extend_capabilities("basedpyright"),
         settings = {
+          basedpyright = {
+            typeCheckingMode = "standard",
+          },
           python = {
             venvPath = ".venv",
             pythonPath = ".venv/bin/python",
