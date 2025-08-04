@@ -155,7 +155,9 @@ alias path='echo -e "${PATH//:/\\n}"'
 # alias rm="safe-rm"
 alias n='nvim -c "lua require(\"telescope\").load_extension(\"oldfiles\")" -c "Telescope oldfiles"'
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
+if [[ "$(uname)" == "Darwin" ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 eval "$(fnm env --use-on-cd)"
 eval "$(gh completion --shell zsh)"
 eval "$(starship init zsh)"
@@ -194,9 +196,6 @@ esac
 # This section can be safely removed at any time if needed.
 [[ ! -r '/Users/manzt/.opam/opam-init/init.zsh' ]] || source '/Users/manzt/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
 # END opam configuration
-
-. "$HOME/.local/bin/env"
-
 
 # >>> juliaup initialize >>>
 # !! Contents within this block are managed by juliaup !!
