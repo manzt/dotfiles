@@ -17,6 +17,8 @@
 /.config/zellij
 /.config/configstore
 /.config/bob
+/.config/turborepo
+/.config/arraylake
 
 !/.config/
 !/.gitignore
