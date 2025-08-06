@@ -4,8 +4,7 @@
 name = "Trevor Manz"
 email = "trevor.j.manz@gmail.com"
 
-[template-aliases]
-'format_short_id(id)' = "id.shortest()"
+[templates]
 git_push_bookmark = '"manzt/" ++ description.first_line().lower().split_whitespace().join("-")'
 
 [colors]

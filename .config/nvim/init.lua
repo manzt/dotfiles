@@ -310,7 +310,7 @@ require("lazy").setup({
 
       local function extend_capabilities(server)
         return vim.tbl_deep_extend(
-          'force',
+          "force",
           vim.lsp.config[server] and vim.lsp.config[server].capabilities or {},
           require("blink.cmp").get_lsp_capabilities(
             vim.lsp.protocol.make_client_capabilities()
