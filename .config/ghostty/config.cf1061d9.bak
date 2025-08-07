@@ -1,8 +1,0 @@
-theme = dark:catppuccin-mocha,light:catppuccin-latte
-# theme = catppuccin-mocha
-# theme = dark:tokyonight,light:tokyonight-day
-# theme = dark:tomorrow,light:tomorrow
-font-family = Comic Code
-font-size = 16
-shell-integration-features = no-cursor
-keybind = global:cmd+shift+j=toggle_quick_terminal
