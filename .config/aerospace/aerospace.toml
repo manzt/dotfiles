@@ -51,12 +51,27 @@ automatically-unhide-macos-hidden-apps = true
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-    inner.horizontal = 12
-    inner.vertical =   12
-    outer.left =       12
-    outer.bottom =     12
-    outer.top =        12
-    outer.right =      12
+    inner.horizontal = [{ monitor.secondary = 30 }, 12]
+    inner.vertical =   [{ monitor.secondary = 30 }, 12]
+    outer.left =       [{ monitor.secondary = 30 }, 12]
+    outer.bottom =     [{ monitor.secondary = 30 }, 12]
+    outer.top =        [{ monitor.secondary = 30 }, 12]
+    outer.right =      [{ monitor.secondary = 30 }, 12]
+
+# Workspace to monitor assignments
+# See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+# You can specify multiple monitors in order of preference
+# The first available monitor in the list will be used
+[workspace-to-monitor-force-assignment]
+1 = ['secondary', 'main']     # Prefer secondary (left), fallback to main
+2 = ['main', 'secondary']     # Prefer main (right), fallback to secondary
+3 = 'main'                    # Always on main
+4 = 'main'                    # Always on main
+5 = 'main'                    # Always on main
+6 = 'main'                    # Always on main
+7 = 'main'                    # Always on main
+8 = 'main'                    # Always on main
+9 = 'main'                    # Always on main
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -157,3 +172,10 @@ automatically-unhide-macos-hidden-apps = true
     down = 'volume down'
     up = 'volume up'
     shift-down = ['volume set 0', 'mode main']
+
+# https://ghostty.org/docs/help/macos-tiling-wms
+[[on-window-detected]]
+if.app-id="com.mitchellh.ghostty"
+run= [
+  "layout floating",
+]
