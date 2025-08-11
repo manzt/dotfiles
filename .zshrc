@@ -147,12 +147,11 @@ export EDITOR=nvim
 
 # aliases
 alias ls="eza --group-directories-first"
-alias ll="ls -l"        # Long format, git status
-alias l="ll -a"               # Long format, all files
+alias ll="ls -l"
+alias l="ll -a"
 alias tree="ls --tree"
 alias vim=nvim
 alias path='echo -e "${PATH//:/\\n}"'
-# alias rm="safe-rm"
 alias n='nvim -c "lua require(\"telescope\").load_extension(\"oldfiles\")" -c "Telescope oldfiles"'
 
 if [[ "$(uname)" == "Darwin" ]]; then
@@ -210,10 +209,8 @@ export PATH="/Users/manzt/.pixi/bin:$PATH"
 
 alias mokill="uvx marimo development ps killall"
 
-# bun completions
-[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
-
 # bun
+[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
