@@ -1,7 +1,4 @@
-theme = dark:catppuccin-mocha,light:catppuccin-latte
-# theme = catppuccin-mocha
-# theme = dark:tokyonight,light:tokyonight-day
-# theme = dark:tomorrow,light:tomorrow
+theme = dark:Catppuccin Mocha,light:Catppuccin Latte
 font-family = Comic Code
 font-size = 16
 shell-integration-features = no-cursor
