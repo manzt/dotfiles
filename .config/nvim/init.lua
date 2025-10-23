@@ -308,18 +308,22 @@ require("lazy").setup({
       require("mason").setup()
       require("mason-lspconfig").setup()
 
-      local function extend_capabilities(server)
+      local function capabilities(server)
+        local base = require("blink.cmp").get_lsp_capabilities(
+          vim.lsp.protocol.make_client_capabilities()
+        )
+        if server == nil then
+          return base
+        end
         return vim.tbl_deep_extend(
           "force",
           vim.lsp.config[server] and vim.lsp.config[server].capabilities or {},
-          require("blink.cmp").get_lsp_capabilities(
-            vim.lsp.protocol.make_client_capabilities()
-          )
+          base
         )
       end
 
       vim.lsp.config("rust_analyzer", {
-        capabilities = extend_capabilities("rust_analyzer"),
+        capabilities = capabilities("rust_analyzer"),
         settings = {
           ["rust-analyzer"] = {
             checkOnSave = { command = "clippy" },
@@ -328,16 +332,16 @@ require("lazy").setup({
         }
       })
       vim.lsp.config("lua_ls", {
-        capabilities = extend_capabilities("lua_ls"),
+        capabilities = capabilities("lua_ls"),
       })
       vim.lsp.config("denols", {
-        capabilities = extend_capabilities("denols"),
+        capabilities = capabilities("denols"),
         single_file_support = false,
         workspace_required = true,
         root_markers = { "deno.json", "deno.jsonc", "deno.lock" }
       })
       vim.lsp.config("ts_ls", {
-        capabilities = extend_capabilities("ts_ls"),
+        capabilities = capabilities("ts_ls"),
         single_file_support = false,
         workspace_required = true,
         root_markers = {
@@ -351,7 +355,7 @@ require("lazy").setup({
         }
       })
       vim.lsp.config("basedpyright", {
-        capabilities = extend_capabilities("basedpyright"),
+        capabilities = capabilities("basedpyright"),
         settings = {
           basedpyright = {
             typeCheckingMode = "standard",
