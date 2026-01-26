@@ -178,11 +178,11 @@ export JUV_CELLMAGIC=1
 export JUV_PAGER=bat
 
 # higlass
-export HIGLASS_MOCKS_DIR=/Users/manzt/github/higlass/higlass-test-mocks/
+export HIGLASS_MOCKS_DIR="$HOME/github/higlass/higlass-test-mocks/"
 
 # pnpm
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  export PNPM_HOME="/Users/manzt/Library/pnpm"
+  export PNPM_HOME="$HOME/Library/pnpm"
 else
   export PNPM_HOME="$HOME/.local/share/pnpm"
 fi
@@ -197,20 +197,20 @@ esac
 #   - the correct directories to the PATH
 #   - auto-completion for the opam binary
 # This section can be safely removed at any time if needed.
-[[ ! -r '/Users/manzt/.opam/opam-init/init.zsh' ]] || source '/Users/manzt/.opam/opam-init/init.zsh' > /dev/null 2> /dev/null
+[[ ! -r "$HOME/.opam/opam-init/init.zsh" ]] || source "$HOME/.opam/opam-init/init.zsh" > /dev/null 2> /dev/null
 # END opam configuration
 
 # >>> juliaup initialize >>>
 # !! Contents within this block are managed by juliaup !!
-export PATH="/Users/manzt/.juliaup/bin:$PATH"
+export PATH="$HOME/.juliaup/bin:$PATH"
 # <<< juliaup initialize <<<
 
-export PATH="/Users/manzt/.pixi/bin:$PATH"
+export PATH="$HOME/.pixi/bin:$PATH"
 
 alias mokill="uvx marimo development ps killall"
 
 # bun
-[ -s "/Users/manzt/.bun/_bun" ] && source "/Users/manzt/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
