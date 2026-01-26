@@ -326,7 +326,7 @@ require("lazy").setup({
         capabilities = capabilities("rust_analyzer"),
         settings = {
           ["rust-analyzer"] = {
-            checkOnSave = { command = "clippy" },
+            checkOnSave = true,
             files = { excludeDirs = { ".venv", "node_modules" } },
           }
         }
@@ -474,6 +474,9 @@ require("lazy").setup({
       vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {})
       vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
     end,
+  },
+  {
+    "github/copilot.vim"
   },
 })
 
