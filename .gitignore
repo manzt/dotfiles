@@ -19,6 +19,10 @@
 /.config/bob
 /.config/turborepo
 /.config/arraylake
+/.config/wandb
+/.config/gcloud
+/.config/fish
+
 
 !/.config/
 !/.gitignore
