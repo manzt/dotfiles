@@ -63,8 +63,8 @@ automatically-unhide-macos-hidden-apps = true
 # You can specify multiple monitors in order of preference
 # The first available monitor in the list will be used
 [workspace-to-monitor-force-assignment]
-1 = ['secondary', 'main']     # Prefer secondary (left), fallback to main
-2 = ['main', 'secondary']     # Prefer main (right), fallback to secondary
+1 = ['main','secondary']      # Prefer main, fallback to secondary
+2 = ['secondary', 'main']     # Prefer main (right), fallback to secondary
 3 = 'main'                    # Always on main
 4 = 'main'                    # Always on main
 5 = 'main'                    # Always on main
