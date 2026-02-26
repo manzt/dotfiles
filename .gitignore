@@ -23,7 +23,9 @@
 /.config/gcloud
 /.config/fish
 
-
+!/.claude/
+/.claude/*
+!/.claude/skills/
 !/.config/
 !/.gitignore
 !/.tmux.conf
