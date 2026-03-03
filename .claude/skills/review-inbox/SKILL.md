@@ -12,13 +12,13 @@ Show PRs awaiting my review and help me triage them.
 
 Parse `$ARGUMENTS` for two optional positional args:
 - **repo** — `owner/repo` format. If omitted, detect from `git remote get-url origin` in the current working directory.
-- **timeframe** — like `24h`, `3d`, `1w`. If omitted, read the timestamp from `~/.claude/skills/review-inbox/last-checked.txt`. If that file doesn't exist, default to `24h`.
+- **timeframe** — like `24h`, `3d`, `1w`. If omitted, read the timestamp from `~/.claude/state/review-inbox-last-checked.txt`. If that file doesn't exist, default to `24h`.
 
 ## Steps
 
 1. **Determine the time filter**
    - If a timeframe arg was given → convert to a date (e.g., `3d` = 3 days ago)
-   - Otherwise read `~/.claude/skills/review-inbox/last-checked.txt` and use that timestamp
+   - Otherwise read `~/.claude/state/review-inbox-last-checked.txt` and use that timestamp
    - If neither exists → default to 24h ago
    - Compute the cutoff as an ISO 8601 date string
 
@@ -28,7 +28,7 @@ Parse `$ARGUMENTS` for two optional positional args:
    ```
    Filter results to only include PRs updated on or after the cutoff date.
    - If no PRs found → report "No PRs awaiting your review since <date>." and stop.
-   - Save the current UTC timestamp (ISO 8601) to `~/.claude/skills/review-inbox/last-checked.txt`.
+   - Save the current UTC timestamp (ISO 8601) to `~/.claude/state/review-inbox-last-checked.txt`.
 
 3. **Get file-level details** (for each PR)
    ```bash
