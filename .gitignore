@@ -22,6 +22,8 @@
 /.config/wandb
 /.config/gcloud
 /.config/fish
+/.config/gws
+
 
 !/.claude/
 /.claude/*
@@ -32,3 +34,9 @@
 !/.zimrc
 !/.zshenv
 !/.zshrc
+
+# Installed or skills to ignore
+/.claude/skills/find-skills
+/.claude/skills/gws-*
+/.claude/skills/recipe-*
+/.claude/skills/marimo-pair
