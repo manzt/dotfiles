@@ -1,5 +1,14 @@
 [git_status]
 disabled = true
 
+[gcloud]
+disabled = true
+
+[package]
+disabled = true
+
+[python]
+disabled = true
+
 [nodejs]
 detect_extensions =[]
