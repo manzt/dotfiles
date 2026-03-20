@@ -25,7 +25,16 @@ Start all three services from the marimo repo root. Order matters — the marimo
 server must be up before Vite (which proxies to it), and the browser points at
 Vite.
 
+**CRITICAL: Always use `run_in_background` on the Bash tool for both the
+marimo server and the Vite dev server.** These are long-running processes —
+launching them in the foreground blocks the conversation. Background tasks are
+automatically cleaned up when the session ends. A background task "completed"
+notification does NOT mean the server died — check the output or use
+`discover-servers.sh` / `curl` to verify.
+
 ### 1. Marimo server (background task)
+
+**Must be started with `run_in_background: true` on the Bash tool.**
 
 ```bash
 uv run marimo edit notebook.py --headless --no-token --no-skew-protection
@@ -36,7 +45,15 @@ uv run marimo edit notebook.py --headless --no-token --no-skew-protection
 - `--no-skew-protection` — required for marimo-pair's execute-code to work
 - Default port: 2718
 
+After starting, wait a few seconds then verify it's up:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" http://localhost:2718
+```
+
 ### 2. Vite dev server (background task)
+
+**Must be started with `run_in_background: true` on the Bash tool.**
 
 ```bash
 cd frontend && pnpm dev
@@ -44,7 +61,15 @@ cd frontend && pnpm dev
 
 Starts on port 3000. Proxies `/api`, `/ws`, etc. to marimo on 2718.
 
+After starting, wait a few seconds then verify it's up:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
+```
+
 ### 3. Browser (headed)
+
+Only open the browser after both servers are confirmed up.
 
 ```bash
 agent-browser --headed open http://localhost:3000
