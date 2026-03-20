@@ -43,22 +43,33 @@ reviewer would want to try.
 
 ### 3. Launch the dev session
 
-Start marimo with a new empty notebook — don't write a file to disk
-beforehand, marimo creates it automatically.
+**CRITICAL: You MUST invoke the `/marimo-dev` skill using the Skill tool
+before starting any servers.** Do not manually run the marimo server, Vite,
+or browser commands yourself — `/marimo-dev` handles the full setup
+(marimo server, Vite dev server, headed browser) and ensures correct
+startup order, background task management, and health checks.
 
-Use the `/marimo-dev` skill to spin up the full environment. Start it
-with a fresh notebook:
+Invoke it like this:
 
-```bash
-uv run marimo edit _pr_playground.py --headless --no-token --no-skew-protection
+```
+Skill(skill="marimo-dev")
 ```
 
-Follow the rest of the `/marimo-dev` setup (Vite, browser).
+When marimo-dev asks what notebook to open, use `_pr_playground.py` as
+the notebook path. Do not write the file to disk beforehand — marimo
+creates it automatically.
 
 ### 4. Build the notebook with marimo-pair
 
-Use the `/marimo-pair` skill's code mode API to create cells in the
-live session. Cells execute as you create them so you can iterate.
+**You MUST invoke the `/marimo-pair` skill using the Skill tool** to
+create cells in the live session:
+
+```
+Skill(skill="marimo-pair")
+```
+
+Follow marimo-pair's code mode API. Cells execute as you create them
+so you can iterate.
 
 Start with a short summary cell (`mo.md()`) that orients the reviewer —
 PR title, what it does, key files. Then build out cells that let the
