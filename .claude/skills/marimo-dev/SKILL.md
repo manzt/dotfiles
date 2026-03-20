@@ -11,6 +11,11 @@ description: >-
   "I want to see what this looks like", "visual test", "inspect the DOM",
   or any task that requires running marimo + Vite together for development.
 user-invocable: true
+hooks:
+  SessionEnd:
+    - hooks:
+        - type: command
+          command: "agent-browser close 2>/dev/null; true"
 ---
 
 # marimo-dev: Live Development Environment
@@ -56,7 +61,7 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:2718
 **Must be started with `run_in_background: true` on the Bash tool.**
 
 ```bash
-cd frontend && pnpm dev
+pnpm dev
 ```
 
 Starts on port 3000. Proxies `/api`, `/ws`, etc. to marimo on 2718.
@@ -76,22 +81,6 @@ agent-browser --headed open http://localhost:3000
 ```
 
 Point at port 3000 (Vite), not 2718 (marimo directly).
-
-### Cleanup
-
-Set up a SessionEnd hook so the browser closes when the session ends:
-
-```json
-{
-  "hooks": {
-    "SessionEnd": [
-      {
-        "hooks": [{ "type": "command", "command": "agent-browser close" }]
-      }
-    ]
-  }
-}
-```
 
 ## Two Skills, Two Sides
 
