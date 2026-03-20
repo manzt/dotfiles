@@ -207,7 +207,7 @@ export PATH="$HOME/.juliaup/bin:$PATH"
 
 export PATH="$HOME/.pixi/bin:$PATH"
 
-alias mokill="uvx marimo development ps killall"
+alias mokill="pkill -f marimo"
 
 # bun
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
@@ -219,3 +219,5 @@ export PATH="$HOME/.claude/local:$PATH"
 
 # jj completions
 source <(COMPLETE=zsh jj)
+
+export PATH="/Users/tmanz/.pixi/bin:$PATH"

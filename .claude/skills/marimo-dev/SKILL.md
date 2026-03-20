@@ -50,12 +50,6 @@ uv run marimo edit notebook.py --headless --no-token --no-skew-protection
 - `--no-skew-protection` — required for marimo-pair's execute-code to work
 - Default port: 2718
 
-After starting, wait a few seconds then verify it's up:
-
-```bash
-curl -s -o /dev/null -w "%{http_code}" http://localhost:2718
-```
-
 ### 2. Vite dev server (background task)
 
 **Must be started with `run_in_background: true` on the Bash tool.**
@@ -65,12 +59,6 @@ pnpm dev
 ```
 
 Starts on port 3000. Proxies `/api`, `/ws`, etc. to marimo on 2718.
-
-After starting, wait a few seconds then verify it's up:
-
-```bash
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
-```
 
 ### 3. Browser (headed)
 
