@@ -333,6 +333,8 @@ require("lazy").setup({
       })
       vim.lsp.config("lua_ls", {
         capabilities = capabilities("lua_ls"),
+        root_markers = { ".luarc.json", ".luarc.jsonc", ".luacheckrc", ".stylua.toml", "stylua.toml", "selene.toml", "selene.yml" },
+        workspace_required = true,
       })
       vim.lsp.config("denols", {
         capabilities = capabilities("denols"),
@@ -398,24 +400,11 @@ require("lazy").setup({
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 1 } },
     },
-    config = function()
-      pcall(require("nvim-treesitter.install").update { with_sync = true })
-      require("nvim-treesitter.configs").setup {
-        ensure_installed = { 'typescript', 'python', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-        highlight = {
-          enable = true,
-          -- disable slow treesitter highlight for large files
-          disable = function(_, buf)
-            local max_filesize = 300 * 1024 -- 300 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-              return true
-            end
-          end,
-        },
-        indent = { enable = true },
-      }
-    end,
+    opts = {
+      ensure_installed = { 'typescript', 'python', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      highlight = { enable = true },
+      indent = { enable = true },
+    },
   },
   { -- Highlight todo, notes, etc in comments
     "folke/todo-comments.nvim",
@@ -427,13 +416,9 @@ require("lazy").setup({
     "stevearc/dressing.nvim",
     opts = {},
   },
-  { -- Theme
-    "catppuccin/nvim",
-    lazy = false,
-    config = function()
-      vim.cmd.colorscheme "catppuccin"
-    end
-  },
+  -- Theme (catppuccin default, extra themes on omarchy via lua/omarchy-themes.lua)
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+  unpack(require("omarchy-themes")),
   { -- Open files on GitHub in browser
     "almo7aya/openingh.nvim",
     keys = {
@@ -476,6 +461,17 @@ require("lazy").setup({
 }, {
   dev = { path = "~/github/manzt" },
 })
+
+-- Apply theme: read from omarchy if available, otherwise catppuccin
+local theme_name_file = vim.fn.expand("~/.config/omarchy/current/theme.name")
+if vim.fn.filereadable(theme_name_file) == 1 then
+  local name = vim.fn.readfile(theme_name_file)[1]
+  if name and name ~= "" then
+    pcall(vim.cmd.colorscheme, name)
+  end
+else
+  vim.cmd.colorscheme("catppuccin")
+end
 
 -- Work around to get Deno virtual LSP locations working
 -- https://github.com/neovim/neovim/issues/30908#issuecomment-2583300661

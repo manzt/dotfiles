@@ -1,18 +1,11 @@
-# A partial gitconfig file. It is meant to be included in a
-# larger .gitconfig (with user.name, user.email, etc.).
-#
-# To use this file, add the following to your ~/.gitconfig:
-#
-# ```
-# [user]
-#    name = Your Name
-#    email = <your email>
-# [include]
-#    path = ~/.config/gitconfig # or wherever you put this file
-# ```
+[user]
+	name = Trevor Manz
+	email = trevor.j.manz@gmail.com
 [alias]
 	st = status
 	co = checkout
+	br = branch
+	ci = commit
 	lol = log --graph --decorate --pretty=oneline --abbrev-commit
 	lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
 [color]
@@ -28,13 +21,15 @@
 [interactive]
 	diffFilter = delta --color-only
 [delta]
-	navigate = true  # use n and N to move between diff sections
+	navigate = true
 	light = false
 	side-by-side = true
 [merge]
 	conflictstyle = diff3
 [diff]
 	colorMoved = default
+[pull]
+	rebase = true
 [push]
 	followTags = true
 [filter "lfs"]
