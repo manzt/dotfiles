@@ -1,42 +1,74 @@
+# Ignore everything by default
 /*
-/.config/btop
-/.config/cargo-dist
-/.config/gh
-/.config/git
-/.config/github-copilot
-/.config/htop
-/.config/marimo
-/.config/mise
-/.config/neofetch
-/.config/op
-/.config/planetscale
-/.config/rstudio
-/.config/tabtab
-/.config/uv
-/.config/zed
-/.config/zellij
-/.config/configstore
-/.config/bob
-/.config/turborepo
-/.config/arraylake
-/.config/wandb
-/.config/gcloud
-/.config/fish
-/.config/gws
 
+# ----- Shell -----
+!/.zshrc
+!/.zshenv
+!/.zimrc
 
+# ----- Top-level files -----
+!/.gitignore
+!/.tmux.conf
+
+# ----- Allow .config/ to be traversed (but ignore its contents) -----
+!/.config/
+/.config/*
+
+# ----- Git -----
+!/.config/git/
+/.config/git/*
+!/.config/git/config
+
+# ----- Neovim -----
+!/.config/nvim/
+# Omarchy nvim files created by bootstrap (not tracked)
+/.config/nvim/plugin/after/
+/.config/nvim/lua/plugins/
+
+# ----- Ghostty -----
+!/.config/ghostty/
+/.config/ghostty/*
+!/.config/ghostty/config
+
+# ----- Tools -----
+!/.config/starship.toml
+
+!/.config/atuin/
+/.config/atuin/*
+!/.config/atuin/config.toml
+
+!/.config/jj/
+/.config/jj/*
+!/.config/jj/config.toml
+
+!/.config/pip/
+/.config/pip/*
+!/.config/pip/pip.conf
+
+# ----- macOS -----
+!/.config/aerospace/
+/.config/aerospace/*
+!/.config/aerospace/aerospace.toml
+
+!/.config/setup.sh
+
+!/.ipython/
+/.ipython/*
+!/.ipython/profile_default/
+/.ipython/profile_default/*
+!/.ipython/profile_default/ipython_config.py
+
+# ----- Claude -----
 !/.claude/
 /.claude/*
 !/.claude/skills/
-!/.config/
-!/.gitignore
-!/.tmux.conf
-!/.zimrc
-!/.zshenv
-!/.zshrc
 
-# Installed or skills to ignore
+# Installed or generated skills to ignore
 /.claude/skills/find-skills
 /.claude/skills/gws-*
 /.claude/skills/recipe-*
 /.claude/skills/marimo-pair
+/.claude/skills/omarchy
+
+# ----- Bootstrap -----
+!/bootstrap-omarchy.sh
