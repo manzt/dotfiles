@@ -24,34 +24,51 @@ This skill orchestrates a full-stack dev environment for working on marimo
 itself. It coordinates three services and two companion skills — marimo-pair
 for the Python side and agent-browser for the frontend side.
 
-## Setup
+## Setup — MANDATORY 3-step startup
 
-Start all three services from the marimo repo root. Order matters — the marimo
-server must be up before Vite (which proxies to it), and the browser points at
-Vite.
+You MUST start all three services every time. Do NOT skip steps or take
+shortcuts (e.g., opening the browser directly, skipping Vite, using
+execute-code without the browser). The full stack is: marimo → Vite → browser.
 
-**CRITICAL: Always use `run_in_background` on the Bash tool for both the
-marimo server and the Vite dev server.** These are long-running processes —
-launching them in the foreground blocks the conversation. Background tasks are
-automatically cleaned up when the session ends. A background task "completed"
-notification does NOT mean the server died — check the output or use
-`discover-servers.sh` / `curl` to verify.
+A background task "completed" notification does NOT mean the server died —
+verify with curl or `discover-servers.sh`.
 
-### 1. Marimo server (background task)
+### Step 1: Start both servers (background)
 
-**Must be started with `run_in_background: true` on the Bash tool.**
+Both servers **must** use `run_in_background: true` on the Bash tool. Start
+them in parallel — they are independent.
+
+**Marimo server** (default port 2718):
 
 ```bash
 uv run marimo edit notebook.py --headless --no-token --no-skew-protection
 ```
 
-- `--headless` — don't open a browser (Vite serves the frontend instead)
-- `--no-token` — required so Vite proxy and scripts can talk to the API
-- `--no-skew-protection` — required for marimo-pair's execute-code to work
-- Default port: 2718
+- `--headless` — Vite serves the frontend, not marimo
+- `--no-token` — lets Vite proxy and scripts talk to the API
+- `--no-skew-protection` — required for code_mode / execute-code
+
+<<<<<<< Updated upstream
+### 2. Vite dev server (background task)
+||||||| Stash base
+After starting, wait a few seconds then verify it's up:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" http://localhost:2718
+```
 
 ### 2. Vite dev server (background task)
+=======
+**Vite dev server** (default port 3000, proxies to marimo on 2718):
 
+```bash
+cd frontend && pnpm dev
+```
+
+After starting both, verify each is up before moving on.
+>>>>>>> Stashed changes
+
+<<<<<<< Updated upstream
 **Must be started with `run_in_background: true` on the Bash tool.**
 
 ```bash
@@ -63,12 +80,39 @@ Starts on port 3000. Proxies `/api`, `/ws`, etc. to marimo on 2718.
 ### 3. Browser (headed)
 
 Only open the browser after both servers are confirmed up.
+||||||| Stash base
+**Must be started with `run_in_background: true` on the Bash tool.**
+
+```bash
+pnpm dev
+```
+
+Starts on port 3000. Proxies `/api`, `/ws`, etc. to marimo on 2718.
+
+After starting, wait a few seconds then verify it's up:
+
+```bash
+curl -s -o /dev/null -w "%{http_code}" http://localhost:3000
+```
+
+### 3. Browser (headed)
+
+Only open the browser after both servers are confirmed up.
+=======
+### Step 2: Browser (headed) — ONLY after both servers are confirmed up
+>>>>>>> Stashed changes
 
 ```bash
 agent-browser --headed open http://localhost:3000
 ```
 
-Point at port 3000 (Vite), not 2718 (marimo directly).
+Point at port 3000 (Vite), NOT 2718. The browser creates the WebSocket
+session — without it, execute-code and code_mode have no session to talk to.
+
+### Restarting
+
+Kill both background tasks (marimo + Vite), then re-run steps 1–2 in order.
+The browser can stay open — just reload after Vite reconnects.
 
 ## Two Skills, Two Sides
 

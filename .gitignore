@@ -40,3 +40,7 @@
 /.claude/skills/gws-*
 /.claude/skills/recipe-*
 /.claude/skills/marimo-pair
+/.claude/skills/agent-browser
+/.claude/skills/electron
+/.claude/skills/skill-creator
+/.claude/skills/dev-browser
