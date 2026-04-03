@@ -15,14 +15,14 @@ hooks:
   SessionEnd:
     - hooks:
         - type: command
-          command: "agent-browser close 2>/dev/null; true"
+          command: "dev-browser close 2>/dev/null; true"
 ---
 
 # marimo-dev: Live Development Environment
 
 This skill orchestrates a full-stack dev environment for working on marimo
 itself. It coordinates three services and two companion skills — marimo-pair
-for the Python side and agent-browser for the frontend side.
+for the Python side and dev-browser for the frontend side.
 
 ## Setup — MANDATORY 3-step startup
 
@@ -103,7 +103,7 @@ Only open the browser after both servers are confirmed up.
 >>>>>>> Stashed changes
 
 ```bash
-agent-browser --headed open http://localhost:3000
+dev-browser --headed open http://localhost:3000
 ```
 
 Point at port 3000 (Vite), NOT 2718. The browser creates the WebSocket
@@ -123,11 +123,11 @@ modifying the running app:
   cells, inspect variables, test runtime behavior. Everything runs in the live
   notebook session via `execute-code.sh` or `code_mode`.
 
-- **agent-browser** — the frontend side. Take screenshots, inspect DOM state,
+- **dev-browser** — the frontend side. Take screenshots, inspect DOM state,
   evaluate JS, interact with UI elements. The browser is pointed at the Vite
   dev server so you see hot-reloaded changes instantly.
 
-To bridge the two: expose React state on `window` for agent-browser to read,
+To bridge the two: expose React state on `window` for dev-browser to read,
 or use marimo-pair to push data into the kernel that triggers UI updates.
 
 ```typescript

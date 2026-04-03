@@ -3,7 +3,7 @@ name: marimo-lsp-dev
 description: >-
   Debug and develop the marimo VS Code extension with a tight edit-build-test
   feedback loop. Launches a VS Code Extension Development Host with two debug
-  channels: agent-browser for UI interaction (screenshots, clicks, commands) and
+  channels: dev-browser for UI interaction (screenshots, clicks, commands) and
   a Node inspector WebSocket for evaluating JS in the extension host process
   (call vscode APIs, inspect Effect-TS services, query kernel/cell/variable
   state). Use this skill whenever working on the marimo-lsp extension, debugging
@@ -17,7 +17,7 @@ hooks:
   SessionEnd:
     - hooks:
         - type: command
-          command: "agent-browser --session ui close 2>/dev/null; true"
+          command: "dev-browser --session ui close 2>/dev/null; true"
 ---
 
 # marimo-lsp-dev: VS Code Extension Debug Environment
@@ -25,7 +25,7 @@ hooks:
 This skill gives you two channels into a running VS Code Extension Development
 Host, enabling a tight edit-build-test loop for the marimo-lsp extension.
 
-**Channel 1 — UI (agent-browser):** Connected to VS Code's Chromium renderer via
+**Channel 1 — UI (dev-browser):** Connected to VS Code's Chromium renderer via
 CDP. Take screenshots, click buttons, open files, interact with the command
 palette, inspect the DOM.
 
@@ -46,7 +46,7 @@ Scripts are at: `~/.claude/skills/marimo-lsp-dev/scripts/`
 
 This builds the extension, launches VS Code with `--remote-debugging-port=9223`
 and `--inspect-extensions=9229`, waits for both to be ready, and connects
-agent-browser.
+dev-browser.
 
 CRITICAL: If VS Code is already running, quit it first. The CDP port must be set
 at launch time. If port 9223 or 9229 is already in use, the script will error.
@@ -59,7 +59,7 @@ at launch time. If port 9223 or 9229 is already in use, the script will error.
 # Should return: object
 
 # UI channel
-agent-browser --session ui snapshot -i
+dev-browser --session ui snapshot -i
 # Should return: VS Code accessibility tree
 ```
 
@@ -82,31 +82,31 @@ agent-browser --session ui snapshot -i
    ```
    This runs `pnpm build` and triggers `workbench.action.reloadWindow`.
 3. **Test** — use either channel to verify the change:
-   - Screenshot: `agent-browser --session ui screenshot /tmp/test.png`
+   - Screenshot: `dev-browser --session ui screenshot /tmp/test.png`
    - Eval: `eval-ext.sh "..."`
 4. **Repeat**
 
 ## Two Channels
 
-### UI Channel (agent-browser)
+### UI Channel (dev-browser)
 
 Best for: visual verification, clicking through UI, testing user-facing workflows.
 
 ```bash
 # Screenshot
-agent-browser --session ui screenshot /tmp/vscode.png
+dev-browser --session ui screenshot /tmp/vscode.png
 
 # Interactive element tree
-agent-browser --session ui snapshot -i
+dev-browser --session ui snapshot -i
 
 # Click an element
-agent-browser --session ui click @e5
+dev-browser --session ui click @e5
 
 # Open command palette
-agent-browser --session ui press Meta+Shift+KeyP
+dev-browser --session ui press Meta+Shift+KeyP
 
 # Type
-agent-browser --session ui keyboard type "marimo run stale"
+dev-browser --session ui keyboard type "marimo run stale"
 ```
 
 ### Extension Host Channel (eval-ext.sh)
