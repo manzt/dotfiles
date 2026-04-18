@@ -24,6 +24,7 @@
 /.config/fish
 /.config/gws
 /.config/ramp
+/.config/middleman
 
 /.config/jj/repos/
 
@@ -42,6 +43,7 @@
 /.claude/skills/gws-*
 /.claude/skills/recipe-*
 /.claude/skills/marimo-pair
+/.claude/skills/grill-me
 /.claude/skills/agent-browser
 /.claude/skills/electron
 /.claude/skills/skill-creator
