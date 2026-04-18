@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-EXT_DIR="${MARIMO_EXT_DIR:-/Users/manzt/github/marimo-team/marimo-lsp/extension}"
+EXT_DIR="${MARIMO_EXT_DIR:-$HOME/github/marimo-team/marimo-lsp/extension}"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 echo "Building..."
