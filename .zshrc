@@ -208,6 +208,8 @@ export PATH="$HOME/.juliaup/bin:$PATH"
 export PATH="$HOME/.pixi/bin:$PATH"
 
 alias mokill="pkill -f marimo"
+alias hide-desktop="defaults write com.apple.finder CreateDesktop -bool false && killall Finder"
+alias show-desktop="defaults write com.apple.finder CreateDesktop -bool true && killall Finder"
 
 # bun
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
@@ -221,3 +223,7 @@ export PATH="$HOME/.claude/local:$PATH"
 source <(COMPLETE=zsh jj)
 
 export PATH="/Users/tmanz/.pixi/bin:$PATH"
+
+# Added by GitButler installer
+export PATH="/Users/manzt/.local/bin:$PATH"
+eval "$(but completions zsh)"

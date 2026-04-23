@@ -367,6 +367,12 @@ require("lazy").setup({
           }
         },
       })
+      vim.lsp.config("oxlint", {
+        capabilities = capabilities("oxlint"),
+        settings = {
+          typeAware = true,
+        },
+      })
       vim.lsp.config("tombi", {
         cmd = { "uvx", "tombi", "lsp" },
         filetypes = { "toml" },

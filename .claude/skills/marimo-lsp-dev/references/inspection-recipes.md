@@ -122,21 +122,21 @@ tail -f /Users/manzt/github/marimo-team/marimo-lsp/extension/logs/marimo.log
 $EVAL "await __marimoVsCode.commands.executeCommand('workbench.action.output.toggleOutput')"
 ```
 
-## UI Interaction (via agent-browser)
+## UI Interaction (via dev-browser)
 
 ```bash
 # Take a screenshot
-agent-browser --session ui screenshot /tmp/vscode.png
+dev-browser --session ui screenshot /tmp/vscode.png
 
 # Get interactive elements
-agent-browser --session ui snapshot -i
+dev-browser --session ui snapshot -i
 
 # Click an element by ref
-agent-browser --session ui click @e5
+dev-browser --session ui click @e5
 
 # Open command palette
-agent-browser --session ui press Meta+Shift+KeyP
+dev-browser --session ui press Meta+Shift+KeyP
 
 # Type in command palette
-agent-browser --session ui keyboard type "marimo"
+dev-browser --session ui keyboard type "marimo"
 ```

@@ -11,3 +11,6 @@
 . "$HOME/.cargo/env"
 . "$HOME/.local/bin/env"
 . "$HOME/.local/share/bob/env/env.sh"
+
+# Vite+ bin (https://viteplus.dev)
+. "$HOME/.vite-plus/env"
