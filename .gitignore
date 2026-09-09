@@ -25,6 +25,9 @@
 /.config/gws
 /.config/ramp
 /.config/middleman
+/.config/tunnel-client
+/.config/opencode
+/.config/1Password
 
 /.config/jj/repos/
 
@@ -48,3 +51,7 @@
 /.claude/skills/electron
 /.claude/skills/skill-creator
 /.claude/skills/dev-browser
+/.claude/skills/gh-stack
+/.claude/skills/grill-with-docs
+/.claude/skills/improve-codebase-architecture
+/.claude/skills/audit-writing

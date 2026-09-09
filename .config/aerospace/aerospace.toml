@@ -67,18 +67,18 @@ outer.right = [{ monitor.secondary = 30 }, 12]
 [workspace-to-monitor-force-assignment]
 1 = ['main','secondary']      # Prefer main, fallback to secondary
 2 = ['secondary', 'main']     # Prefer main (right), fallback to secondary
-3 = 'main'                    # Always on main
-4 = 'main'                    # Always on main
-5 = 'main'                    # Always on main
-6 = 'main'                    # Always on main
-7 = 'main'                    # Always on main
-8 = 'main'                    # Always on main
-9 = 'main'                    # Always on main
+3 = 'secondary'                    # Always on secondary
+4 = 'secondary'                    # Always on secondary
+5 = 'secondary'                    # Always on secondary
+6 = 'secondary'                    # Always on secondary
+7 = 'secondary'                    # Always on secondary
+8 = 'secondary'                    # Always on secondary
+9 = 'secondary'                    # Always on secondary
 
 # Work
 # [workspace-to-monitor-force-assignment]
-# 1 = ["secondary", "main"]
-# 2 = ["main", "secondary"]
+# 1 = ["secondary", "main"]  # Prefer secondary, fallback to main
+# 2 = ["main", "secondary"]  # Pre
 # 3 = "secondary"
 # 4 = "secondary"
 # 5 = "secondary"
@@ -192,6 +192,4 @@ shift-down = ["volume set 0", "mode main"]
 # https://ghostty.org/docs/help/macos-tiling-wms
 [[on-window-detected]]
 if.app-id = "com.mitchellh.ghostty"
-run = [
-  "layout floating",
-]
+run = ["layout floating"]

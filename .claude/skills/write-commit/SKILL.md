@@ -15,47 +15,75 @@ No flowery language. Efficient communication only.
 
 1. Run `jj diff --from $ARGUMENTS --git` to see all changes (default: `@-` if no argument given)
 2. Understand the motivation and scope of the changes
-3. Write a commit message to `commit.md` following the format below
+3. Write a commit message to `commit.md` following the guidance below
 
-## Format
+## The principle
+
+A commit message captures what is **not** in the diff. Length follows
+content, not a template — if nothing load-bearing remains to say
+beyond the title, the title is the whole message.
+
+## Write about what the diff doesn't show
+
+Body text earns its place when it captures at least one of:
+
+- A non-obvious tradeoff or design decision — why this path and not
+  the nearby alternative a reader would reach for.
+- A new public interface or contract. Describe how callers use it,
+  and include a small code snippet when it helps.
+- A new architecture or data flow. A sentence of prose; a tiny ASCII
+  diagram when it genuinely earns one.
+- Why *now* — an incident, a blocker being cleared, a follow-up to a
+  known-bad state — when the timing isn't self-evident.
+
+## Skip the body when there's nothing to say
+
+If none of the above applies, stop at the title. A typo fix, rename,
+dependency bump, or a straightforward regression test is usually
+title-only. Do not pad.
+
+Never include:
+
+- A prose retelling of the diff (`renames X to Y, moves Z into W`)
+- A file-by-file summary
+- A restatement of the title at length
+- Throat-clearing, apologies, or `this commit` / `this PR` openers
+
+## Voice
+
+- Imperative title, ~50 chars, no trailing period.
+- Body is prose — no bullet lists, no section headers, no bold or
+  italic. Backticks and links are fine.
+- Do not open a sentence with a bare `This` / `This commit` / `This
+  PR` referring to the change. Name the thing (`the parser`, `the
+  new hook`) or use `these changes` when a collective subject is
+  genuinely needed.
+
+## Examples
+
+Title only — nothing in the diff needs explaining:
 
 ```
-<title>
-
-<body>
+Fix typo in CellConfig docstring
 ```
 
-### Title
-- Imperative mood ("Add X" not "Added X")
-- Concise, ~50 chars ideally
-- No period at end
+Short body — a fix where the cause isn't obvious from the code:
 
-### Body
-- Write in prose, not bullet points or sections
-- Focus on why, not what (let the diff speak for details)
-- Explain motivation and context
-- Note any non-obvious tradeoffs or design decisions
-- Keep it sufficiently detailed but not overly long
-- Include a high-level code snippet when there is a new top-level API or concept
+```
+Fall back to stdin when the tty probe fails
 
-### DO NOT
-- Reiterate implementation details (those should be evident in the diff)
-- Use markdown other than backticks and links (no bold or italics)
-- Be too long; sufficient detail might be a few sentences
+Windows Terminal misreports its capabilities under an MSYS shell, so
+the previous probe blocked marimo from starting there entirely.
+```
 
-## Example
+Longer body — a new interface; the snippet is the interface itself:
 
 ```
 Add CellConfig parsing for decorator kwargs
 
-Marimo cells support configuration via decorator kwargs like
-`@app.cell(hide_code=True, disabled=True)`. Previously we only detected
-the presence of the decorator but ignored any configuration.
-
-This adds a CellConfig struct and updates the parser to extract these
-values from regular cells, setup cells, and unparsable cells. The config
-is needed for round-trip serialization since we need to preserve these
-settings when writing notebooks back to disk.
+The parser noticed kwargs like `@app.cell(hide_code=True)` but
+dropped their values, so round-trip serialization silently lost any
+cell configuration.
 
 The new API exposes config on each cell:
 
