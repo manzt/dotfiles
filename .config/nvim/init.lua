@@ -400,27 +400,32 @@ require("lazy").setup({
   },
   { -- Treesitter, syntax highlighting, text objects
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
+    lazy = false,
     build = ":TSUpdate",
     dependencies = {
       { "nvim-treesitter/nvim-treesitter-context", opts = { max_lines = 1 } },
     },
     config = function()
-      pcall(require("nvim-treesitter.install").update { with_sync = true })
-      require("nvim-treesitter.configs").setup {
-        ensure_installed = { 'typescript', 'python', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
-        highlight = {
-          enable = true,
-          -- disable slow treesitter highlight for large files
-          disable = function(_, buf)
-            local max_filesize = 300 * 1024 -- 300 KB
-            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-            if ok and stats and stats.size > max_filesize then
-              return true
-            end
-          end,
-        },
-        indent = { enable = true },
+      require("nvim-treesitter").install {
+        'typescript', 'python', 'bash', 'c', 'diff', 'html', 'lua', 'luadoc',
+        'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc',
       }
+      vim.api.nvim_create_autocmd("FileType", {
+        group = vim.api.nvim_create_augroup("treesitter-start", { clear = true }),
+        callback = function(args)
+          local buf = args.buf
+          -- skip slow treesitter highlighting for large files
+          local ok, stats = pcall(vim.uv.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > 300 * 1024 then
+            return
+          end
+          -- no-op for filetypes without an installed parser
+          if pcall(vim.treesitter.start, buf) then
+            vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+          end
+        end,
+      })
     end,
   },
   { -- Highlight todo, notes, etc in comments
