@@ -181,14 +181,10 @@ export JUV_PAGER=bat
 export HIGLASS_MOCKS_DIR="$HOME/github/higlass/higlass-test-mocks/"
 
 # pnpm
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  export PNPM_HOME="$HOME/Library/pnpm"
-else
-  export PNPM_HOME="$HOME/.local/share/pnpm"
-fi
+export PNPM_HOME='/Users/manzt/Library/pnpm'
 case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
+  ":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
 

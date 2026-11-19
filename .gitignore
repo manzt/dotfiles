@@ -33,7 +33,6 @@
 
 !/.claude/
 /.claude/*
-!/.claude/skills/
 !/.config/
 !/.gitignore
 !/.tmux.conf
@@ -42,16 +41,4 @@
 !/.zshrc
 
 # Installed or skills to ignore
-/.claude/skills/find-skills
-/.claude/skills/gws-*
-/.claude/skills/recipe-*
-/.claude/skills/marimo-pair
-/.claude/skills/grill-me
-/.claude/skills/agent-browser
-/.claude/skills/electron
-/.claude/skills/skill-creator
-/.claude/skills/dev-browser
-/.claude/skills/gh-stack
-/.claude/skills/grill-with-docs
-/.claude/skills/improve-codebase-architecture
-/.claude/skills/audit-writing
+/.claude/skills/
